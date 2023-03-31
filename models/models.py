@@ -63,6 +63,7 @@ class Joueur :
 
     def consulter_joueur(self):
         bdd_joueurs = "JSON/joueurs.json"
+        joueur_voulu = "//"
         if os.path.exists(bdd_joueurs):
             #Si le fichier JSON pour les joueurs existe on peut récupérer le contenu
             with open(bdd_joueurs, 'r') as f :
@@ -73,24 +74,14 @@ class Joueur :
                     joueur_voulu = rjoueur
                     break
 
-            if joueur_voulu :
-                print(joueur_voulu)
+            if joueur_voulu != "//" :
+                return joueur_voulu
             else:
-                input("ce joueur n'existe pas ! Voulez vous l'enregistrer ?")
+                reponse = "ce joueur n'existe pas ! Voulez vous l'enregistrer ?"
+                return reponse
         else :
-            print("Soit aucun joueur n'a encore été enregistré, soit le fichier JSON a été supprimé. Veuillez contacter l'administrateur.")
-
-''''#Pour tester
-joueur1=Joueur("q_identifiant", "q_nom", "q_prenom", "q_sexe", "q_date_naissance", "q_remarque", "stat_liste_tournois", "stat_moyenne_points")
-joueur1.dictionnaire()
-joueur1.enregistreJoueur()
-input("pause")
-joueur2=Joueur("AB4587", "RENARD", "Christophe", "Homme", "25 août 1980", "t'es un mauvais", 5, 8)
-joueur2.dictionnaire()
-joueur2.enregistreJoueur()
-input("pause2")
-joueur3=Joueur("AB4587", 0, 0, 0, 0, 0, 0, 0)
-joueur3.consulter_joueur()'''
+            reponse ="Soit aucun joueur n'a encore été enregistré, soit le fichier JSON a été supprimé. Veuillez contacter l'administrateur."
+            return reponse
 
 if __name__ == "__main__":
     print("Merci de commencer par lancer main.py")

@@ -1,7 +1,7 @@
 import sys
 import keyboard
 
-from view.view import MenuPrincipal, FormulaireNouveauJoueur, MenuConsulterListeJoueur
+from view.view import MenuPrincipal, FormulaireNouveauJoueur, MenuConsulterListeJoueur, FormulaireRechercheJoueur
 from models.models import Joueur
 
 class Lancement :
@@ -40,7 +40,11 @@ class MenuJoueur:
             resultat = creation.enregistreJoueur()
             print(resultat)
         elif reponse == 2 :
-            print(reponse)
+            reponses_formulaire = FormulaireRechercheJoueur.questionnaire()
+            consultation = Joueur(reponses_formulaire, 0, 0, 0, 0, 0, 0, 0)
+            consultation.dictionnaire()
+            resultat = consultation.consulter_joueur()
+            print(FormulaireRechercheJoueur.affichage(resultat))
         elif reponse == 4 :
             print(reponse)
         elif reponse == 5 :

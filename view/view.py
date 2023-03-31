@@ -86,7 +86,13 @@ class FormulaireNouveauJoueur :
         return reponses_formulaire
 
 class FormulaireRechercheJoueur :
-    pass
+    def questionnaire():
+        identifiant = input("Quel est l'identifiant national du joueur ?")
+        return identifiant
+    def affichage(resultat):
+        print("Voici les informations demandées")
+        for cle in resultat :
+            print(cle, ":", resultat[cle])
 
 if __name__ == "__main__":
     print("Merci de commencer par lancer main.py")
