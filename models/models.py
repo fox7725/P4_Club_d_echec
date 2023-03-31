@@ -29,7 +29,10 @@ class Joueur :
         return dict_joueur
 
     def enregistreJoueur(self):
-        bdd_joueurs = "joueurs.json"
+        #On crée le dossier JSON pour stocker les BDD s'il n'existe pas
+        os.makedirs("JSON", exist_ok=True)
+        bdd_joueurs = "JSON/joueurs.json"
+        joueur_voulu = "//"
         if os.path.exists(bdd_joueurs):
             #Si le fichier JSON pour les joueurs existe, on vérifie que le joueur n'existe pas déjà et on l'enregistre
             with open(bdd_joueurs, 'r') as f :
@@ -39,26 +42,27 @@ class Joueur :
                     #On commence par vérifier si le joueur existe déjà
                     joueur_voulu = rjoueur["Nom du joueur"]+" "+rjoueur["Prénom du joueur"]
                     break
-
-            if joueur_voulu :
-                print("Le joueur ", joueur_voulu, " existe déjà. Pressez 'ENTER' pour retourner au menu principal")
-
+            if joueur_voulu != "//" :
+                reponse = "Le joueur " + joueur_voulu + " existe déjà."
+                return reponse
             else :
-                #S'il n'existe pas, on peut l'ajouter
+                #Si le joueur n'existe pas, on peut le créer et ajouter le joueur
                 with open(bdd_joueurs, "w") as f :
                     contenu.append(self.dictionnaire())
                     json.dump(contenu, f)
-                    print("Ce joueur a bien été créé. Pressez 'ENTER' pour retourner au menu principal")
+                    reponse = "Le joueur a bien été créé."
+                    return reponse
 
         else :
             #Si le fichier JSON pour les joueurs n'existe pas encore, on le crée et on y ajoute le nouveau joueur
             with open(bdd_joueurs, "w") as f :
                 json.dump([self.dictionnaire()], f)
-                print("Ce joueur a bien été créé. Pressez 'ENTER' pour retourner au menu principal")
+                reponse = "Le joueur a bien été créé."
+                return reponse
 
 
     def consulter_joueur(self):
-        bdd_joueurs = "joueurs.json"
+        bdd_joueurs = "JSON/joueurs.json"
         if os.path.exists(bdd_joueurs):
             #Si le fichier JSON pour les joueurs existe on peut récupérer le contenu
             with open(bdd_joueurs, 'r') as f :
@@ -76,6 +80,7 @@ class Joueur :
         else :
             print("Soit aucun joueur n'a encore été enregistré, soit le fichier JSON a été supprimé. Veuillez contacter l'administrateur.")
 
+''''#Pour tester
 joueur1=Joueur("q_identifiant", "q_nom", "q_prenom", "q_sexe", "q_date_naissance", "q_remarque", "stat_liste_tournois", "stat_moyenne_points")
 joueur1.dictionnaire()
 joueur1.enregistreJoueur()
@@ -85,4 +90,7 @@ joueur2.dictionnaire()
 joueur2.enregistreJoueur()
 input("pause2")
 joueur3=Joueur("AB4587", 0, 0, 0, 0, 0, 0, 0)
-joueur3.consulter_joueur()
+joueur3.consulter_joueur()'''
+
+if __name__ == "__main__":
+    print("Merci de commencer par lancer main.py")

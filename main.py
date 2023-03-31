@@ -1,13 +1,20 @@
-if __name__ == "__main__":
-    print("="*29)
+import keyboard
+
+from controller.controller import Lancement
+from view.view import MenuPrincipal
+def accueil() :
+    print("=" * 29)
     print(" ")
     print("BIENVENUE DANS VOTRE LOGICIEL")
     print("DE GESTION DE TOURNOIS DE")
     print("PING-PONG")
     print(" ")
-    print("="*29)
-    input("Pressez 'ENTER' pour continuer")
+    print("=" * 29)
+    print("Pressez une touche pour continuer")
+    keyboard.read_key()
+    Lancement.lancementMenuPrincipal()
 
-    menu = MenuPrincipal()
-    menu.menuprincipal()
-    choix = menu.code_menu_principal
+
+if __name__ == "__main__":
+    #Affichage du message de bienvenue
+    accueil()
