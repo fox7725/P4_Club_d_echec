@@ -1,6 +1,7 @@
 import sys
 import json
 
+from models.models import ListeJoueurs
 class MenuPrincipal :
     #On crée une classe pour appeler le menu principal quand on le souhaite
 
@@ -44,7 +45,7 @@ class MenuConsulterListeJoueur :
     def __init__(self):
         self.code_menu_joueur = 0
     def menujoueur(self):
-        while self.code_menu_joueur != 1 and self.code_menu_joueur != 2 and self.code_menu_joueur != 3 and self.code_menu_joueur != 4 and self.code_menu_joueur != 5 :
+        while self.code_menu_joueur != 1 and self.code_menu_joueur != 2 and self.code_menu_joueur != 3 and self.code_menu_joueur != 4 :
             print("*" *66)
             print("-" * 66)
             print("Bienvenue dans le menu de gestion des joueur, merci de faire votre sélection :")
@@ -53,8 +54,7 @@ class MenuConsulterListeJoueur :
             print("1. Consulter la liste des joueurs enregistrés")
             print("2. Consulter les informations d'un joueur")
             print("3. Créer un nouveau joueur")
-            print("4. Supprimer un joueur")
-            print("5. Retour au menu principal")
+            print("4. Retour au menu principal")
             print(" ")
             print("*" *66)
             menu_joueur = input("Votre réponse :")
@@ -63,11 +63,11 @@ class MenuConsulterListeJoueur :
             else :
                 self.code_menu_joueur = 0
                 print(" ")
-                print("Merci de choisir parmis les options 1, 2, 3, 4 ou 5")
+                print("Merci de choisir parmis les options 1, 2, 3, ou 4 !")
                 print(" ")
-            if self.code_menu_joueur != 0 and self.code_menu_joueur != 1 and self.code_menu_joueur != 2 and self.code_menu_joueur != 3 and self.code_menu_joueur != 4 and self.code_menu_joueur !=5 :
+            if self.code_menu_joueur != 0 and self.code_menu_joueur != 1 and self.code_menu_joueur != 2 and self.code_menu_joueur != 3 and self.code_menu_joueur != 4 :
                 print(" ")
-                print("Merci de choisir parmis les options 1, 2, 3, 4  ou 5")
+                print("Merci de choisir parmis les options 1, 2, 3, 4 !")
                 print(" ")
         return self.code_menu_joueur
 
@@ -93,6 +93,24 @@ class FormulaireRechercheJoueur :
         print("Voici les informations demandées")
         for cle in resultat :
             print(cle, ":", resultat[cle])
+
+class ListeDesJoeurs :
+    def affiche_liste_joueurs():
+        resultat = ListeJoueurs.recup_liste()
+        if resultat == False :
+            print ("La base de données des joueurs n'est pas accessible. Veuillez contacter l'administrateur")
+            input("Pressez 'ENTER' pour retourner au menu")
+        else :
+            print("Il y a actuellement " + str(len(resultat)) + " joueurs inscrits.")
+            input("Pressez 'ENTER' pour afficher la liste des joueurs")
+            for joueur in resultat :
+                print(" ")
+                print("=" * 29)
+                print ("Idedntifiant national : " + joueur["Identifiant national"])
+                print ("Nom du joueur : " + joueur["Nom du joueur"])
+                print ("Prénom du joueur : " + joueur["Prénom du joueur"])
+                print("=" * 29)
+            input("Pressez 'ENTER' pour retourner au menu")
 
 if __name__ == "__main__":
     print("Merci de commencer par lancer main.py")
