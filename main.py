@@ -3,6 +3,7 @@ import keyboard
 from controller.controller import Lancement
 from view.view import MenuPrincipal
 
+
 def accueil() :
     print("=" * 29)
     print(" ")
@@ -14,6 +15,6 @@ def accueil() :
     input("Pressez 'ENTER' pour continuer")
     Lancement.lancementMenuPrincipal()
 
-if __name__ == "__main__":
+if __name__ == "__main__" :
     #Affichage du message de bienvenue
     accueil()

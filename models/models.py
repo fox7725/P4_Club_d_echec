@@ -3,7 +3,9 @@ import os
 
 
 class Joueur :
-    def __init__(self, q_identifiant, q_nom, q_prenom, q_sexe, q_date_naissance, q_remarque, stat_liste_tournois, stat_moyenne_points):
+    def __init__(self, q_identifiant, q_nom, q_prenom, q_sexe,
+                 q_date_naissance, q_remarque, stat_liste_tournois,
+                 stat_moyenne_points):
         self.identifiant = q_identifiant
         self.nom = q_nom
         self.prenom = q_prenom
@@ -12,6 +14,7 @@ class Joueur :
         self.remarque = q_remarque
         self.liste_tournois = stat_liste_tournois
         self.moyenne_points = stat_moyenne_points
+
     def dictionnaire(self):
         #on crée un dictionnaire
         dict_joueur = {
@@ -73,8 +76,10 @@ class Joueur :
                 reponse = "ce joueur n'existe pas ! Voulez vous l'enregistrer ?"
                 return reponse
         else :
-            reponse ="Soit aucun joueur n'a encore été enregistré, soit le fichier JSON a été supprimé. Veuillez contacter l'administrateur."
+            reponse = "Soit aucun joueur n'a encore été enregistré, soit le fichier JSON a été supprimé. Veuillez contacter l'administrateur."
             return reponse
+
+
 class ListeJoueurs :
     def recup_liste():
         # On crée le dossier JSON pour stocker les BDD s'il n'existe pas

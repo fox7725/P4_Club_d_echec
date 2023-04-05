@@ -54,11 +54,12 @@ class MenuJoueur:
             while oui_non == "oui" :
                 reponses_formulaire = FormulaireRechercheJoueur.questionnaire()
                 consultation = Joueur(reponses_formulaire, 0, 0, 0, 0, 0, 0, 0)
-                consultation.dictionnaire()
                 resultat = consultation.consulter_joueur()
+                #print(resultat)
                 print(FormulaireRechercheJoueur.affichage(resultat))
+                oui_non = "peut-être"
                 while oui_non != "oui" and oui_non != "non" :
-                    oui_non = input("Voulez vous créer un nouveau joueur ? (oui / non) ")
+                    oui_non = input("Voulez vous consulter un autre joueur ? (oui / non) ")
                     if oui_non != "oui" and oui_non != "non" :
                         print ("Votre saisie est invalide, veuillez répondre par 'oui' ou par 'non' !")
                     if oui_non == "non" :

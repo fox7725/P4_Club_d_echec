@@ -90,9 +90,12 @@ class FormulaireRechercheJoueur :
         identifiant = input("Quel est l'identifiant national du joueur ?")
         return identifiant
     def affichage(resultat):
-        print("Voici les informations demandées")
-        for cle in resultat :
-            print(cle, ":", resultat[cle])
+        if type(resultat) != dict :
+            print(resultat)
+        else :
+            print("Voici les informations demandées")
+            for cle in resultat :
+                print(cle, ":", resultat[cle])
 
 class ListeDesJoeurs :
     def affiche_liste_joueurs():
