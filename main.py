@@ -1,4 +1,3 @@
-import keyboard
 
 from controller.controller import Lancement
 from view.view import MenuPrincipal

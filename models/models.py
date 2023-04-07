@@ -1,6 +1,8 @@
 import json
 import os
 
+import controller.controller
+
 
 class Joueur :
     def __init__(self, q_identifiant, q_nom, q_prenom, q_sexe,
@@ -92,6 +94,28 @@ class ListeJoueurs :
                 return contenu
         else :
             return False
+
+
+class Tournoi :
+    pass
+
+
+class Match :
+
+    def __init__(self, nb_tours):
+        self.nb_tours = nb_tours
+
+    def joueurstournoi():
+        liste_joueurs = ListeJoueurs.recup_liste()
+        if liste_joueurs == False :
+            print("Aucune base de données n'est présente. Merci de contacter votre administrateur !")
+            input("Tapez 'ENTER' pour retourner au menu principal")
+            controller.controller.Lancement.lancementMenuPrincipal()
+        else :
+            return liste_joueurs
+
+
+
 
 if __name__ == "__main__":
     print("Merci de commencer par lancer main.py")

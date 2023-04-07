@@ -1,20 +1,36 @@
 import sys
-import keyboard
 
-from view.view import MenuPrincipal, FormulaireNouveauJoueur, MenuConsulterListeJoueur, FormulaireRechercheJoueur, ListeDesJoeurs
-from models.models import Joueur
+from view.view import MenuPrincipal, FormulaireNouveauJoueur, MenuConsulterListeJoueur, FormulaireRechercheJoueur, ListeDesJoeurs, TournoiView
+from models.models import Joueur, ListeJoueurs
 
 class Lancement :
-
-    def __init__(self):
-        pass
 
     def lancementMenuPrincipal() :
         reponse = 0
         menu = MenuPrincipal()
         reponse = menu.menuprincipal()
         if reponse == 1 :
-            print(reponse)
+            nv_joueurs = TournoiView.demandejoueur()
+            if nv_joueurs == "oui":
+                oui_non = "oui"
+                while oui_non == "oui":
+                    reponses_formulaire = FormulaireNouveauJoueur.questionnaire()
+                    creation = Joueur(reponses_formulaire[0], reponses_formulaire[1], reponses_formulaire[2],
+                                      reponses_formulaire[3], reponses_formulaire[4], reponses_formulaire[5],
+                                      reponses_formulaire[6], reponses_formulaire[7])
+                    creation.dictionnaire()
+                    resultat = creation.enregistreJoueur()
+                    print(resultat)
+                    oui_nope = "peut-être"
+                    while oui_nope != "oui" and oui_non != "non":
+                        oui_nope = input("Voulez vous créer un nouveau joueur ? (oui / non) ")
+                        if oui_nope != "oui" and oui_non != "non":
+                            print("Votre saisie est invalide, veuillez répondre par 'oui' ou par 'non' !")
+                        elif oui_nope == "non":
+                            Lancement.lancementMenuPrincipal()
+            else:
+                nb_tours = TournoiView.nombretours()
+
         elif reponse == 2 :
             print(reponse)
         elif reponse == 3 :
@@ -47,7 +63,7 @@ class MenuJoueur:
                     oui_non = input("Voulez vous créer un nouveau joueur ? (oui / non) ")
                     if oui_non != "oui" and oui_non != "non" :
                         print ("Votre saisie est invalide, veuillez répondre par 'oui' ou par 'non' !")
-                    if oui_non == "non" :
+                    elif oui_non == "non" :
                         MenuJoueur.afficherMenuJoueur()
         elif reponse == 2 :
             oui_non = "oui"
@@ -70,6 +86,7 @@ class MenuJoueur:
             print("Une erreur s'est produite")
             input("Pressez 'ENTER' pour continuer")
             MenuJoueur.afficherMenuJoueur()
+
 
 if __name__ == "__main__":
     print("Merci de commencer par lancer main.py")

@@ -115,5 +115,40 @@ class ListeDesJoeurs :
                 print("=" * 29)
             input("Pressez 'ENTER' pour retourner au menu")
 
+class TournoiView :
+
+    def demandejoueur() :
+        oui_non = "peut-être"
+        while oui_non != "oui" and oui_non != "non" :
+            oui_non = input("Souhaitez vous enregistrer des nouveaux joueurs avant de lancer le tournoi ?")
+            if oui_non != "oui" and oui_non != "non" :
+                print("merci de répondre par 'oui' ou par 'non'")
+                input("Tapez 'enter' pour recommencer")
+            else :
+                return oui_non
+
+
+    def nombretours() :
+        nb_tours = 4
+        q_nb_tours = "pas de nombre"
+        oui_non = "peut-être"
+        while oui_non != "oui" and oui_non != "non":
+            oui_non = input("Le nombre de tour est fixé à 4 par défaut. Souhaitez vous modifier ?")
+            if oui_non != "oui" and oui_non != "non":
+                print("Merci de répondre par 'oui' ou par 'non'")
+                input("Tapez 'ENTER' pour recommencer")
+            elif oui_non == "non":
+                return nb_tours
+            else :
+                while not q_nb_tours.isdigit():
+                    q_nb_tours = input("Le nombre de tour est fixé à 4 par défaut. Souhaitez vous modifier ?")
+                    if q_nb_tours.isdigit():
+                        nb_tours = int(q_nb_tours)
+                        return nb_tours
+                    else:
+                        print("Votre réponse n'est pas un nombre.")
+                        input("Tapez 'ENTER' pour recommencer")
+
+
 if __name__ == "__main__":
     print("Merci de commencer par lancer main.py")
