@@ -1,7 +1,10 @@
 import sys
 import json
+import datetime
 
 from models.models import ListeJoueurs
+
+
 class MenuPrincipal :
     #On crée une classe pour appeler le menu principal quand on le souhaite
 
@@ -35,11 +38,72 @@ class MenuPrincipal :
                 print(" ")
         return self.code_menu_principal
 
-class MenuNouveauTournoi :
-    pass
+
+class TournoiView :
+
+    def demandejoueur() :
+        oui_non = "peut-être"
+        while oui_non != "oui" and oui_non != "non" :
+            oui_non = input("Souhaitez vous enregistrer manuellement les joueurs avant de lancer le tournoi ?")
+            if oui_non != "oui" and oui_non != "non" :
+                print("merci de répondre par 'oui' ou par 'non'")
+                input("Tapez 'enter' pour recommencer")
+            else :
+                return oui_non
+
+    def nombretours() :
+        nb_tours = 4
+        q_nb_tours = "pas de nombre"
+        oui_non = "peut-être"
+        while oui_non != "oui" and oui_non != "non":
+            oui_non = input("Le nombre de tour est fixé à 4 par défaut. Souhaitez vous modifier ?")
+            if oui_non != "oui" and oui_non != "non":
+                print("Merci de répondre par 'oui' ou par 'non'")
+                input("Tapez 'ENTER' pour recommencer")
+            elif oui_non == "non":
+                return nb_tours
+            else :
+                while not q_nb_tours.isdigit():
+                    q_nb_tours = input("Combien de tours les joueurs effectueront ?")
+                    if q_nb_tours.isdigit():
+                        nb_tours = int(q_nb_tours)
+                        return nb_tours
+                    else:
+                        print("Votre réponse n'est pas un nombre.")
+                        input("Tapez 'ENTER' pour recommencer")
+
+    def infostournoi():
+        confirmation = "non"
+        while confirmation == "non" :
+            date_debut = datetime.datetime.today()
+            nom_tournoi = input("Quel est le nom du tournoi que vous souhaitez commencer ?")
+            duree_tournoi = "ceci n'est pas un nombre"
+            while not duree_tournoi.isdigit() :
+                duree_tournoi = input("Combien de jour(s) dure le tournoi ?")
+                if duree_tournoi.isdigit() :
+                    duree_tournoi = int(duree_tournoi)
+                    date_fin = date_debut + timedelta(days=duree_tournoi)
+                else :
+                    print("La valeur entrée n'est pas correcte, merci de saisir un nombre !")
+            lieu_tournoi = input("Où a lieu le tournoir ?")
+            commentaire_tournoi = input("Le directeur peut ajouter ici ses remarques concernant le tournoi :")
+            confirmation = "peut-être"
+            while confirmation != "oui" and confirmation != "non" :
+                print("Merci de confimer les informations :")
+                print("Vous souhaitez organiser le tournoi ", nom_tournoi, " à partir du ", date_debut, " au ", date_fin, " à ", lieu_tounoi, ".")
+                print("Le commentaire saisi par le Directeur est : ", commentaire_tournoi)
+                confirmation = input("Est ce correcte ? (oui / non")
+                if confirmation == "oui" :
+                    reponses = [nom_tournoi, date_debut, date_fin, lieu_tournoi, commentaire_tournoi]
+                    return reponses
+                if confirmation != "oui" and confirmation != "non" :
+                    print("Merci de répondre par 'oui' ou par 'non' !")
+                    input("Tapez 'ENTER' pour continuer")
+
 
 class MenuConsulterTournoi :
     pass
+
 
 class MenuConsulterListeJoueur :
     def __init__(self):
@@ -71,9 +135,12 @@ class MenuConsulterListeJoueur :
                 print(" ")
         return self.code_menu_joueur
 
+
 class FormulaireNouveauJoueur :
 
     def questionnaire():
+        #Formulaire pour l'inscription des joueurs dans le JSON en tant que membres de l'association
+        print(" ")
         identifiant = input("Quel est votre identifiant national ?")
         nom = input("Quel est votre nom ?")
         prenom = input("Quel est votre prénom ?")
@@ -84,6 +151,16 @@ class FormulaireNouveauJoueur :
         moyenne_points = 0
         reponses_formulaire = [identifiant, nom, prenom, sexe, date_naissance, remarque, liste_tournois, moyenne_points]
         return reponses_formulaire
+
+    def questionnairejoueurtournoi():
+        #Formulaire pour l'enregistrement manuel des joueurs du tournoi
+        identifiant = input("Quel est votre identifiant national ?")
+        nom = input("Quel est votre nom ?")
+        prenom = input("Quel est votre prénom ?")
+        reponses_formulaire = {"ID" : identifiant, "nom_joueur" : nom, "prenom_joueur" : prenom, "points" : 0}
+        return reponses_formulaire
+
+
 
 class FormulaireRechercheJoueur :
     def questionnaire():
@@ -96,6 +173,7 @@ class FormulaireRechercheJoueur :
             print("Voici les informations demandées")
             for cle in resultat :
                 print(cle, ":", resultat[cle])
+
 
 class ListeDesJoeurs :
     def affiche_liste_joueurs():
@@ -115,39 +193,20 @@ class ListeDesJoeurs :
                 print("=" * 29)
             input("Pressez 'ENTER' pour retourner au menu")
 
-class TournoiView :
 
-    def demandejoueur() :
-        oui_non = "peut-être"
-        while oui_non != "oui" and oui_non != "non" :
-            oui_non = input("Souhaitez vous enregistrer des nouveaux joueurs avant de lancer le tournoi ?")
-            if oui_non != "oui" and oui_non != "non" :
-                print("merci de répondre par 'oui' ou par 'non'")
-                input("Tapez 'enter' pour recommencer")
-            else :
-                return oui_non
+class ViewMatch :
+    def __init__(self, les_paires, nom_tournoi, nom_tour):
+        self.les_paires = les_paires
+        #contient dico nom du match : dico paires
+        self.nom_tournoi = nom_tournoi
+        self.nom_tour = nom_tour
+
+    def afficher_match(self):
+        print("Bienvenue dans le tournoi ", self.nom_tournoi)
+        print("Nous en sommes actuellement au ", self.nom_tour)
+        choix_match = input("De quel match avez vous le retour ? (Format 'M+Numéro)")
 
 
-    def nombretours() :
-        nb_tours = 4
-        q_nb_tours = "pas de nombre"
-        oui_non = "peut-être"
-        while oui_non != "oui" and oui_non != "non":
-            oui_non = input("Le nombre de tour est fixé à 4 par défaut. Souhaitez vous modifier ?")
-            if oui_non != "oui" and oui_non != "non":
-                print("Merci de répondre par 'oui' ou par 'non'")
-                input("Tapez 'ENTER' pour recommencer")
-            elif oui_non == "non":
-                return nb_tours
-            else :
-                while not q_nb_tours.isdigit():
-                    q_nb_tours = input("Le nombre de tour est fixé à 4 par défaut. Souhaitez vous modifier ?")
-                    if q_nb_tours.isdigit():
-                        nb_tours = int(q_nb_tours)
-                        return nb_tours
-                    else:
-                        print("Votre réponse n'est pas un nombre.")
-                        input("Tapez 'ENTER' pour recommencer")
 
 
 if __name__ == "__main__":
