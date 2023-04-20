@@ -29,6 +29,10 @@ class Lancement :
             else :
                 liste_joueurs = ViewInformationsTournoi.ajout_joueurs()
 
+            joueurs = []
+            for joueur in liste_joueurs :
+                objet_joueurs = Joueur(joueur[0], joueur[1], joueur[2], joueur[3], joueur[4], joueur[5], joueur[6], score_actuel=0)
+
             nom_tournoi = infos_tournoi[0]
             lieu_tournoi = infos_tournoi[1]
             remarque_tournoi = infos_tournoi[2]

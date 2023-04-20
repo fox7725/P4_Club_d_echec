@@ -25,7 +25,6 @@ class Joueur :
         self.prenom_joueur = prenom_joueur
         self.sexe = sexe
         self.date_naissance = date_naissance
-        self.tournoi_en_cours = tour_en_cours
         self.score_actuel = score_actuel
 
 
