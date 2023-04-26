@@ -43,6 +43,7 @@ class MenuPrincipal :
 class ViewInformationsTournoi :
     def infos_generales_tournoi():
         confirmation = "peut-être"
+        liste_tours = []
         while confirmation != "oui":
             confirmation = "peut-être"
             print(" ")
@@ -59,7 +60,6 @@ class ViewInformationsTournoi :
             duree_tournoi = int(duree_tournoi)
             date_fin_brut = debut_tournoi_brut + datetime.timedelta(days=duree_tournoi)
             fin_tournoi = date_fin_brut.strftime("%d/%m/%Y")
-            q_nb_tours = "pas de nombre"
             是不是 = "peut-être"
             while 是不是 != "oui" and 是不是 != "non":
                 是不是 = input("Le nombre de tour est fixé à 4 par défaut. Souhaitez vous modifier ?")
@@ -69,26 +69,32 @@ class ViewInformationsTournoi :
                 elif 是不是 == "non":
                     nb_tours = 4
                 else:
+                    q_nb_tours = "pas de nombre"
                     while not q_nb_tours.isdigit():
                         q_nb_tours = input("Combien de tours les joueurs effectueront ?")
                         if q_nb_tours.isdigit():
                             nb_tours = int(q_nb_tours)
-                            num_tour = 0
-                            liste_tours = []
-                            while num_tour < nb_tours:
-                                num_tour += 1
-                                nom_tour = "Round " + str(num_tour)
-                                liste_tours.append(nom_tour)
                         else:
                             print("Votre réponse n'est pas un nombre.")
                             input("Tapez 'ENTER' pour recommencer")
 
+                num_tour = 0
+                while num_tour < nb_tours:
+                    num_tour += 1
+                    nom_tour = "Round " + str(num_tour)
+                    liste_tours.append(nom_tour)
+
+
             while confirmation != "oui" and confirmation != "non" :
+                print(" ")
+                print("=" * 29)
                 print(" ")
                 print("Merci de confimer les informations :")
                 print("Vous souhaitez organiser le tournoi", nom_tournoi, "de", nb_tours, "tours à partir du", debut_tournoi, "au", fin_tournoi, "à",
                       lieu_tournoi, ".")
                 print("Le commentaire saisi par le Directeur est :", remarque_tournoi)
+                print(" ")
+                print("=" * 29)
                 print(" ")
                 confirmation = input("Est ce correcte ? (oui / non)")
                 if confirmation != "oui" and confirmation != "non":
@@ -104,7 +110,7 @@ class ViewInformationsTournoi :
         oui_non = "peut-être"
         while oui_non != "oui" and oui_non != "non":
             oui_non = input("Le tournoi se joue-t-il à guichet fermé (seulement les membres du club + invités) ou est "
-                            "il ouvert à tous ?")
+                            "il ouvert à tous ? (oui / non)")
             if oui_non != "oui" and oui_non != "non":
                 print("merci de répondre par 'oui' ou par 'non'")
                 input("Tapez 'enter' pour recommencer")
@@ -199,6 +205,65 @@ class ViewInformationsTournoi :
                         return liste_joueurs
             elif o_n == "non":
                 return liste_joueurs
+
+
+class ViewInformationTour :
+    def lancement_tour(tour):
+        print("=" * 29)
+        print(" ")
+        print("Quand vous êtes prêts à lancer le ", tour)
+        input("pressez 'ENTER'.")
+        date_brut_debut_tour = datetime.datetime.now()
+        date_debut_tour = date_brut_debut_tour.strftime("%d/%m/%Y à %I:%M%p")
+        print(" ")
+        print("Merci ! Le ", tour, "commence donc le ", date_debut_tour)
+        print(" ")
+        print("=" * 29)
+        input("pressez 'ENTER'.")
+        return date_debut_tour
+
+    def fin_tour(tour):
+        print("=" * 29)
+        print(" ")
+        print("Le ", tour, "est maintenant terminé")
+        date_brut_fin_tour = datetime.datetime.now()
+        date_fin_tour = date_brut_fin_tour.strftime("%d/%m/%Y à %I:%M%p")
+        print("le ", date_fin_tour)
+        print(" ")
+        print("=" * 29)
+        input("pressez 'ENTER' pour continuer.")
+        return date_fin_tour
+
+
+class ViewMatch :
+    def appel_match(match_joue):
+        jeu = "pas de match"
+        while jeu not in match_joue :
+            print("Voici la liste des matchs restant à jouer :", match_joue)
+            jeu = input("De quel match avez vous le retour ?")
+            if jeu in match_joue :
+                return jeu
+            else :
+                print("Ceci n'est pas un match à jouer")
+
+    def declaration_scores(joueur_blc, joueur_nr, nom_match):
+        score = "Pas de score"
+        while score != "JB" and score != "JN" and score != "N" :
+            print("=" * 29)
+            print(" ")
+            print("Résultat du match", nom_match, "opposant", joueur_blc["prenom_joueur"], joueur_blc["nom_joueur"],
+                  "vs", joueur_nr["prenom_joueur"], joueur_nr["nom_joueur"])
+            print(" ")
+            print("=" * 29)
+            print("- En cas de match nul, répondez 'N'")
+            print("- Pour le joueur blanc", joueur_blc["prenom_joueur"], joueur_blc["nom_joueur"], "répondez 'JB'")
+            print("- Pour le joueur noir", joueur_nr["prenom_joueur"], joueur_nr["nom_joueur"], "répondez 'JN'")
+            score = input("Qui a gagné le match ?")
+            if score != "JB" and score != "JN" and score != "N" :
+                print("Merci de répondre par 'JB', 'JN' ou 'N' uniquement !")
+                input("Pressez 'ENTER' pour continuer")
+            else :
+                return score
 
 
 class Erreurs :

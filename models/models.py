@@ -18,8 +18,7 @@ class Joueurs :
         return contenu
 
 class Joueur :
-    def __init__(self, identifiant_national, nom_joueur, prenom_joueur, sexe, date_naissance, tournoi_en_cours,
-                 tour_en_cours, score_actuel = 0):
+    def __init__(self, identifiant_national, nom_joueur, prenom_joueur, sexe, date_naissance, score_actuel = 0):
         self.identifiant_national = identifiant_national
         self.nom_joueur = nom_joueur
         self.prenom_joueur = prenom_joueur
@@ -44,13 +43,23 @@ class Tournoi :
 
 
 class Tour :
-    def __init__(self, liste_joueurs, nb_match, liste_matchs, date_debut_tour, date_fin_tour):
-        pass
+    def __init__(self, liste_joueurs, nb_matchs, liste_matchs, date_debut_tour, date_fin_tour = " "):
+        self.liste_joueurs = liste_joueurs
+        self.nb_matchs = nb_matchs
+        self.liste_matchs = liste_matchs
+        self.date_debut_tour = date_debut_tour
+        self.date_fin_tour = date_fin_tour
+        self.liste_matchs_restants = liste_matchs
 
 
 class Match :
-    def __init__(self, joueur_blanc =" ", joueur_noir = " ", score_JB = 0, score_JN = 0, gagnant = null):
-        pass
+    def __init__(self,nom_tour, nom_match, joueur_blanc, joueur_noir, score_JB = 0, score_JN = 0):
+        self.nom_tour = nom_tour
+        self.nom_match = nom_match
+        self.joueur_blanc = joueur_blanc
+        self.joueur_noir = joueur_noir
+        self.score_JB = score_JB
+        self.score_JN = score_JN
 
 
 if __name__ == "__main__":
