@@ -251,13 +251,13 @@ class ViewMatch :
         while score != "JB" and score != "JN" and score != "N" :
             print("=" * 29)
             print(" ")
-            print("Résultat du match", nom_match, "opposant", joueur_blc["prenom_joueur"], joueur_blc["nom_joueur"],
-                  "vs", joueur_nr["prenom_joueur"], joueur_nr["nom_joueur"])
+            print("Résultat du match", nom_match, "opposant", joueur_blc.prenom_joueur, joueur_blc.nom_joueur,
+                  "vs", joueur_nr.prenom_joueur, joueur_nr.nom_joueur)
             print(" ")
             print("=" * 29)
             print("- En cas de match nul, répondez 'N'")
-            print("- Pour le joueur blanc", joueur_blc["prenom_joueur"], joueur_blc["nom_joueur"], "répondez 'JB'")
-            print("- Pour le joueur noir", joueur_nr["prenom_joueur"], joueur_nr["nom_joueur"], "répondez 'JN'")
+            print("- Pour le joueur blanc", joueur_blc.prenom_joueur, joueur_blc.nom_joueur, "répondez 'JB'")
+            print("- Pour le joueur noir", joueur_nr.prenom_joueur, joueur_nr.nom_joueur, "répondez 'JN'")
             score = input("Qui a gagné le match ?")
             if score != "JB" and score != "JN" and score != "N" :
                 print("Merci de répondre par 'JB', 'JN' ou 'N' uniquement !")
@@ -269,6 +269,10 @@ class ViewMatch :
 class Erreurs :
     def erreur1():
         print("Aucune base de données n'est présente. Merci de contacter votre administrateur !")
+        input("Tapez 'ENTER' pour retourner au menu principal")
+
+    def erreur2():
+        print("Une erreur s'est produite, merci de recommencer !")
         input("Tapez 'ENTER' pour retourner au menu principal")
 
 

@@ -33,7 +33,8 @@ class Lancement :
 
             liste_objets_joueurs = []
             for joueur in liste_joueurs :
-                objet_joueurs = Joueur(joueur["ID"], joueur["nom_joueur"], joueur["prenom_joueur"], joueur["sexe"], joueur["date_naissance"], score_actuel=0)
+                objet_joueurs = Joueur(joueur["ID"], joueur["nom_joueur"], joueur["prenom_joueur"], joueur["sexe"],
+                                       joueur["date_naissance"], score_actuel=0)
                 liste_objets_joueurs.append(objet_joueurs)
 
             nom_tournoi = infos_tournoi[0]
@@ -44,9 +45,10 @@ class Lancement :
             nb_tours = infos_tournoi[5]
             liste_tours = infos_tournoi[6]
 
+            #Création de l'objet Tournoi
             tournoi=Tournoi(nom_tournoi, lieu_tournoi, remarque_tournoi, debut_tournoi, fin_tournoi,
                             nb_tours, liste_tours, liste_objets_joueurs)
-            #Création de l'objet Tournoi
+
 
             liste_joueurs = []
             liste_objets_tours = []
@@ -72,28 +74,33 @@ class Lancement :
 
                 liste_objet_match = []
                 paire = []
+
+                for jeu in liste_matchs :
+                    i = 1
+                    paire = [liste_joueurs[0], liste_joueurs[i]]
+                    if paire in liste_opposants :
+                        while paire in liste_opposants and i < len(liste_joueurs) - 1 :
+                            i += 1
+                            paire = [liste_joueurs[0], liste_joueurs[i]]
+                            liste_opposants.append(paire)
+                            liste_joueurs.remove(liste_joueurs[0])
+                            liste_joueurs.remove(liste_joueurs[i-1])
+                            joueur_blanc = random.choice(paire)
+                            paire.remove(joueur_blanc)
+                            joueur_noir = paire[0]
+                            paire.remove(joueur_noir)
+
+                            #on crée l'objet match
+                            objet_match = Match(tour, jeu, joueur_blanc, joueur_noir)
+                            liste_objet_match.append(objet_match)
+
                 match_joue = objet_tour.liste_matchs_restants
-                jeu = ViewMatch.appel_match(match_joue)
+
+
                 while len(match_joue) > 1 :
-                    while jeu in match_joue :
-                        i = 1
-                        paire = [liste_joueurs[0], liste_joueurs[i]]
-                        if paire in liste_opposants :
-                            while paire in liste_opposants and i < len(liste_joueurs) - 1 :
-                                i += 1
-                                paire = [liste_joueurs[0], liste_joueurs[i]]
-                        liste_opposants.append(paire)
-                        liste_joueurs.remove(liste_joueurs[0])
-                        liste_joueurs.remove(liste_joueurs[i-1])
-                        joueur_blanc = random.choice(paire)
-                        paire.remove(joueur_blanc)
-                        joueur_noir = paire[0]
-                        paire.remove(joueur_noir)
-
-                        #on crée l'objet match
-                        objet_match = Match(tour, jeu, joueur_blanc, joueur_noir)
-                        liste_objet_match.append(objet_match)
-
+                    jeu = ViewMatch.appel_match(match_joue)
+                    #On demande quel match vient de se terminer
+                    if jeu in match_joue :
                         score = ViewMatch.declaration_scores(joueur_blanc, joueur_noir, jeu)
                         #On récupère le score de chaque joueur
 
@@ -124,6 +131,10 @@ class Lancement :
                                 joueur_cherche.score_actuel = score_actualise
                             else :
                                 break
+                        match_joue.remove(jeu)
+                    else :
+                        Erreurs.erreur2()
+
                 if len(match_joue) == 1 :
                     pass
                 if len(match_joue) < 1:
