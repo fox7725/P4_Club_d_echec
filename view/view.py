@@ -55,7 +55,7 @@ class ViewInformationsTournoi :
             debut_tournoi_brut = datetime.date.today()
             debut_tournoi = debut_tournoi_brut.strftime("%d/%m/%Y")
             duree_tournoi = input("Combien de jour(s) dure le tournoi ?")
-            while not duree_tournoi.isdigit() and duree_tournoi < 0:
+            while not duree_tournoi.isdigit() or int(duree_tournoi) < 0:
                 duree_tournoi = input("La valeur entrée n'est pas correcte. Merci de saisir un nombre supérieur à 0 !")
             duree_tournoi = int(duree_tournoi)
             date_fin_brut = debut_tournoi_brut + datetime.timedelta(days=duree_tournoi)

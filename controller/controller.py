@@ -4,25 +4,30 @@ import random
 
 from view.view import *
 from models.models import *
+from fonctions.fonctions import *
 
 class Lancement :
+
+    '''def demarrer_tournoi(self):
+
+        pass'''
 
     def lancementMenuPrincipal() :
         '''Gestion du menu principal et des différentes options (lancement de tournoi, enregistrement de joeurs,
         édition des rapports'''
+
         reponse = 0
         reponse = MenuPrincipal.menuprincipal(reponse)
-
         if reponse == 1 :
         #1. Commencer un nouveau tournoi
             infos_tournoi = ViewInformationsTournoi.infos_generales_tournoi()
             #contient : nom_tournoi, lieu_tournoi, remarque_tournoi, debut_tournoi, fin_tournoi, nb_tours, liste_tours
 
             demande_nv_joueur = ViewInformationsTournoi.demande_nv_joueurs()
-            #On demande à l'organisateur s'il veut récupérer la liste des joueurs (réponse "oui")
-            #ou s'il veut la créer ("non")
+            #On demande à l'organisateur s'il veut récupérer la liste des joueurs (réponse "oui") ou s'il veut
+            # la créer ("non")
             if demande_nv_joueur == "oui" :
-                preliste_joueurs = Joueurs.liste_joueur_JSON()
+                preliste_joueurs = liste_joueur_JSON()
                 if preliste_joueurs == "ERR01" :
                     Erreurs.erreur1()
                     Lancement.lancementMenuPrincipal()
@@ -31,7 +36,7 @@ class Lancement :
             else :
                 liste_joueurs = ViewInformationsTournoi.ajout_joueurs()
 
-            liste_objets_joueurs = []
+            '''liste_objets_joueurs = []
             for joueur in liste_joueurs :
                 objet_joueurs = Joueur(joueur["ID"], joueur["nom_joueur"], joueur["prenom_joueur"], joueur["sexe"],
                                        joueur["date_naissance"], score_actuel=0)
@@ -64,6 +69,7 @@ class Lancement :
                     num_match += 1
                     nom_match = "M" + str(num_match)
                     liste_matchs.append(nom_match)
+
                 if tour == "Round 1":
                     random.shuffle(liste_joueurs)
                 else:
@@ -95,8 +101,6 @@ class Lancement :
                             liste_objet_match.append(objet_match)
 
                 match_joue = objet_tour.liste_matchs_restants
-
-
                 while len(match_joue) > 1 :
                     jeu = ViewMatch.appel_match(match_joue)
                     #On demande quel match vient de se terminer
@@ -142,7 +146,7 @@ class Lancement :
 
 
             fin_tour = ViewInformationTour.fin_tour(tour)
-            tour.date_fin_tour = fin_tour
+            tour.date_fin_tour = fin_tour'''
 
 
         elif reponse == 2 :
