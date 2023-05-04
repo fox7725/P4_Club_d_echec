@@ -3,6 +3,8 @@ import json
 import datetime
 import re
 
+from models.models import *
+
 
 class MenuPrincipal :
 
@@ -43,7 +45,6 @@ class MenuPrincipal :
 class ViewInformationsTournoi :
     def infos_generales_tournoi():
         confirmation = "peut-être"
-        liste_tours = []
         while confirmation != "oui":
             confirmation = "peut-être"
             print(" ")
@@ -78,13 +79,6 @@ class ViewInformationsTournoi :
                             print("Votre réponse n'est pas un nombre.")
                             input("Tapez 'ENTER' pour recommencer")
 
-                num_tour = 0
-                while num_tour < nb_tours:
-                    num_tour += 1
-                    nom_tour = "Round " + str(num_tour)
-                    liste_tours.append(nom_tour)
-
-
             while confirmation != "oui" and confirmation != "non" :
                 print(" ")
                 print("=" * 29)
@@ -103,7 +97,7 @@ class ViewInformationsTournoi :
             if confirmation == "non" :
                 print("Merci de resaisir les informations !")
                 input("Tapez 'ENTER' pour continuer")
-        infos_tournoi = [nom_tournoi, lieu_tournoi, remarque_tournoi, debut_tournoi, fin_tournoi, nb_tours, liste_tours]
+        infos_tournoi = [nom_tournoi, lieu_tournoi, remarque_tournoi, debut_tournoi, fin_tournoi, nb_tours]
         return infos_tournoi
 
     def demande_nv_joueurs():
@@ -124,12 +118,11 @@ class ViewInformationsTournoi :
         while 是不是 == "oui":
             id_valide = False
             while not id_valide:
-                identifiant = input("Quel est votre identifiant national ? ")
+                identifiant = input("Quel est votre Identifiant National ? ")
                 if re.match(r'^[a-zA-Z]{2}\d{5}$', identifiant):
                     id_valide = True
                 else:
-                    print("L'identifiant national entré est invalide ! Veuillez ressaisir un identifiant de la forme"
-                          " XX12345.")
+                    print("L'Identifiant National entré est invalide ! Veuillez le ressaisir sous la forme 'XX12345'.")
             nom = input("Quel est votre nom ?")
             prenom = input("Quel est votre prénom ?")
             sexe = "NSP"
@@ -236,28 +229,35 @@ class ViewInformationTour :
 
 
 class ViewMatch :
-    def appel_match(match_joue):
-        jeu = "pas de match"
-        while jeu not in match_joue :
-            print("Voici la liste des matchs restant à jouer :", match_joue)
-            jeu = input("De quel match avez vous le retour ?")
-            if jeu in match_joue :
-                return jeu
-            else :
-                print("Ceci n'est pas un match à jouer")
+    def choix_match(liste_matchs_restant):
+        #On commence par afficher la liste des matchs restant dans la tour en cours
+        print("Voici la liste des matchs restant à jouer :")
+        for match in liste_matchs_restant :
+            print("match :", match.nom_match,
+                  "- Joueur Blanc :", match.joueur_blanc.nom_joueur, match.joueur_blanc.prenom_joueur,
+                  "- Joueur Noir :", match.joueur_noir.nom_joueur, match.joueur_noir.prenom_joueur)
+            print("-" * 29)
 
-    def declaration_scores(joueur_blc, joueur_nr, nom_match):
+        #Puis on demande à l'utilisateur de choisir son match
+        while True:
+            choix_match = input("Entrez le nom du match dont vous avez le retour ?")
+            for recherche_choix_match in liste_matchs_restant:
+                if recherche_choix_match.nom_match == choix_match:
+                    return recherche_choix_match
+            print("Ceci n'est pas un match à jouer")
+
+    def declaration_scores(match):
         score = "Pas de score"
         while score != "JB" and score != "JN" and score != "N" :
             print("=" * 29)
             print(" ")
-            print("Résultat du match", nom_match, "opposant", joueur_blc.prenom_joueur, joueur_blc.nom_joueur,
-                  "vs", joueur_nr.prenom_joueur, joueur_nr.nom_joueur)
+            print("Résultat du match", match.nom_match, "opposant", match.joueur_blanc.prenom_joueur, match.joueur_blanc.nom_joueur,
+                  "vs", match.joueur_noir.prenom_joueur, match.joueur_noir.nom_joueur)
             print(" ")
             print("=" * 29)
             print("- En cas de match nul, répondez 'N'")
-            print("- Pour le joueur blanc", joueur_blc.prenom_joueur, joueur_blc.nom_joueur, "répondez 'JB'")
-            print("- Pour le joueur noir", joueur_nr.prenom_joueur, joueur_nr.nom_joueur, "répondez 'JN'")
+            print("- Pour le joueur blanc", match.joueur_blanc.prenom_joueur, match.joueur_blanc.nom_joueur, "répondez 'JB'")
+            print("- Pour le joueur noir", match.joueur_noir.prenom_joueur, match.joueur_noir.nom_joueur, "répondez 'JN'")
             score = input("Qui a gagné le match ?")
             if score != "JB" and score != "JN" and score != "N" :
                 print("Merci de répondre par 'JB', 'JN' ou 'N' uniquement !")
