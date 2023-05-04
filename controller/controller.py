@@ -141,7 +141,7 @@ class Lancement :
                             score_a_actu = joueur_cherche.score_actuel
                             score_actualise = le_match[jeu][0][1] + score_a_actu
                             joueur_cherche.score_actuel = score_actualise
-                        if joueur_cherche == joueur_noir:
+                        if joueur_cherche == match.joueur_noir:
                             score_a_actu = joueur_cherche.score_actuel
                             score_actualise = le_match[jeu][0][1] + score_a_actu
                             joueur_cherche.score_actuel = score_actualise
