@@ -7,7 +7,7 @@ from models.models import *
 
 
 class MenuPrincipal :
-
+    @staticmethod
     #On crée une classe pour appeler le menu principal quand on le souhaite
     def menuprincipal(code_menu_principal) :
         #On fait une boucle pour que le menu s'affiche tant que l'utilisateur ne donne pas une réponse autorisée
@@ -43,6 +43,7 @@ class MenuPrincipal :
 
 
 class ViewInformationsTournoi :
+    @staticmethod
     def infos_generales_tournoi():
         confirmation = "peut-être"
         while confirmation != "oui":
@@ -100,6 +101,7 @@ class ViewInformationsTournoi :
         infos_tournoi = [nom_tournoi, lieu_tournoi, remarque_tournoi, debut_tournoi, fin_tournoi, nb_tours]
         return infos_tournoi
 
+    @staticmethod
     def demande_nv_joueurs():
         oui_non = "peut-être"
         while oui_non != "oui" and oui_non != "non":
@@ -111,7 +113,7 @@ class ViewInformationsTournoi :
             else:
                 return oui_non
 
-
+    @staticmethod
     def ajout_joueurs():
         liste_joueurs = []
         是不是 = "oui"
@@ -153,6 +155,7 @@ class ViewInformationsTournoi :
             elif 是不是 == "non":
                 return liste_joueurs
 
+    @staticmethod
     def ajout_joueurs_invites(preliste_joueurs):
         if len(preliste_joueurs) == 0 or len(preliste_joueurs) == 1:
             print("Il y a actuellement " + str(len(preliste_joueurs)) + " joueur enregistré dans la base de données")
@@ -201,6 +204,7 @@ class ViewInformationsTournoi :
 
 
 class ViewInformationTour :
+    @staticmethod
     def lancement_tour(tour, nb_matchs):
         print("=" * 29)
         print(" ")
@@ -216,6 +220,7 @@ class ViewInformationTour :
         input("pressez 'ENTER'.")
         return date_debut_tour
 
+    @staticmethod
     def fin_tour(tour):
         print("=" * 29)
         print(" ")
@@ -230,6 +235,7 @@ class ViewInformationTour :
 
 
 class ViewMatch :
+    @staticmethod
     def choix_match(liste_matchs_restant):
         #On commence par afficher la liste des matchs restant dans la tour en cours
         print("Voici la liste des matchs restant à jouer :")
@@ -247,6 +253,7 @@ class ViewMatch :
                     return recherche_choix_match
             print("Ceci n'est pas un match à jouer")
 
+    @staticmethod
     def declaration_scores(match):
         score = "Pas de score"
         while score != "JB" and score != "JN" and score != "N" :
@@ -270,10 +277,12 @@ class ViewMatch :
 
 
 class Erreurs :
+    @staticmethod
     def erreur1():
         print("Aucune base de données n'est présente. Merci de contacter votre administrateur !")
         input("Tapez 'ENTER' pour retourner au menu principal")
 
+    @staticmethod
     def erreur2():
         print("Une erreur s'est produite, merci de recommencer !")
         input("Tapez 'ENTER' pour retourner au menu principal")

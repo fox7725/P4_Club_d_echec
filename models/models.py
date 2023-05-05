@@ -1,8 +1,3 @@
-import json
-import os
-import random
-import datetime
-
 
 class Joueur :
     def __init__(self, identifiant_nationale, nom_joueur, prenom_joueur, sexe, date_naissance, score_actuel = 0):

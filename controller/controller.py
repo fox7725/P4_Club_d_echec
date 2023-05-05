@@ -7,15 +7,11 @@ from models.models import *
 from fonctions.fonctions import *
 
 class Lancement :
+    '''Gestion du menu principal et des différentes options (lancement de tournoi, enregistrement de joeurs,
+            édition des rapports'''
 
-    '''def demarrer_tournoi(self):
-
-        pass'''
-
+    @staticmethod
     def lancementMenuPrincipal() :
-        '''Gestion du menu principal et des différentes options (lancement de tournoi, enregistrement de joeurs,
-        édition des rapports'''
-
         reponse = 0
         reponse = MenuPrincipal.menuprincipal(reponse)
         if reponse == 1 :
