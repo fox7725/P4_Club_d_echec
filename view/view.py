@@ -201,7 +201,7 @@ class ViewInformationsTournoi :
 
 
 class ViewInformationTour :
-    def lancement_tour(tour):
+    def lancement_tour(tour, nb_matchs):
         print("=" * 29)
         print(" ")
         print("Quand vous êtes prêts à lancer le ", tour)
@@ -210,6 +210,7 @@ class ViewInformationTour :
         date_debut_tour = date_brut_debut_tour.strftime("%d/%m/%Y à %I:%M%p")
         print(" ")
         print("Merci ! Le ", tour, "commence donc le ", date_debut_tour)
+        print("Il y a", nb_matchs, "matchs à jouer.")
         print(" ")
         print("=" * 29)
         input("pressez 'ENTER'.")
@@ -259,9 +260,11 @@ class ViewMatch :
             print("- Pour le joueur blanc", match.joueur_blanc.prenom_joueur, match.joueur_blanc.nom_joueur, "répondez 'JB'")
             print("- Pour le joueur noir", match.joueur_noir.prenom_joueur, match.joueur_noir.nom_joueur, "répondez 'JN'")
             score = input("Qui a gagné le match ?")
+            print("=" * 29)
             if score != "JB" and score != "JN" and score != "N" :
                 print("Merci de répondre par 'JB', 'JN' ou 'N' uniquement !")
                 input("Pressez 'ENTER' pour continuer")
+                print("=" * 29)
             else :
                 return score
 

@@ -21,11 +21,10 @@ class Lancement :
         if reponse == 1 :
         #1. Commencer un nouveau tournoi
             infos_tournoi = ViewInformationsTournoi.infos_generales_tournoi()
-            #contient : nom_tournoi, lieu_tournoi, remarque_tournoi, debut_tournoi, fin_tournoi, nb_tours
 
             demande_nv_joueur = ViewInformationsTournoi.demande_nv_joueurs()
             #On demande à l'organisateur s'il veut récupérer la liste des joueurs (réponse "oui") ou s'il veut
-            # la créer ("non")
+            #la créer ("non")
             if demande_nv_joueur == "oui" :
                 preliste_joueurs = liste_joueur_JSON()
                 if preliste_joueurs == "ERR01" :
@@ -60,19 +59,21 @@ class Lancement :
                 #On nomme les tours : 'Round 1', 'Round 2', ...
                 nom_tour = "Round " + str(num_tour)
 
-                #Dans les tours, on doit classer les joueurs en fonction de leur score (radom si 1er tour)
+                #Dans les tours, on doit classer les joueurs en fonction de leur score et du nom (random si 1er tour)
                 #On commence par créer une variable contenant la liste des joueurs de ce tout
-                liste_joueurs_tour = tournoi.liste_joueurs
+                liste_joueurs_tour = []
+                for j in tournoi.liste_joueurs :
+                    liste_joueurs_tour.append(j)
                 if nom_tour == "Round 1":
                     random.shuffle(liste_joueurs_tour)
                 else:
-                    liste_joueurs_tour.sort(key=lambda x: x.score_actuel)
+                    liste_joueurs_tour.sort(key=lambda x: (-x.score_actuel, x.nom_joueur))
 
                 #Dans les tours, on doit savoir combien il y a de match
                 nb_match = len(liste_joueurs_tour) // 2
 
                 #On récupère la date et l'heure du début du tour et on les affiche à l'utilisateur
-                date_debut_tour = ViewInformationTour.lancement_tour(nom_tour)
+                date_debut_tour = ViewInformationTour.lancement_tour(nom_tour, nb_match)
 
                 #On peut maintenant créer l'objet tour
                 tour = Tour(nom_tour, liste_joueurs_tour, nb_match, date_debut_tour, date_fin_tour=" ")
@@ -117,8 +118,12 @@ class Lancement :
 
                 #L'opérateur sélectionne le match dont il a le retour
                 while len(liste_matchs_restant) > 0 :
-                    choix_match = ViewMatch.choix_match(liste_matchs_restant)
-                    liste_matchs_restant.remove(choix_match)
+                    if len(liste_matchs_restant) > 1 :
+                        choix_match = ViewMatch.choix_match(liste_matchs_restant)
+                        liste_matchs_restant.remove(choix_match)
+                    else :
+                        choix_match = liste_matchs_restant[0]
+                        liste_matchs_restant.remove(choix_match)
 
                     #On récupère ensuite les score
                     score = ViewMatch.declaration_scores(choix_match)
@@ -136,7 +141,7 @@ class Lancement :
                         score_a_actu = 0.5
 
                     # mise à jour des données du joueur
-                    for joueur_cherche in liste_objets_joueurs:
+                    for joueur_cherche in tournoi.liste_joueurs:
                         if joueur_cherche == match.joueur_blanc.identifiant_nationale:
                             score_a_actu = joueur_cherche.score_actuel
                             score_actualise = le_match[jeu][0][1] + score_a_actu
@@ -147,6 +152,8 @@ class Lancement :
                             joueur_cherche.score_actuel = score_actualise
                         else:
                             break
+
+                date_fin_de_tour = ViewInformationTour.fin_tour(tour.nom_tour)
 
         elif reponse == 2 :
         #2. Consulter un ancien tournoi
