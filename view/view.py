@@ -58,7 +58,8 @@ class ViewInformationsTournoi :
             debut_tournoi = debut_tournoi_brut.strftime("%d/%m/%Y")
             duree_tournoi = input("Combien de jour(s) dure le tournoi ?")
             while not duree_tournoi.isdigit() or int(duree_tournoi) < 0:
-                duree_tournoi = input("La valeur entrée n'est pas correcte. Merci de saisir un nombre supérieur à 0 !")
+                duree_tournoi = input("La valeur entrée n'est pas correcte. Merci de saisir un nombre supérieur à 0 !"
+                                      "Combien de jour(s) dure le tournoi ?")
             duree_tournoi = int(duree_tournoi)
             date_fin_brut = debut_tournoi_brut + datetime.timedelta(days=duree_tournoi)
             fin_tournoi = date_fin_brut.strftime("%d/%m/%Y")
@@ -221,13 +222,16 @@ class ViewInformationTour :
         return date_debut_tour
 
     @staticmethod
-    def fin_tour(tour):
+    def fin_tour(tour, liste_joueurs):
         print("=" * 29)
         print(" ")
         print("Le ", tour, "est maintenant terminé")
         date_brut_fin_tour = datetime.datetime.now()
         date_fin_tour = date_brut_fin_tour.strftime("%d/%m/%Y à %I:%M%p")
         print("le ", date_fin_tour)
+        print("Voici les scores :")
+        for joueur in liste_joueurs :
+            print(joueur.nom_joueur, joueur.prenom_joueur, "score :", joueur.score_actuel)
         print(" ")
         print("=" * 29)
         input("pressez 'ENTER' pour continuer.")
@@ -286,6 +290,12 @@ class Erreurs :
     def erreur2():
         print("Une erreur s'est produite, merci de recommencer !")
         input("Tapez 'ENTER' pour retourner au menu principal")
+
+    @staticmethod
+    def erreur3():
+        print("Une erreur s'est produite")
+        input("Pressez 'ENTER' pour continuer")
+        Lancement.lancementMenuPrincipal()
 
 
 if __name__ == "__main__":

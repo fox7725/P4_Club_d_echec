@@ -40,6 +40,20 @@ class Match :
         self.score_JB = score_JB
         self.score_JN = score_JN
 
+    def score (self, score) :
+        if score == "JB" :
+            self.score_JB = 1
+            self.score_JN = 0
+        elif score == "JN" :
+            self.score_JB = 0
+            self.score_JN = 1
+        elif score == "N" :
+            self.score_JB = 0.5
+            self.score_JN = 0.5
+
+        self.joueur_blanc.score_actuel += self.score_JB
+        self.joueur_noir.score_actuel += self.score_JN
+
 
 if __name__ == "__main__":
     print("Merci de commencer par lancer main.py")

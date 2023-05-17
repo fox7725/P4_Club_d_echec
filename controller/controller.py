@@ -19,6 +19,7 @@ class Lancement :
             infos_tournoi = ViewInformationsTournoi.infos_generales_tournoi()
 
             demande_nv_joueur = ViewInformationsTournoi.demande_nv_joueurs()
+
             #On demande à l'organisateur s'il veut récupérer la liste des joueurs (réponse "oui") ou s'il veut
             #la créer ("non")
             if demande_nv_joueur == "oui" :
@@ -108,9 +109,8 @@ class Lancement :
 
                     # on fait une liste avec tous les matchs
                     liste_matchs.append(match)
-
                     #on définit la variable qui contiendra les matchs restant à jouer dans le tour
-                    liste_matchs_restant = liste_matchs
+                    liste_matchs_restant = liste_matchs.copy()
 
                 #L'opérateur sélectionne le match dont il a le retour
                 while len(liste_matchs_restant) > 0 :
@@ -123,33 +123,13 @@ class Lancement :
 
                     #On récupère ensuite les score
                     score = ViewMatch.declaration_scores(choix_match)
+                    print(score)
+                    choix_match.score(score)
+                    for joueur in tournoi.liste_joueurs:
+                        print(joueur.nom_joueur, joueur.prenom_joueur, "score :", joueur.score_actuel)
 
-                    #On attribue les points à chaque joueur
-                    le_match = {}
-                    if score == "JB":
-                        le_match = {choix_match: ([match.joueur_blanc, 1], [match.joueur_noir, 0])}
-                        score_a_actu = 1
-                    if score == "JN":
-                        le_match = {choix_match: ([match.joueur_blanc, 0], [match.joueur_noir, 1])}
-                        score_a_actu = 1
-                    if score == "N":
-                        le_match = {choix_match: ([match.joueur_blanc, 0.5], [match.joueur_noir, 0.5])}
-                        score_a_actu = 0.5
-
-                    # mise à jour des données du joueur
-                    for joueur_cherche in tournoi.liste_joueurs:
-                        if joueur_cherche == match.joueur_blanc.identifiant_nationale:
-                            score_a_actu = joueur_cherche.score_actuel
-                            score_actualise = le_match[jeu][0][1] + score_a_actu
-                            joueur_cherche.score_actuel = score_actualise
-                        if joueur_cherche == match.joueur_noir:
-                            score_a_actu = joueur_cherche.score_actuel
-                            score_actualise = le_match[jeu][0][1] + score_a_actu
-                            joueur_cherche.score_actuel = score_actualise
-                        else:
-                            break
-
-                date_fin_de_tour = ViewInformationTour.fin_tour(tour.nom_tour)
+                #Affichage de fin du tour et enregistrement de la date
+                date_fin_de_tour = ViewInformationTour.fin_tour(tour.nom_tour, tournoi.liste_joueurs)
 
         elif reponse == 2 :
         #2. Consulter un ancien tournoi
@@ -166,9 +146,7 @@ class Lancement :
             sys.exit("Merci et à bientôt !")
 
         else :
-            print("Une erreur s'est produite")
-            input("Pressez 'ENTER' pour continuer")
-            Lancement.lancementMenuPrincipal()
+            Erreurs.erreur3()
 
 
 if __name__ == "__main__":
