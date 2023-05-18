@@ -103,6 +103,25 @@ class ViewInformationsTournoi :
         return infos_tournoi
 
     @staticmethod
+    def infos_fin_tournoi(liste_gagnants, tournoi):
+        print(" ")
+        print("=" * 29)
+        print(" ")
+        print("FIN DU TOURNOI", tournoi.nom_tournoi.upper())
+        print(" ")
+        print("=" * 29)
+        print(" ")
+        print("Le tournoi d'échec est maintenant terminé, nous vous remercions d'avoir utilisé ce logiciel de gestion"
+              "de tournois édité par Christophe RENARD !")
+        if len(liste_gagnants) > 1 :
+            print("Toutes nos félicitations aux gagnants :")
+            for joueur in liste_gagnants :
+                print(joueur.prenom_joueur, joueur.nom_joueur)
+        else :
+            print("Toutes nos félicitation au gagnant", liste_gagnants[0].prenom_joueur, liste_gagnants[0].nom_joueur)
+        input("Presser 'ENTER' pour retourner au menu principal")
+
+    @staticmethod
     def demande_nv_joueurs():
         oui_non = "peut-être"
         while oui_non != "oui" and oui_non != "non":

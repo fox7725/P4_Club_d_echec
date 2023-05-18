@@ -160,7 +160,6 @@ class Lancement :
                     tour_dict = {
                         "num_tour" : tour_a_sauver.num_tour,
                         "nom_tour" : tour_a_sauver.nom_tour,
-                        "liste_joueurs" : tour_a_sauver.liste_joueurs,
                         "nb_matchs" : tour_a_sauver.nb_matchs,
                         "date_debut_tour" : tour_a_sauver.date_debut_tour,
                         "date_fin_tour" : tour_a_sauver.date_fin_tour
@@ -168,6 +167,22 @@ class Lancement :
                     liste_tours_dict.append(tour_dict)
                 with open("JSON/en_cours/tours_joues.json", "w") as fichier_bis:
                     json.dump(liste_tours_dict, fichier_bis, indent=4)
+
+            #On termine le tournoi en indiquant le ou les gagnants, puis en enregistrant et en archivant le tout
+            #On commence par chercher la valeur du score le plus élevé
+            score_max = max(joueur.score_actuel for joueur in liste_joueurs)
+            #On recherche le ou les joueurs qui ont ce score
+            liste_gagnants = [joueur for joueur in liste_joueurs if joueur.score_actuel == score_max]
+
+            #On affiche le résultat du tournoi
+            liste_ID_gagnants = []
+            for gagnant in liste_gagnants :
+                liste_ID_gagnants.append(gagnant.identifiant_nationale)
+            tournoi.sauver_tournoi(gagnant = liste_ID_gagnants)
+            ViewInformationsTournoi.infos_fin_tournoi(liste_gagnants, tournoi)
+
+            #retour au menu principal
+            Lancement.lancementMenuPrincipal()
 
         elif reponse == 2 :
         #2. Consulter un ancien tournoi
