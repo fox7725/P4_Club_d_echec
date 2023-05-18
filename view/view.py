@@ -285,14 +285,10 @@ class Erreurs :
     def erreur1():
         print("Aucune base de données n'est présente. Merci de contacter votre administrateur !")
         input("Tapez 'ENTER' pour retourner au menu principal")
+        Lancement.lancementMenuPrincipal()
 
     @staticmethod
     def erreur2():
-        print("Une erreur s'est produite, merci de recommencer !")
-        input("Tapez 'ENTER' pour retourner au menu principal")
-
-    @staticmethod
-    def erreur3():
         print("Une erreur s'est produite")
         input("Pressez 'ENTER' pour continuer")
         Lancement.lancementMenuPrincipal()

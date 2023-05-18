@@ -13,6 +13,3 @@ def liste_joueur_JSON():
     else:
         contenu = "ERR01"
     return contenu
-
-def save() :
-    pass

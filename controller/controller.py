@@ -48,8 +48,12 @@ class Lancement :
             nb_tours = infos_tournoi[5]
             tournoi = Tournoi(nom_tournoi, lieu_tournoi, remarque_tournoi, debut_tournoi, fin_tournoi,
                               nb_tours, liste_objets_joueurs)
+            #On sauvegarde le tournoi lancé et la liste des joueurs pour les récupérer en cas de coupure
+            tournoi.sauver_tournoi()
+            tournoi.sauver_joueurs()
 
             #On créé les itérations des tours via une première boucle
+            liste_tours = []
             num_tour = 0
             while num_tour < tournoi.nb_tours:
                 num_tour += 1
@@ -73,7 +77,7 @@ class Lancement :
                 date_debut_tour = ViewInformationTour.lancement_tour(nom_tour, nb_match)
 
                 #On peut maintenant créer l'objet tour
-                tour = Tour(nom_tour, liste_joueurs_tour, nb_match, date_debut_tour, date_fin_tour=" ")
+                tour = Tour(num_tour, nom_tour, liste_joueurs_tour, nb_match, date_debut_tour, date_fin_tour=" ")
 
                 #On va maintenant pouvoir créer une nouvelle boucle pour créer les matchs
                 liste_paires_passees = []
@@ -113,6 +117,7 @@ class Lancement :
                     liste_matchs_restant = liste_matchs.copy()
 
                 #L'opérateur sélectionne le match dont il a le retour
+                liste_matchs_joues = []
                 while len(liste_matchs_restant) > 0 :
                     if len(liste_matchs_restant) > 1 :
                         choix_match = ViewMatch.choix_match(liste_matchs_restant)
@@ -120,16 +125,49 @@ class Lancement :
                     else :
                         choix_match = liste_matchs_restant[0]
                         liste_matchs_restant.remove(choix_match)
-
                     #On récupère ensuite les score
                     score = ViewMatch.declaration_scores(choix_match)
-                    print(score)
                     choix_match.score(score)
-                    for joueur in tournoi.liste_joueurs:
-                        print(joueur.nom_joueur, joueur.prenom_joueur, "score :", joueur.score_actuel)
+                    liste_matchs_joues.append(choix_match)
+
+                    #On sauvegarde les matchs joués dans un JSON
+                    liste_matchs_joues_dict = []
+                    for match_joue in liste_matchs_joues :
+                        match_joue_dict = {
+                            "nom_tour" : match_joue.nom_tour,
+                            "nom_match" : match_joue.nom_match,
+                            "joueur_blanc" : match_joue.joueur_blanc.identifiant_nationale,
+                            "joueur_noir" : match_joue.joueur_noir.identifiant_nationale,
+                            "score_JB" : match_joue.score_JB,
+                            "score_JN" : match_joue.score_JN
+                        }
+                        liste_matchs_joues_dict.append(match_joue_dict)
+                    with open("JSON/en_cours/matchs_joues.json", "w") as fichier_bis:
+                        json.dump(liste_matchs_joues_dict, fichier_bis, indent=4)
+
+                # Mise à jour des scores des joueurs dans le JSON
+                tournoi.sauver_joueurs()
 
                 #Affichage de fin du tour et enregistrement de la date
                 date_fin_de_tour = ViewInformationTour.fin_tour(tour.nom_tour, tournoi.liste_joueurs)
+                #Mise à jour de la date de fin du tour
+                tour.date_fin_tour = date_fin_de_tour
+
+                #On ajoute le tour terminé dans une liste et on sauvegarde dans un JSON
+                liste_tours.append(tour)
+                liste_tours_dict = []
+                for tour_a_sauver in liste_tours :
+                    tour_dict = {
+                        "num_tour" : tour_a_sauver.num_tour,
+                        "nom_tour" : tour_a_sauver.nom_tour,
+                        "liste_joueurs" : tour_a_sauver.liste_joueurs,
+                        "nb_matchs" : tour_a_sauver.nb_matchs,
+                        "date_debut_tour" : tour_a_sauver.date_debut_tour,
+                        "date_fin_tour" : tour_a_sauver.date_fin_tour
+                    }
+                    liste_tours_dict.append(tour_dict)
+                with open("JSON/en_cours/tours_joues.json", "w") as fichier_bis:
+                    json.dump(liste_tours_dict, fichier_bis, indent=4)
 
         elif reponse == 2 :
         #2. Consulter un ancien tournoi
@@ -146,7 +184,7 @@ class Lancement :
             sys.exit("Merci et à bientôt !")
 
         else :
-            Erreurs.erreur3()
+            Erreurs.erreur2()
 
 
 if __name__ == "__main__":
