@@ -170,15 +170,16 @@ class Lancement :
 
             #On termine le tournoi en indiquant le ou les gagnants, puis en enregistrant et en archivant le tout
             #On commence par chercher la valeur du score le plus élevé
-            score_max = max(joueur.score_actuel for joueur in liste_joueurs)
+            score_max = max(joueur.score_actuel for joueur in tournoi.liste_joueurs)
             #On recherche le ou les joueurs qui ont ce score
-            liste_gagnants = [joueur for joueur in liste_joueurs if joueur.score_actuel == score_max]
+            liste_gagnants = [joueur for joueur in tournoi.liste_joueurs if joueur.score_actuel == score_max]
 
             #On affiche le résultat du tournoi
             liste_ID_gagnants = []
             for gagnant in liste_gagnants :
                 liste_ID_gagnants.append(gagnant.identifiant_nationale)
-            tournoi.sauver_tournoi(gagnant = liste_ID_gagnants)
+            tournoi.gagnant = liste_ID_gagnants
+            tournoi.sauver_tournoi()
             ViewInformationsTournoi.infos_fin_tournoi(liste_gagnants, tournoi)
 
             #retour au menu principal
