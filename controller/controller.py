@@ -54,6 +54,7 @@ class Lancement :
 
             #On créé les itérations des tours via une première boucle
             liste_tours = []
+            liste_matchs_joues = []
             num_tour = 0
             while num_tour < tournoi.nb_tours:
                 num_tour += 1
@@ -117,7 +118,6 @@ class Lancement :
                     liste_matchs_restant = liste_matchs.copy()
 
                 #L'opérateur sélectionne le match dont il a le retour
-                liste_matchs_joues = []
                 while len(liste_matchs_restant) > 0 :
                     if len(liste_matchs_restant) > 1 :
                         choix_match = ViewMatch.choix_match(liste_matchs_restant)
