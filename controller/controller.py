@@ -137,8 +137,8 @@ class Lancement :
                         match_joue_dict = {
                             "nom_tour" : match_joue.nom_tour,
                             "nom_match" : match_joue.nom_match,
-                            "joueur_blanc" : match_joue.joueur_blanc.identifiant_nationale,
-                            "joueur_noir" : match_joue.joueur_noir.identifiant_nationale,
+                            "joueur_blanc" : match_joue.joueur_blanc.identifiant_national,
+                            "joueur_noir" : match_joue.joueur_noir.identifiant_national,
                             "score_JB" : match_joue.score_JB,
                             "score_JN" : match_joue.score_JN
                         }
@@ -178,7 +178,7 @@ class Lancement :
             #On affiche le résultat du tournoi
             liste_ID_gagnants = []
             for gagnant in liste_gagnants :
-                liste_ID_gagnants.append(gagnant.identifiant_nationale)
+                liste_ID_gagnants.append(gagnant.identifiant_national)
             tournoi.gagnant = liste_ID_gagnants
             tournoi.sauver_tournoi()
             ViewInformationsTournoi.infos_fin_tournoi(liste_gagnants, tournoi)

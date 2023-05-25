@@ -3,8 +3,8 @@ import os
 
 
 class Joueur :
-    def __init__(self, identifiant_nationale, nom_joueur, prenom_joueur, sexe, date_naissance, score_actuel = 0):
-        self.identifiant_nationale = identifiant_nationale
+    def __init__(self, identifiant_national, nom_joueur, prenom_joueur, sexe, date_naissance, score_actuel = 0):
+        self.identifiant_national = identifiant_national
         self.nom_joueur = nom_joueur
         self.prenom_joueur = prenom_joueur
         self.sexe = sexe
@@ -94,7 +94,7 @@ class Tournoi :
             "debut_tournoi": self.debut_tournoi,
             "fin_tournoi": self.fin_tournoi,
             "nb_tours": self.nb_tours,
-            "liste_joueurs": [joueur.identifiant_nationale for joueur in self.liste_joueurs],
+            "liste_joueurs": [joueur.identifiant_national for joueur in self.liste_joueurs],
             "gagnant": self.gagnant
         }
 
@@ -107,7 +107,7 @@ class Tournoi :
         liste_joueurs_dict = []
         for joueur in self.liste_joueurs :
             joueur_dict = {
-                "identifiant_nationale" : joueur.identifiant_nationale,
+                "identifiant_national" : joueur.identifiant_national,
                 "nom_joueur" : joueur.nom_joueur,
                 "prenom_joueur" : joueur.prenom_joueur,
                 "sexe" : joueur.sexe,
