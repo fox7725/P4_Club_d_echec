@@ -67,7 +67,8 @@ class MenuGestionJoueur :
                 print(" ")
                 print("Merci de choisir parmis les options 1, 2, 3, ou 4 !")
                 print(" ")
-            if code_menu_joueur != 0 and code_menu_joueur != 1 and code_menu_joueur != 2 and code_menu_joueur != 3 and code_menu_joueur != 4:
+            if code_menu_joueur != 0 and code_menu_joueur != 1 and code_menu_joueur != 2 and code_menu_joueur != 3 \
+                    and code_menu_joueur != 4:
                 print(" ")
                 print("Merci de choisir parmis les options 1, 2, 3, 4 !")
                 print(" ")
@@ -77,7 +78,13 @@ class MenuGestionJoueur :
     def formulaire_nouveau_joueur():
         # Formulaire pour l'inscription des joueurs dans le JSON en tant que membres de l'association
         print(" ")
-        identifiant = input("Quel est votre identifiant national ? ")
+        id_valide = False
+        while not id_valide:
+            identifiant = input("Quel est votre Identifiant National ? ")
+            if re.match(r'^[a-zA-Z]{2}\d{5}$', identifiant):
+                id_valide = True
+            else:
+                print("L'Identifiant National entré est invalide ! Veuillez le ressaisir sous la forme 'XX12345'.")
         nom = input("Quel est votre nom ? ")
         prenom = input("Quel est votre prénom ? ")
         sexe = "non binaire"
