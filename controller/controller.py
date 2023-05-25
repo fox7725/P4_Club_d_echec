@@ -1,6 +1,7 @@
 import sys
 import datetime
 import random
+import json
 
 from view.view import *
 from models.models import *
@@ -192,8 +193,55 @@ class Lancement :
 
         elif reponse == 3 :
         #3. Gestion des joueurs du club
-            print(reponse)
-            Lancement.lancementMenuPrincipal()
+            #On affiche le menu de la gestion des joueurs
+            code_menu_joueur = 0
+            while code_menu_joueur == 0 :
+                code_menu_joueur = MenuGestionJoueur.menujoueur()
+
+                #On traite le choix de l'utilisateur
+                if code_menu_joueur == 1:
+                    liste_joueurs_abonnes = liste_joueur_JSON()
+                    code_menu_joueur = MenuGestionJoueur.affichage_liste_abonnes(liste_joueurs_abonnes)
+
+                elif code_menu_joueur == 2:
+                    oui_non = "oui"
+                    while oui_non == "oui":
+                        #On demande l'identifiant du joueur recherché
+                        reponses_formulaire = MenuGestionJoueur.questionnaire_recherche_joueur()
+
+                        # Charger les données du fichier JSON dans une liste
+                        with open("JSON/joueurs.json", "r") as fichier:
+                            joueurs_json = json.load(fichier)
+
+                        #Maintenant on peut chercher le joueur voulu dans la liste
+                        oui_non = "oui"
+                        while oui_non == "oui" :
+                            for joueur in joueurs_json :
+                                if joueur["Identifiant national"] == reponses_formulaire :
+                                    oui_non = MenuGestionJoueur.affichage(joueur)
+                                    if oui_non == "non" :
+                                        code_menu_joueur = 0
+                                    break
+
+                elif code_menu_joueur == 3:
+                    oui_non = "oui"
+                    while oui_non == "oui":
+                        reponses_formulaire = MenuGestionJoueur.formulaire_nouveau_joueur()
+                        creation = JoueurJSON(reponses_formulaire[0], reponses_formulaire[1], reponses_formulaire[2],
+                                          reponses_formulaire[3], reponses_formulaire[4], reponses_formulaire[5],
+                                          reponses_formulaire[6], reponses_formulaire[7])
+                        creation.dictionnaire()
+                        resultat = creation.enregistreJoueur()
+                        retour = MenuGestionJoueur.joueur_enregistre(resultat)
+                        if retour == False :
+                            oui_non = "non"
+                            code_menu_joueur = 0
+
+                elif code_menu_joueur == 4:
+                    Lancement.lancementMenuPrincipal()
+
+                else:
+                    Erreurs.erreur2()
 
         elif reponse == 4 :
         #4. quitter le programme

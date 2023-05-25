@@ -4,6 +4,7 @@ import datetime
 import re
 
 from models.models import *
+from fonctions.fonctions import *
 
 
 class MenuPrincipal :
@@ -40,6 +41,102 @@ class MenuPrincipal :
                 print(" ")
                 input("Pressez 'ENTER' pour continuer")
         return code_menu_principal
+
+
+class MenuGestionJoueur :
+    @staticmethod
+    def menujoueur():
+        code_menu_joueur = 0
+        while code_menu_joueur != 1 and code_menu_joueur != 2 and code_menu_joueur != 3 and code_menu_joueur != 4:
+            print("*" * 66)
+            print("-" * 66)
+            print("Bienvenue dans le menu de gestion des joueur, merci de faire votre sélection :")
+            print("-" * 66)
+            print(" ")
+            print("1. Consulter la liste des joueurs enregistrés")
+            print("2. Consulter les informations d'un joueur")
+            print("3. Créer un nouveau joueur")
+            print("4. Retour au menu principal")
+            print(" ")
+            print("*" * 66)
+            menu_joueur = input("Votre réponse :")
+            if menu_joueur.isdigit():
+                code_menu_joueur = int(menu_joueur)
+            else:
+                code_menu_joueur = 0
+                print(" ")
+                print("Merci de choisir parmis les options 1, 2, 3, ou 4 !")
+                print(" ")
+            if code_menu_joueur != 0 and code_menu_joueur != 1 and code_menu_joueur != 2 and code_menu_joueur != 3 and code_menu_joueur != 4:
+                print(" ")
+                print("Merci de choisir parmis les options 1, 2, 3, 4 !")
+                print(" ")
+        return code_menu_joueur
+
+    @staticmethod
+    def formulaire_nouveau_joueur():
+        # Formulaire pour l'inscription des joueurs dans le JSON en tant que membres de l'association
+        print(" ")
+        identifiant = input("Quel est votre identifiant national ? ")
+        nom = input("Quel est votre nom ? ")
+        prenom = input("Quel est votre prénom ? ")
+        sexe = "non binaire"
+        while sexe != "H" and sexe != "F" :
+            sexe = input("Êtes vous un homme ou une femme ? (H / F) ")
+            if sexe != "H" and sexe != "F" :
+                print("Merci de répondre par 'H' pour Homme ou par 'F' pour Femme.")
+        verif_date = 0
+        while verif_date == 0 :
+            date_naissance = input("Quelle est votre date de naissance ? ")
+            verif_date = verification_date(date_naissance)
+            if verif_date == 0 :
+                print ("La valeur entrée (", date_naissance, ") n'est pas une date valide. Merci de recommencer.")
+        remarque = " "
+        liste_tournois = []
+        moyenne_points = 0
+        reponses_formulaire = [identifiant, nom, prenom, sexe, date_naissance, remarque, liste_tournois, moyenne_points]
+        return reponses_formulaire
+
+    @staticmethod
+    def joueur_enregistre(resultat):
+        print(resultat)
+        oui_non = "peut-être"
+        while oui_non != "oui" and oui_non != "non":
+            oui_non = input("Voulez vous créer un nouveau joueur ? (oui / non) ")
+            if oui_non != "oui" and oui_non != "non":
+                print("Votre saisie est invalide, veuillez répondre par 'oui' ou par 'non' !")
+            elif oui_non == "non":
+                return False
+            elif oui_non == "oui":
+                return True
+
+    @staticmethod
+    def questionnaire_recherche_joueur():
+        identifiant = input("Quel est l'identifiant national du joueur ?")
+        return identifiant
+
+    @staticmethod
+    def affichage(resultat):
+        print("Voici les informations demandées")
+        for cle in resultat:
+            print(cle, ":", resultat[cle])
+        oui_non = "peut-être"
+        while oui_non != "oui" and oui_non != "non":
+            oui_non = input("Voulez vous consulter un autre joueur ? (oui / non) ")
+            if oui_non != "oui" and oui_non != "non":
+                print("Votre saisie est invalide, veuillez répondre par 'oui' ou par 'non' !")
+            else :
+                return oui_non
+
+    @staticmethod
+    def affichage_liste_abonnes(liste_abonnes):
+        print("Voici la liste des joueurs enregistrés dans le club :")
+        for abonne in liste_abonnes :
+            for cle in abonne :
+                print(cle, ":", abonne[cle])
+            print("-" * 29)
+        input("Pour continuer pressez 'ENTER'")
+        return 0
 
 
 class ViewInformationsTournoi :

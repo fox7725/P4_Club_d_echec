@@ -1,5 +1,6 @@
 import json
 import os
+import datetime
 
 
 def liste_joueur_JSON():
@@ -13,3 +14,11 @@ def liste_joueur_JSON():
     else:
         contenu = "ERR01"
     return contenu
+
+def verification_date(date) :
+    format_date = "%d/%m/%Y"
+    try :
+        validation_date = datetime.datetime.strptime(date, format_date)
+    except ValueError :
+        return 0
+    return 1
