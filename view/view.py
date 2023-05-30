@@ -434,6 +434,15 @@ class Erreurs :
         input("Pressez 'ENTER' pour continuer")
         Lancement.lancementMenuPrincipal()
 
+    @staticmethod
+    def erreur3():
+        print(" ")
+        print("Nous n'avons pas pu mettre les informations des joueurs à jour, le fichier 'joueurs.json'"
+              " est introuvable")
+        print(" ")
+        input("Pressez 'ENTER' pour continuer")
+
+
 
 if __name__ == "__main__":
     print("Merci de commencer par lancer main.py")

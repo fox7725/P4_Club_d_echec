@@ -186,6 +186,15 @@ class Lancement :
             archivage_tournoi = tournoi.sauvegarde_fin_tournoi(liste_tours)
             ViewInformationsTournoi.archivage_tournoi(archivage_tournoi)
 
+            #S'il s'agissait d'un tournoi à guichet fermé, il faut mettre à jour la liste des joueurs
+            if demande_nv_joueur == "oui" :
+                for joueur_a_modifier in tournoi.liste_joueurs :
+                    retour_mise_a_jour = joueur_a_modifier.mise_a_jour_fin_tournoi(tournoi.nom_tournoi,
+                                                                                   tournoi.debut_tournoi)
+                    if retour_mise_a_jour == 0 :
+                        Erreurs.erreur3()
+                        break
+
             #retour au menu principal
             Lancement.lancementMenuPrincipal()
 

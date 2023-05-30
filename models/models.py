@@ -12,15 +12,42 @@ class Joueur :
         self.date_naissance = date_naissance
         self.score_actuel = score_actuel
 
+    def mise_a_jour_fin_tournoi(self, nom_tournoi, date_tournoi):
+        #On crée un tuple contenant les info sur le tournoi que le joueur vient de jouer
+        info_tournoi = (nom_tournoi, date_tournoi, {"score" : self.score_actuel})
+        # on accède au fichier JSON pour la charger et chercher le joueur
+        os.makedirs("JSON", exist_ok=True)
+        bdd_joueurs = "JSON/joueurs.json"
+        if os.path.exists(bdd_joueurs):
+            # Si le fichier JSON pour les joueurs existe, on vérifie que le joueur n'existe pas déjà et on l'enregistre
+            with open(bdd_joueurs, 'r') as f:
+                contenu = json.load(f)
+            for rjoueur in contenu:
+                # On commence par vérifier si le joueur existe déjà
+                if rjoueur["Identifiant national"] == self.identifiant_national:
+                    # On calcul la moyenne des scores du joueur
+                    nombre_tournoi_participe = len(rjoueur["Liste des tournois"])
+                    calcul_moyenne = ((rjoueur["Moyenne des points par tournoi"] * nombre_tournoi_participe) +
+                                      self.score_actuel) / (nombre_tournoi_participe + 1)
+
+                    #on met à jour les informations du joueur
+                    rjoueur["Liste des tournois"].append(info_tournoi)
+                    rjoueur["Moyenne des points par tournoi"] = calcul_moyenne
+            with open(bdd_joueurs, "w") as f:
+                json.dump(contenu, f, indent=4)
+            return 1
+
+        else :
+            return 0
+
 
 class JoueurJSON :
-    def __init__(self, identifiant, nom, prenom, sexe, date_naissance, remarque, liste_tournois, moyenne_points):
+    def __init__(self, identifiant, nom, prenom, sexe, date_naissance, liste_tournois, moyenne_points):
         self.identifiant_national = identifiant
         self.nom = nom
         self.prenom = prenom
         self.sexe = sexe
         self.date_naissance = date_naissance
-        self.remarque = remarque
         self.liste_tournois = liste_tournois
         self.moyenne_points = moyenne_points
 
@@ -32,7 +59,6 @@ class JoueurJSON :
             "Prénom du joueur" : self.prenom,
             "Sexe" : self.sexe,
             "Date de naissance" : self.date_naissance,
-            "Remarque du directeur" : self.remarque,
             "Liste des tournois" : self.liste_tournois,
             "Moyenne des points par tournoi" : self.moyenne_points
         }
