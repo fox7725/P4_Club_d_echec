@@ -119,6 +119,7 @@ class Lancement :
                     liste_matchs_restant = liste_matchs.copy()
 
                 #L'opérateur sélectionne le match dont il a le retour
+                liste_tuples_matchs_tour = []
                 while len(liste_matchs_restant) > 0 :
                     if len(liste_matchs_restant) > 1 :
                         choix_match = ViewMatch.choix_match(liste_matchs_restant)
@@ -131,20 +132,28 @@ class Lancement :
                     choix_match.score(score)
                     liste_matchs_joues.append(choix_match)
 
-                    #On sauvegarde les matchs joués dans un JSON
-                    liste_matchs_joues_dict = []
-                    for match_joue in liste_matchs_joues :
-                        match_joue_dict = {
-                            "nom_tour" : match_joue.nom_tour,
-                            "nom_match" : match_joue.nom_match,
-                            "joueur_blanc" : match_joue.joueur_blanc.identifiant_national,
-                            "joueur_noir" : match_joue.joueur_noir.identifiant_national,
-                            "score_JB" : match_joue.score_JB,
-                            "score_JN" : match_joue.score_JN
-                        }
-                        liste_matchs_joues_dict.append(match_joue_dict)
-                    with open("JSON/en_cours/matchs_joues.json", "w") as fichier_bis:
-                        json.dump(liste_matchs_joues_dict, fichier_bis, indent=4)
+                    #On fait le tuple demandé qu'on va aussi utiliser dans les saugardes
+                    tuple_match_joue = (
+                        [
+                            {
+                                choix_match.joueur_blanc.identifiant_national : [
+                                    choix_match.joueur_blanc.prenom_joueur,
+                                    choix_match.joueur_blanc.nom_joueur
+                                ]
+                            },
+                            choix_match.score_JB
+                        ],
+                        [
+                            {
+                                choix_match.joueur_noir.identifiant_national: [
+                                    choix_match.joueur_noir.prenom_joueur,
+                                    choix_match.joueur_noir.nom_joueur
+                                ]
+                            },
+                            choix_match.score_JN
+                        ]
+                    )
+                    liste_tuples_matchs_tour.append(tuple_match_joue)
 
                 # Mise à jour des scores des joueurs dans le JSON
                 tournoi.sauver_joueurs()
@@ -156,18 +165,7 @@ class Lancement :
 
                 #On ajoute le tour terminé dans une liste et on sauvegarde dans un JSON
                 liste_tours.append(tour)
-                liste_tours_dict = []
-                for tour_a_sauver in liste_tours :
-                    tour_dict = {
-                        "num_tour" : tour_a_sauver.num_tour,
-                        "nom_tour" : tour_a_sauver.nom_tour,
-                        "nb_matchs" : tour_a_sauver.nb_matchs,
-                        "date_debut_tour" : tour_a_sauver.date_debut_tour,
-                        "date_fin_tour" : tour_a_sauver.date_fin_tour
-                    }
-                    liste_tours_dict.append(tour_dict)
-                with open("JSON/en_cours/tours_joues.json", "w") as fichier_bis:
-                    json.dump(liste_tours_dict, fichier_bis, indent=4)
+                tour.sauvegarde_tour(liste_tours, liste_tuples_matchs_tour)
 
             #On termine le tournoi en indiquant le ou les gagnants, puis en enregistrant et en archivant le tout
             #On commence par chercher la valeur du score le plus élevé
@@ -182,6 +180,11 @@ class Lancement :
             tournoi.gagnant = liste_ID_gagnants
             tournoi.sauver_tournoi()
             ViewInformationsTournoi.infos_fin_tournoi(liste_gagnants, tournoi)
+
+            #On archive le tournoi et on supprime les JSON temporaires
+            ViewInformationsTournoi.pret_pour_archivage()
+            archivage_tournoi = tournoi.sauvegarde_fin_tournoi(liste_tours)
+            ViewInformationsTournoi.archivage_tournoi(archivage_tournoi)
 
             #retour au menu principal
             Lancement.lancementMenuPrincipal()

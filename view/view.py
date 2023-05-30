@@ -280,6 +280,24 @@ class ViewInformationsTournoi :
                 return liste_joueurs
 
     @staticmethod
+    def archivage_tournoi(archivage_tournoi):
+        print("=" * 29)
+        print(" ")
+        print(archivage_tournoi)
+        print(" ")
+        print("=" * 29)
+        input("Pressez 'ENTER' pour continuer")
+
+    @staticmethod
+    def pret_pour_archivage():
+        print("=" * 29)
+        print(" ")
+        print("Quand vous serez prêt pour terminer le tournoi et l'archiver, pressez 'ENTER' !")
+        print(" ")
+        print("=" * 29)
+        input("Pressez 'ENTER' pour continuer")
+
+    @staticmethod
     def ajout_joueurs_invites(preliste_joueurs):
         if len(preliste_joueurs) == 0 or len(preliste_joueurs) == 1:
             print("Il y a actuellement " + str(len(preliste_joueurs)) + " joueur enregistré dans la base de données")
