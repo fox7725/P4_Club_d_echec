@@ -133,26 +133,28 @@ class Lancement :
                     liste_matchs_joues.append(choix_match)
 
                     #On fait le tuple demandé qu'on va aussi utiliser dans les saugardes
-                    tuple_match_joue = (
-                        [
-                            {
-                                choix_match.joueur_blanc.identifiant_national : [
-                                    choix_match.joueur_blanc.prenom_joueur,
-                                    choix_match.joueur_blanc.nom_joueur
-                                ]
-                            },
-                            choix_match.score_JB
-                        ],
-                        [
-                            {
-                                choix_match.joueur_noir.identifiant_national: [
-                                    choix_match.joueur_noir.prenom_joueur,
-                                    choix_match.joueur_noir.nom_joueur
-                                ]
-                            },
-                            choix_match.score_JN
-                        ]
-                    )
+                    tuple_match_joue = {choix_match.nom_match :
+                        (
+                            [
+                                {
+                                    choix_match.joueur_blanc.identifiant_national : [
+                                        choix_match.joueur_blanc.prenom_joueur,
+                                        choix_match.joueur_blanc.nom_joueur
+                                    ]
+                                },
+                                choix_match.score_JB
+                            ],
+                            [
+                                {
+                                    choix_match.joueur_noir.identifiant_national: [
+                                        choix_match.joueur_noir.prenom_joueur,
+                                        choix_match.joueur_noir.nom_joueur
+                                    ]
+                                },
+                                choix_match.score_JN
+                            ]
+                        )
+                    }
                     liste_tuples_matchs_tour.append(tuple_match_joue)
 
                 # Mise à jour des scores des joueurs dans le JSON
@@ -198,7 +200,6 @@ class Lancement :
             #retour au menu principal
             Lancement.lancementMenuPrincipal(0)
 
-
         # 2. Consulter les anciens tournois
         elif reponse == 2 :
 
@@ -232,7 +233,7 @@ class Lancement :
 
             #On traite le choix de l'utilisateur
             #code 5 : retour au menu principal
-            if code_rapport_tournoi == 5 :
+            if code_rapport_tournoi == 3 :
                 Lancement.lancementMenuPrincipal(0)
 
             #code 1 : affichage de la liste des tournois
@@ -242,17 +243,10 @@ class Lancement :
 
             #code 2 : affichage les informations générale d'un tournoi
             if code_rapport_tournoi == 2 :
-                pass
-
-            #code 3 : affichage la liste des joueurs d'un tournoi
-            if code_rapport_tournoi == 3 :
-                pass
-
-            #code 4 : affichage la liste des tours et des matchs d'un tournoi
-            if code_rapport_tournoi == 4 :
-                pass
-
-
+                #On demande de quel tournoi on veut afficher les informations
+                date_tournoi = RapportsTournois.quelle_date_tournoi(liste_tournois)
+                affichage_info_tournoi = RapportsTournois.affichage_infos_tournoi(date_tournoi, liste_tournois)
+                Lancement.lancementMenuPrincipal(2)
 
         # 3. Gestion des joueurs du club
         elif reponse == 3 :
@@ -305,7 +299,6 @@ class Lancement :
 
                 else:
                     Erreurs.erreur2()
-
 
         # 4. quitter le programme
         elif reponse == 4 :

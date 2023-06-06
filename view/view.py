@@ -425,25 +425,139 @@ class ViewMatch :
 class RapportsTournois :
 
     @staticmethod
-    def quelle_date_tournoi():
+    def quelle_date_tournoi(liste_tournois):
         print("*" * 66)
         print(" ")
         print("Bienvenue dans le menu visionnage des matchs archivés, quelle est la date de début du match que vous "
               "souhaitez consulter ?")
         print(" ")
         verif_date = 0
-        while verif_date == 0 :
+        date_existe = 0
+        while verif_date == 0 or date_existe == 0 :
             date_tournoi = input("Tapez une date au format JJ/MM/AAAA : ")
             verif_date = verification_date(date_tournoi)
             if verif_date == 0 :
                 print("La date", date_tournoi, "n'est pas une date correcte.")
             if verif_date == 1 :
-                return date_tournoi
+                for tournoi in liste_tournois :
+                    if tournoi.debut_tournoi == date_tournoi :
+                        date_existe = 1
+                        return date_tournoi
+                if date_existe == 0 :
+                    input("Il n'y a pas de tournoi à cette date, merci de saisir une autre date. Pressez 'ENTER' "
+                          "pour continuer.")
+
+    @staticmethod
+    def affichage_infos_tournoi(date_tournoi, liste_tournois):
+        for tournoi in liste_tournois :
+            if tournoi.debut_tournoi == date_tournoi:
+                print(" ")
+                print("*" * 66)
+                print(" ")
+                print("Vous avez demandé à voir les information du tournoi", tournoi.nom_tournoi, "s'étant déroulé à",
+                      tournoi.lieu_tournoi, "du", tournoi.debut_tournoi, "au", tournoi.fin_tournoi, ":")
+                print(" ")
+                if len(tournoi.gagnant) == 1:
+                    for gagnant in tournoi.gagnant:
+                        cle = list(gagnant.keys())[0]
+                        valeurs = gagnant[cle]
+                        prenom = valeurs[0]
+                        nom = valeurs[1]
+                        print("Ce tournoi s'est déroulé en", tournoi.nb_tours, "tours. Le vainqueur est le joueur N°",
+                              cle, ":", prenom, nom)
+                else:
+                    print("Ce tournoi s'est déroulé en", tournoi.nb_tours, "tours. Les vainqueurs sont :")
+                    for gagnant in tournoi.gagnant:
+                        cle = list(gagnant.keys())[0]
+                        valeurs = gagnant[cle]
+                        prenom = valeurs[0]
+                        nom = valeurs[1]
+                        print("=> Joueur numéro", cle, "Nom :", prenom, nom)
+                print(" ")
+                print("-" * 66)
+                print(" ")
+                input("Pressez 'ENTER' pour continuer l'affichage")
+                print(" ")
+                print("-" * 66)
+                print("La liste des joueurs inscrits au tournoi est :")
+                # On trie de la liste des joueurs par ordre alphabétique du nom de famille
+                liste_joueurs_triee = sorted(tournoi.liste_joueurs, key=lambda x: x[list(x.keys())[0]][1])
+                #On fait l'affichage sous forme "numéro : prénom nom"
+                for joueur in liste_joueurs_triee:
+                    joueur_numero = list(joueur.keys())[0]
+                    joueur_nom_prenom = joueur[joueur_numero]
+                    prenom = joueur_nom_prenom[0]
+                    nom = joueur_nom_prenom[1]
+                    print(f"{joueur_numero} : {prenom} {nom}")
+                print(" ")
+                print("-" * 66)
+                print(" ")
+                input("Pressez 'ENTER' pour continuer l'affichage")
+                print(" ")
+                print("-" * 66)
+                print(" ")
+                print("Voici la liste des matchs du tournoi :")
+
+                print("Voici la liste des matchs, les joueurs gagnants sont affichés avec une étoile.")
+
+                # Parcourir chaque tour et chaque match
+                for tour in tournoi.liste_matchs:
+                    nom_tour = list(tour.keys())[0]
+                    matches = tour[nom_tour]
+
+                    # Afficher le nom du tour
+                    print("=" * 66)
+                    print(nom_tour + " :")
+
+                    # Parcourir chaque match dans le tour
+                    for match in matches:
+                        match_name = list(match.keys())[0]
+                        joueurs = match[match_name]
+
+                        # Extraire les informations des joueurs
+                        joueur1 = joueurs[0][0]
+                        score1 = joueurs[0][1]
+                        joueur2 = joueurs[1][0]
+                        score2 = joueurs[1][1]
+
+                        # on mémorise les données à afficher
+                        impr_joueur1 = \
+                            "        " +\
+                            list(joueur1.keys())[0] +\
+                            " : " +\
+                            joueur1[list(joueur1.keys())[0]][1] +\
+                            " " +\
+                            joueur1[list(joueur1.keys())[0]][0]
+
+                        impr_joueur2 = \
+                            "        " +\
+                            list(joueur2.keys())[0] +\
+                            " : " +\
+                            joueur2[list(joueur2.keys())[0]][1] +\
+                            " " +\
+                            joueur2[list(joueur2.keys())[0]][0]
+
+                        # on détermine le joueur gagnant
+                        if score1 > score2:
+                            impr_joueur1 += "*"
+                        elif score2 > score1:
+                            impr_joueur2 += "*"
+
+                        # Afficher les informations du match
+                        print("    " + match_name + " :")
+                        print(impr_joueur1)
+                        print(impr_joueur2)
+
+        print(" ")
+        print("-" * 66)
+        print(" ")
+        input("Pressez 'ENTER' pour retourner au menu")
+        print(" ")
 
     @staticmethod
     def menu_rapports() :
         code_menu_tournois = 0
-        while code_menu_tournois != 1 and code_menu_tournois != 2 and code_menu_tournois != 3 and code_menu_tournois != 4 and code_menu_tournois != 5:
+        while code_menu_tournois != 1 and code_menu_tournois != 2 and code_menu_tournois != 3 :
             print("*" * 66)
             print("-" * 66)
             print("Bienvenue dans le menu visionnage des matchs archivés")
@@ -452,9 +566,7 @@ class RapportsTournois :
             print(" ")
             print("1. Afficher la liste des tournois")
             print("2. Afficher les informations générale d'un tournoi")
-            print("3. Afficher la liste des joueurs d'un tournoi")
-            print("4. Afficher la liste des tours et des matchs d'un tournoi")
-            print("5. Retour au menu principal")
+            print("3. Retour au menu principal")
             print(" ")
             print("*" * 66)
             menu_tournois = input("Votre réponse :")
@@ -465,10 +577,10 @@ class RapportsTournois :
                 print(" ")
                 print("Merci de choisir parmis les options 1, 2, 3, ou 4 !")
                 print(" ")
-            if code_menu_tournois != 0 and code_menu_tournois != 1 and code_menu_tournois != 2 and code_menu_tournois != 3 \
-                    and code_menu_tournois != 4 and code_menu_tournois != 5:
+            if code_menu_tournois != 0 and code_menu_tournois != 1 and code_menu_tournois != 2 and\
+                    code_menu_tournois != 3:
                 print(" ")
-                print("Merci de choisir parmis les options 1, 2, 3, 4 ou 5 !")
+                print("Merci de choisir parmis les options 1, 2 ou 3 !")
                 print(" ")
         return code_menu_tournois
 
@@ -487,7 +599,7 @@ class RapportsTournois :
                     valeurs = gagnant[cle]
                     prenom = valeurs[0]
                     nom = valeurs[1]
-                    print("Le gagnant est le joueur", cle, ":", prenom, nom)
+                    print("Le gagnant est le joueur N°", cle, ":", prenom, nom)
             else :
                 print("Les gagnants sont :")
                 for gagnant in tournoi.gagnant:
