@@ -138,7 +138,8 @@ class MenuGestionJoueur :
     @staticmethod
     def affichage_liste_abonnes(liste_abonnes):
         print("Voici la liste des joueurs enregistrés dans le club :")
-        for abonne in liste_abonnes :
+        liste_abonnes_triee = sorted(liste_abonnes, key=lambda x: x['Nom du joueur'])
+        for abonne in liste_abonnes_triee :
             for cle in abonne :
                 print(cle, ":", abonne[cle])
             print("-" * 29)
@@ -421,18 +422,98 @@ class ViewMatch :
                 return score
 
 
+class RapportsTournois :
+
+    @staticmethod
+    def quelle_date_tournoi():
+        print("*" * 66)
+        print(" ")
+        print("Bienvenue dans le menu visionnage des matchs archivés, quelle est la date de début du match que vous "
+              "souhaitez consulter ?")
+        print(" ")
+        verif_date = 0
+        while verif_date == 0 :
+            date_tournoi = input("Tapez une date au format JJ/MM/AAAA : ")
+            verif_date = verification_date(date_tournoi)
+            if verif_date == 0 :
+                print("La date", date_tournoi, "n'est pas une date correcte.")
+            if verif_date == 1 :
+                return date_tournoi
+
+    @staticmethod
+    def menu_rapports() :
+        code_menu_tournois = 0
+        while code_menu_tournois != 1 and code_menu_tournois != 2 and code_menu_tournois != 3 and code_menu_tournois != 4 and code_menu_tournois != 5:
+            print("*" * 66)
+            print("-" * 66)
+            print("Bienvenue dans le menu visionnage des matchs archivés")
+            print("-" * 66)
+            print("Que voulez-vous faire, merci de faire votre sélection :")
+            print(" ")
+            print("1. Afficher la liste des tournois")
+            print("2. Afficher les informations générale d'un tournoi")
+            print("3. Afficher la liste des joueurs d'un tournoi")
+            print("4. Afficher la liste des tours et des matchs d'un tournoi")
+            print("5. Retour au menu principal")
+            print(" ")
+            print("*" * 66)
+            menu_tournois = input("Votre réponse :")
+            if menu_tournois.isdigit():
+                code_menu_tournois = int(menu_tournois)
+            else:
+                code_menu_tournois = 0
+                print(" ")
+                print("Merci de choisir parmis les options 1, 2, 3, ou 4 !")
+                print(" ")
+            if code_menu_tournois != 0 and code_menu_tournois != 1 and code_menu_tournois != 2 and code_menu_tournois != 3 \
+                    and code_menu_tournois != 4 and code_menu_tournois != 5:
+                print(" ")
+                print("Merci de choisir parmis les options 1, 2, 3, 4 ou 5 !")
+                print(" ")
+        return code_menu_tournois
+
+    @staticmethod
+    def affichage_liste_tournois(liste_tournois):
+        print("Voici l'ensemble des tournois enregistrés dans la base de données :")
+        print(" ")
+        for tournoi in liste_tournois :
+            print(" ")
+            print("Nom du tournoi :", tournoi.nom_tournoi, ", commencé le", tournoi.debut_tournoi, "et terminé le",
+                  tournoi.fin_tournoi, "à", tournoi.lieu_tournoi)
+            print("Nombre de tours :", tournoi.nb_tours, "- Nombre de joueurs :", len(tournoi.liste_joueurs))
+            if len(tournoi.gagnant) == 1 :
+                for gagnant in tournoi.gagnant:
+                    cle = list(gagnant.keys())[0]
+                    valeurs = gagnant[cle]
+                    prenom = valeurs[0]
+                    nom = valeurs[1]
+                    print("Le gagnant est le joueur", cle, ":", prenom, nom)
+            else :
+                print("Les gagnants sont :")
+                for gagnant in tournoi.gagnant:
+                    cle = list(gagnant.keys())[0]
+                    valeurs = gagnant[cle]
+                    prenom = valeurs[0]
+                    nom = valeurs[1]
+                    print("=> Joueur numéro", cle, "Nom :", prenom, nom)
+            print(" ")
+            print("-" * 66)
+        input("Pressez 'ENTER' pour retourner au menu")
+
+
+
 class Erreurs :
     @staticmethod
     def erreur1():
         print("Aucune base de données n'est présente. Merci de contacter votre administrateur !")
         input("Tapez 'ENTER' pour retourner au menu principal")
-        Lancement.lancementMenuPrincipal()
+        Lancement.lancementMenuPrincipal(0)
 
     @staticmethod
     def erreur2():
         print("Une erreur s'est produite")
         input("Pressez 'ENTER' pour continuer")
-        Lancement.lancementMenuPrincipal()
+        Lancement.lancementMenuPrincipal(0)
 
     @staticmethod
     def erreur3():

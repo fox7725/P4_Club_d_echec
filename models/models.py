@@ -215,6 +215,20 @@ class Tournoi :
         return reponse
 
 
+class TournoisJSON :
+    def __init__(self, nom_tournoi, lieu_tournoi, remarque_tournoi, debut_tournoi, fin_tournoi, nb_tours, liste_matchs,
+                 liste_joueurs, gagnant):
+        self.nom_tournoi = nom_tournoi
+        self.lieu_tournoi = lieu_tournoi
+        self.remarque_tournoi = remarque_tournoi
+        self.debut_tournoi = debut_tournoi
+        self.fin_tournoi = fin_tournoi
+        self.nb_tours = nb_tours
+        self.liste_matchs = liste_matchs
+        self.liste_joueurs = liste_joueurs
+        self.gagnant = gagnant
+
+
 class Tour :
     def __init__(self, num_tour, nom_tour, liste_joueurs, nb_matchs, date_debut_tour, liste_tuples_matchs_tour = [],
                  date_fin_tour = " "):

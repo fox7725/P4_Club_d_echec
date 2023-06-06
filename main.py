@@ -12,7 +12,7 @@ def accueil() :
     print(" ")
     print("=" * 29)
     input("Pressez 'ENTER' pour continuer")
-    Lancement.lancementMenuPrincipal()
+    Lancement.lancementMenuPrincipal(0)
 
 if __name__ == "__main__" :
     #Affichage du message de bienvenue

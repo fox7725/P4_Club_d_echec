@@ -12,11 +12,11 @@ class Lancement :
             édition des rapports'''
 
     @staticmethod
-    def lancementMenuPrincipal() :
-        reponse = 0
-        reponse = MenuPrincipal.menuprincipal(reponse)
-        if reponse == 1 :
+    def lancementMenuPrincipal(reponse) :
+        if reponse == 0 :
+            reponse = MenuPrincipal.menuprincipal(reponse)
         #1. Commencer un nouveau tournoi
+        if reponse == 1 :
             infos_tournoi = ViewInformationsTournoi.infos_generales_tournoi()
 
             demande_nv_joueur = ViewInformationsTournoi.demande_nv_joueurs()
@@ -27,7 +27,7 @@ class Lancement :
                 preliste_joueurs = liste_joueur_JSON()
                 if preliste_joueurs == "ERR01" :
                     Erreurs.erreur1()
-                    Lancement.lancementMenuPrincipal()
+                    Lancement.lancementMenuPrincipal(0)
                 else :
                     liste_joueurs = ViewInformationsTournoi.ajout_joueurs_invites(preliste_joueurs)
             else :
@@ -196,15 +196,66 @@ class Lancement :
                         break
 
             #retour au menu principal
-            Lancement.lancementMenuPrincipal()
+            Lancement.lancementMenuPrincipal(0)
 
+
+        # 2. Consulter les anciens tournois
         elif reponse == 2 :
-        #2. Consulter un ancien tournoi
-            print(reponse)
-            Lancement.lancementMenuPrincipal()
 
+            #On charge le fichier JSON contenant l'historique des tournois
+            rapports = rapports_tournois()
+            if rapports == "ERR01":
+                Erreurs.erreur1()
+
+            #On désérialise les données
+            liste_tournois = []
+            for tournoi in rapports :
+                nom_tournoi = tournoi["nom_tournoi"]
+                lieu_tournoi = tournoi["lieu_tournoi"]
+                remarque_tournoi = tournoi["remarque_tournoi"]
+                debut_tournoi = tournoi["debut_tournoi"]
+                fin_tournoi = tournoi["fin_tournoi"]
+                nb_tours = tournoi["nb_tours"]
+                liste_matchs = tournoi["liste_matchs"]
+                liste_joueurs = tournoi["liste_joueurs"]
+                gagnant = tournoi["gagnant"]
+
+                #On crée une instance par tournoi
+                tournoi_instance = TournoisJSON(nom_tournoi, lieu_tournoi, remarque_tournoi, debut_tournoi, fin_tournoi,
+                                                nb_tours, liste_matchs, liste_joueurs, gagnant)
+
+                #On crée une liste de toutes les instances
+                liste_tournois.append(tournoi_instance)
+
+            # On affiche le menu de gestion des rapports
+            code_rapport_tournoi = RapportsTournois.menu_rapports()
+
+            #On traite le choix de l'utilisateur
+            #code 5 : retour au menu principal
+            if code_rapport_tournoi == 5 :
+                Lancement.lancementMenuPrincipal(0)
+
+            #code 1 : affichage de la liste des tournois
+            if code_rapport_tournoi == 1 :
+                RapportsTournois.affichage_liste_tournois(liste_tournois)
+                Lancement.lancementMenuPrincipal(2)
+
+            #code 2 : affichage les informations générale d'un tournoi
+            if code_rapport_tournoi == 2 :
+                pass
+
+            #code 3 : affichage la liste des joueurs d'un tournoi
+            if code_rapport_tournoi == 3 :
+                pass
+
+            #code 4 : affichage la liste des tours et des matchs d'un tournoi
+            if code_rapport_tournoi == 4 :
+                pass
+
+
+
+        # 3. Gestion des joueurs du club
         elif reponse == 3 :
-        #3. Gestion des joueurs du club
             #On affiche le menu de la gestion des joueurs
             code_menu_joueur = 0
             while code_menu_joueur == 0 :
@@ -250,13 +301,14 @@ class Lancement :
                             code_menu_joueur = 0
 
                 elif code_menu_joueur == 4:
-                    Lancement.lancementMenuPrincipal()
+                    Lancement.lancementMenuPrincipal(0)
 
                 else:
                     Erreurs.erreur2()
 
+
+        # 4. quitter le programme
         elif reponse == 4 :
-        #4. quitter le programme
             sys.exit("Merci et à bientôt !")
 
         else :

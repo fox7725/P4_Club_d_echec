@@ -22,3 +22,13 @@ def verification_date(date) :
     except ValueError :
         return 0
     return 1
+
+def rapports_tournois():
+    os.makedirs("JSON/archives", exist_ok=True)
+    bdd_tournois = "JSON/archives/tournois.json"
+    if os.path.exists(bdd_tournois):
+        with open(bdd_tournois, 'r') as f:
+            contenu = json.load(f)
+    else:
+        contenu = "ERR01"
+    return contenu
