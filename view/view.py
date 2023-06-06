@@ -539,9 +539,9 @@ class RapportsTournois :
 
                         # on détermine le joueur gagnant
                         if score1 > score2:
-                            impr_joueur1 += "*"
+                            impr_joueur1 += " ***"
                         elif score2 > score1:
-                            impr_joueur2 += "*"
+                            impr_joueur2 += " ***"
 
                         # Afficher les informations du match
                         print("    " + match_name + " :")
