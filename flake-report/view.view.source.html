@@ -6,7 +6,7 @@
       <link rel="stylesheet" href="styles.css">
    </head>
    <body>
-      <div id="masthead" class="sev-1"></div>
+      <div id="masthead" class="sev-2"></div>
       <div id="page">
          <h1>
             <a href="view.view.report.html">
@@ -26,28 +26,10 @@
                class="code sev- "><tt><i>3</i> &nbsp;</tt>
             </div>
             <div id="l4"
-               class="code sev-1  le">
-               <ul class="violations">
-               
-                  <li>
-                     <span class="count sev-1">
-                        F403
-                     </span>
-                     'from models.models import *' used; unable to detect undefined names</li>
-               
-               </ul><tt><i>4</i> <span class="kn">from</span> <span class="nn">models.models</span> <span class="kn">import</span> <span class="o">*</span></tt>
+               class="code sev- "><tt><i>4</i> <span class="kn">from</span> <span class="nn">controller.controller</span> <span class="kn">import</span> <span class="n">Lancement</span></tt>
             </div>
             <div id="l5"
-               class="code sev-1  le">
-               <ul class="violations">
-               
-                  <li>
-                     <span class="count sev-1">
-                        F403
-                     </span>
-                     'from fonctions.fonctions import *' used; unable to detect undefined names</li>
-               
-               </ul><tt><i>5</i> <span class="kn">from</span> <span class="nn">fonctions.fonctions</span> <span class="kn">import</span> <span class="o">*</span></tt>
+               class="code sev- "><tt><i>5</i> <span class="kn">from</span> <span class="nn">fonctions.fonctions</span> <span class="kn">import</span> <span class="n">verification_date</span></tt>
             </div>
             <div id="l6"
                class="code sev- "><tt><i>6</i> &nbsp;</tt>
@@ -347,16 +329,7 @@
                class="code sev- "><tt><i>104</i>             <span class="n">date_naissance</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Quelle est votre date de naissance ? &quot;</span><span class="p">)</span></tt>
             </div>
             <div id="l105"
-               class="code sev-1  le">
-               <ul class="violations">
-               
-                  <li>
-                     <span class="count sev-1">
-                        F405
-                     </span>
-                     'verification_date' may be undefined, or defined from star imports: fonctions.fonctions, models.models</li>
-               
-               </ul><tt><i>105</i>             <span class="n">verif_date</span> <span class="o">=</span> <span class="n">verification_date</span><span class="p">(</span><span class="n">date_naissance</span><span class="p">)</span></tt>
+               class="code sev- "><tt><i>105</i>             <span class="n">verif_date</span> <span class="o">=</span> <span class="n">verification_date</span><span class="p">(</span><span class="n">date_naissance</span><span class="p">)</span></tt>
             </div>
             <div id="l106"
                class="code sev- "><tt><i>106</i>             <span class="k">if</span> <span class="n">verif_date</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span></tt>
@@ -1619,16 +1592,7 @@
                class="code sev- "><tt><i>507</i>             <span class="n">date_tournoi</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Tapez une date au format JJ/MM/AAAA : &quot;</span><span class="p">)</span></tt>
             </div>
             <div id="l508"
-               class="code sev-1  le">
-               <ul class="violations">
-               
-                  <li>
-                     <span class="count sev-1">
-                        F405
-                     </span>
-                     'verification_date' may be undefined, or defined from star imports: fonctions.fonctions, models.models</li>
-               
-               </ul><tt><i>508</i>             <span class="n">verif_date</span> <span class="o">=</span> <span class="n">verification_date</span><span class="p">(</span><span class="n">date_tournoi</span><span class="p">)</span></tt>
+               class="code sev- "><tt><i>508</i>             <span class="n">verif_date</span> <span class="o">=</span> <span class="n">verification_date</span><span class="p">(</span><span class="n">date_tournoi</span><span class="p">)</span></tt>
             </div>
             <div id="l509"
                class="code sev- "><tt><i>509</i>             <span class="k">if</span> <span class="n">verif_date</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span></tt>
@@ -2225,16 +2189,7 @@
                class="code sev- "><tt><i>703</i>         <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Tapez &#39;ENTER&#39; pour retourner au menu principal&quot;</span><span class="p">)</span></tt>
             </div>
             <div id="l704"
-               class="code sev-1  le">
-               <ul class="violations">
-               
-                  <li>
-                     <span class="count sev-1">
-                        F405
-                     </span>
-                     'Lancement' may be undefined, or defined from star imports: fonctions.fonctions, models.models</li>
-               
-               </ul><tt><i>704</i>         <span class="n">Lancement</span><span class="o">.</span><span class="n">lancementMenuPrincipal</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></tt>
+               class="code sev- "><tt><i>704</i>         <span class="n">Lancement</span><span class="o">.</span><span class="n">lancementMenuPrincipal</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></tt>
             </div>
             <div id="l705"
                class="code sev- "><tt><i>705</i> &nbsp;</tt>
@@ -2252,16 +2207,7 @@
                class="code sev- "><tt><i>709</i>         <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Pressez &#39;ENTER&#39; pour continuer&quot;</span><span class="p">)</span></tt>
             </div>
             <div id="l710"
-               class="code sev-1  le">
-               <ul class="violations">
-               
-                  <li>
-                     <span class="count sev-1">
-                        F405
-                     </span>
-                     'Lancement' may be undefined, or defined from star imports: fonctions.fonctions, models.models</li>
-               
-               </ul><tt><i>710</i>         <span class="n">Lancement</span><span class="o">.</span><span class="n">lancementMenuPrincipal</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></tt>
+               class="code sev- "><tt><i>710</i>         <span class="n">Lancement</span><span class="o">.</span><span class="n">lancementMenuPrincipal</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></tt>
             </div>
             <div id="l711"
                class="code sev- "><tt><i>711</i> &nbsp;</tt>

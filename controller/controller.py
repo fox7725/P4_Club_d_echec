@@ -1,11 +1,13 @@
 import sys
-import datetime
 import random
 import json
 
-from view.view import *
-from models.models import *
-from fonctions.fonctions import *
+from view.view import MenuPrincipal, MenuGestionJoueur
+from view.view import ViewInformationsTournoi, ViewInformationTour, ViewMatch
+from view.view import RapportsTournois, Erreurs
+from models.models import Joueur, JoueurJSON, Tournoi, TournoisJSON, Tour
+from models.models import Match
+from fonctions.fonctions import liste_joueur_JSON, rapports_tournois
 
 
 class Lancement:
