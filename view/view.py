@@ -1,5 +1,3 @@
-import sys
-import json
 import datetime
 import re
 
@@ -7,35 +5,38 @@ from models.models import *
 from fonctions.fonctions import *
 
 
-class MenuPrincipal :
+class MenuPrincipal:
     @staticmethod
-    #On crée une classe pour appeler le menu principal quand on le souhaite
-    def menuprincipal(code_menu_principal) :
-        #On fait une boucle pour que le menu s'affiche tant que l'utilisateur ne donne pas une réponse autorisée
-        while code_menu_principal != 1 and code_menu_principal != 2 and code_menu_principal != 3 and\
-                code_menu_principal != 4 :
-            print("*" *66)
+    # On crée une classe pour appeler le menu principal quand on le souhaite
+    def menuprincipal(code_menu_principal):
+        # On fait une boucle pour que le menu s'affiche tant que l'utilisateur
+        # ne donne pas une réponse autorisée
+        while code_menu_principal != 1 and code_menu_principal != 2 and\
+                code_menu_principal != 3 and code_menu_principal != 4:
+            print("*" * 66)
             print("-" * 66)
-            print("Bienvenue dans le menu principal, merci de faire votre sélection :")
-            print("-" *66)
+            print("Bienvenue dans le menu principal, merci de faire votre"
+                  " sélection :")
+            print("-" * 66)
             print(" ")
             print("1. Commencer un nouveau tournoi")
             print("2. Consulter un ancien tournoi")
             print("3. Gestion des joueurs du club")
             print("4. quitter le programme")
             print(" ")
-            print("*" *66)
+            print("*" * 66)
             menu_principal = input("Votre réponse :")
-            if menu_principal.isdigit() :
+            if menu_principal.isdigit():
                 code_menu_principal = int(menu_principal)
-            else :
+            else:
                 code_menu_principal = 0
                 print(" ")
                 print("Merci de choisir parmis les options 1, 2, 3 ou 4")
                 print(" ")
-                input ("Pressez 'ENTER' pour continuer")
-            if code_menu_principal != 0 and code_menu_principal != 1 and code_menu_principal != 2 and\
-                    code_menu_principal != 3 and code_menu_principal != 4 :
+                input("Pressez 'ENTER' pour continuer")
+            if code_menu_principal != 0 and code_menu_principal != 1 and\
+                    code_menu_principal != 2 and code_menu_principal != 3 and\
+                    code_menu_principal != 4:
                 print(" ")
                 print("Merci de choisir parmis les options 1, 2, 3  ou 4")
                 print(" ")
@@ -43,14 +44,16 @@ class MenuPrincipal :
         return code_menu_principal
 
 
-class MenuGestionJoueur :
+class MenuGestionJoueur:
     @staticmethod
     def menujoueur():
         code_menu_joueur = 0
-        while code_menu_joueur != 1 and code_menu_joueur != 2 and code_menu_joueur != 3 and code_menu_joueur != 4:
+        while code_menu_joueur != 1 and code_menu_joueur != 2 and\
+                code_menu_joueur != 3 and code_menu_joueur != 4:
             print("*" * 66)
             print("-" * 66)
-            print("Bienvenue dans le menu de gestion des joueur, merci de faire votre sélection :")
+            print("Bienvenue dans le menu de gestion des joueur, merci de"
+                  " faire votre sélection :")
             print("-" * 66)
             print(" ")
             print("1. Consulter la liste des joueurs enregistrés")
@@ -67,8 +70,9 @@ class MenuGestionJoueur :
                 print(" ")
                 print("Merci de choisir parmis les options 1, 2, 3, ou 4 !")
                 print(" ")
-            if code_menu_joueur != 0 and code_menu_joueur != 1 and code_menu_joueur != 2 and code_menu_joueur != 3 \
-                    and code_menu_joueur != 4:
+            if code_menu_joueur != 0 and code_menu_joueur != 1 and\
+                    code_menu_joueur != 2 and code_menu_joueur != 3 and\
+                    code_menu_joueur != 4:
                 print(" ")
                 print("Merci de choisir parmis les options 1, 2, 3, 4 !")
                 print(" ")
@@ -76,7 +80,8 @@ class MenuGestionJoueur :
 
     @staticmethod
     def formulaire_nouveau_joueur():
-        # Formulaire pour l'inscription des joueurs dans le JSON en tant que membres de l'association
+        # Formulaire pour l'inscription des joueurs dans le JSON en tant que
+        # membres de l'association
         print(" ")
         id_valide = False
         while not id_valide:
@@ -84,24 +89,28 @@ class MenuGestionJoueur :
             if re.match(r'^[a-zA-Z]{2}\d{5}$', identifiant):
                 id_valide = True
             else:
-                print("L'Identifiant National entré est invalide ! Veuillez le ressaisir sous la forme 'XX12345'.")
+                print("L'Identifiant National entré est invalide ! Veuillez le"
+                      " ressaisir sous la forme 'XX12345'.")
         nom = input("Quel est votre nom ? ")
         prenom = input("Quel est votre prénom ? ")
         sexe = "non binaire"
-        while sexe != "H" and sexe != "F" :
+        while sexe != "H" and sexe != "F":
             sexe = input("Êtes vous un homme ou une femme ? (H / F) ")
-            if sexe != "H" and sexe != "F" :
-                print("Merci de répondre par 'H' pour Homme ou par 'F' pour Femme.")
+            if sexe != "H" and sexe != "F":
+                print("Merci de répondre par 'H' pour Homme ou par 'F' pour"
+                      " Femme.")
         verif_date = 0
-        while verif_date == 0 :
+        while verif_date == 0:
             date_naissance = input("Quelle est votre date de naissance ? ")
             verif_date = verification_date(date_naissance)
-            if verif_date == 0 :
-                print ("La valeur entrée (", date_naissance, ") n'est pas une date valide. Merci de recommencer.")
+            if verif_date == 0:
+                print("La valeur entrée (", date_naissance,
+                       ") n'est pas une date valide. Merci de recommencer.")
         remarque = " "
         liste_tournois = []
         moyenne_points = 0
-        reponses_formulaire = [identifiant, nom, prenom, sexe, date_naissance, remarque, liste_tournois, moyenne_points]
+        reponses_formulaire = [identifiant, nom, prenom, sexe, date_naissance,
+                               remarque, liste_tournois, moyenne_points]
         return reponses_formulaire
 
     @staticmethod
@@ -109,9 +118,11 @@ class MenuGestionJoueur :
         print(resultat)
         oui_non = "peut-être"
         while oui_non != "oui" and oui_non != "non":
-            oui_non = input("Voulez vous créer un nouveau joueur ? (oui / non) ")
+            oui_non = input("Voulez vous créer un nouveau joueur ? "
+                            "(oui / non) ")
             if oui_non != "oui" and oui_non != "non":
-                print("Votre saisie est invalide, veuillez répondre par 'oui' ou par 'non' !")
+                print("Votre saisie est invalide, veuillez répondre par 'oui'"
+                      " ou par 'non' !")
             elif oui_non == "non":
                 return False
             elif oui_non == "oui":
@@ -129,48 +140,56 @@ class MenuGestionJoueur :
             print(cle, ":", resultat[cle])
         oui_non = "peut-être"
         while oui_non != "oui" and oui_non != "non":
-            oui_non = input("Voulez vous consulter un autre joueur ? (oui / non) ")
+            oui_non = input("Voulez vous consulter un autre joueur ?"
+                            " (oui / non) ")
             if oui_non != "oui" and oui_non != "non":
-                print("Votre saisie est invalide, veuillez répondre par 'oui' ou par 'non' !")
-            else :
+                print("Votre saisie est invalide, veuillez répondre par 'oui'"
+                      " ou par 'non' !")
+            else:
                 return oui_non
 
     @staticmethod
     def affichage_liste_abonnes(liste_abonnes):
         print("Voici la liste des joueurs enregistrés dans le club :")
-        liste_abonnes_triee = sorted(liste_abonnes, key=lambda x: x['Nom du joueur'])
-        for abonne in liste_abonnes_triee :
-            for cle in abonne :
+        liste_abonnes_triee = sorted(liste_abonnes, key=lambda
+            x: x['Nom du joueur'])
+        for abonne in liste_abonnes_triee:
+            for cle in abonne:
                 print(cle, ":", abonne[cle])
             print("-" * 29)
         input("Pour continuer pressez 'ENTER'")
         return 0
 
 
-class ViewInformationsTournoi :
+class ViewInformationsTournoi:
     @staticmethod
     def infos_generales_tournoi():
         confirmation = "peut-être"
         while confirmation != "oui":
             confirmation = "peut-être"
             print(" ")
-            print("Vous souhaitez débuter un nouveau tournoi. Nous avons donc besoin d'informations complémentaires avant"
-                  "de commencer")
+            print("Vous souhaitez débuter un nouveau tournoi. Nous avons donc"
+                  " besoin d'informations complémentaires avant de commencer")
             nom_tournoi = input("Quel est le nom du tournoi ?")
             lieu_tournoi = input("Où a lieu le tournoi ?")
-            remarque_tournoi = input("Le directeur du tournoi souhaite-t-il ajouter un commentaire ?")
+            remarque_tournoi = input("Le directeur du tournoi souhaite-t-il"
+                                     " ajouter un commentaire ?")
             debut_tournoi_brut = datetime.date.today()
             debut_tournoi = debut_tournoi_brut.strftime("%d/%m/%Y")
             duree_tournoi = input("Combien de jour(s) dure le tournoi ?")
             while not duree_tournoi.isdigit() or int(duree_tournoi) < 0:
-                duree_tournoi = input("La valeur entrée n'est pas correcte. Merci de saisir un nombre supérieur à 0 !"
-                                      "Combien de jour(s) dure le tournoi ?")
+                duree_tournoi = input("La valeur entrée n'est pas correcte."
+                                      " Merci de saisir un nombre supérieur à"
+                                      " 0 ! Combien de jour(s) dure le tournoi"
+                                      " ?")
             duree_tournoi = int(duree_tournoi)
-            date_fin_brut = debut_tournoi_brut + datetime.timedelta(days=duree_tournoi)
+            date_fin_brut = debut_tournoi_brut +\
+                            datetime.timedelta(days=duree_tournoi)
             fin_tournoi = date_fin_brut.strftime("%d/%m/%Y")
             是不是 = "peut-être"
             while 是不是 != "oui" and 是不是 != "non":
-                是不是 = input("Le nombre de tour est fixé à 4 par défaut. Souhaitez vous modifier ?")
+                是不是 = input("Le nombre de tour est fixé à 4 par défaut."
+                               " Souhaitez vous modifier ?")
                 if 是不是 != "oui" and 是不是 != "non":
                     print("Merci de répondre par 'oui' ou par 'non'")
                     input("Tapez 'ENTER' pour recommencer")
@@ -179,21 +198,24 @@ class ViewInformationsTournoi :
                 else:
                     q_nb_tours = "pas de nombre"
                     while not q_nb_tours.isdigit():
-                        q_nb_tours = input("Combien de tours les joueurs effectueront ?")
+                        q_nb_tours = input("Combien de tours les joueurs"
+                                           " effectueront ?")
                         if q_nb_tours.isdigit():
                             nb_tours = int(q_nb_tours)
                         else:
                             print("Votre réponse n'est pas un nombre.")
                             input("Tapez 'ENTER' pour recommencer")
 
-            while confirmation != "oui" and confirmation != "non" :
+            while confirmation != "oui" and confirmation != "non":
                 print(" ")
                 print("=" * 29)
                 print(" ")
                 print("Merci de confimer les informations :")
-                print("Vous souhaitez organiser le tournoi", nom_tournoi, "de", nb_tours, "tours à partir du", debut_tournoi, "au", fin_tournoi, "à",
-                      lieu_tournoi, ".")
-                print("Le commentaire saisi par le Directeur est :", remarque_tournoi)
+                print("Vous souhaitez organiser le tournoi", nom_tournoi,
+                      "de", nb_tours, "tours à partir du", debut_tournoi,
+                      "au", fin_tournoi, "à", lieu_tournoi, ".")
+                print("Le commentaire saisi par le Directeur est :",
+                      remarque_tournoi)
                 print(" ")
                 print("=" * 29)
                 print(" ")
@@ -201,10 +223,11 @@ class ViewInformationsTournoi :
                 if confirmation != "oui" and confirmation != "non":
                     print("Merci de répondre par 'oui' ou par 'non' !")
                     input("Tapez 'ENTER' pour continuer")
-            if confirmation == "non" :
+            if confirmation == "non":
                 print("Merci de resaisir les informations !")
                 input("Tapez 'ENTER' pour continuer")
-        infos_tournoi = [nom_tournoi, lieu_tournoi, remarque_tournoi, debut_tournoi, fin_tournoi, nb_tours]
+        infos_tournoi = [nom_tournoi, lieu_tournoi, remarque_tournoi,
+                         debut_tournoi, fin_tournoi, nb_tours]
         return infos_tournoi
 
     @staticmethod
@@ -216,22 +239,26 @@ class ViewInformationsTournoi :
         print(" ")
         print("=" * 29)
         print(" ")
-        print("Le tournoi d'échec est maintenant terminé, nous vous remercions d'avoir utilisé ce logiciel de gestion"
-              "de tournois édité par Christophe RENARD !")
-        if len(liste_gagnants) > 1 :
+        print("Le tournoi d'échec est maintenant terminé, nous vous remercions"
+              " d'avoir utilisé ce logiciel de gestion de tournois édité par"
+              " Christophe RENARD !")
+        if len(liste_gagnants) > 1:
             print("Toutes nos félicitations aux gagnants :")
-            for joueur in liste_gagnants :
+            for joueur in liste_gagnants:
                 print(joueur.prenom_joueur, joueur.nom_joueur)
-        else :
-            print("Toutes nos félicitation au gagnant", liste_gagnants[0].prenom_joueur, liste_gagnants[0].nom_joueur)
+        else:
+            print("Toutes nos félicitation au gagnant",
+                  liste_gagnants[0].prenom_joueur,
+                  liste_gagnants[0].nom_joueur)
         input("Presser 'ENTER' pour retourner au menu principal")
 
     @staticmethod
     def demande_nv_joueurs():
         oui_non = "peut-être"
         while oui_non != "oui" and oui_non != "non":
-            oui_non = input("Le tournoi se joue-t-il à guichet fermé (seulement les membres du club + invités) ou est "
-                            "il ouvert à tous ? (oui / non)")
+            oui_non = input("Le tournoi se joue-t-il à guichet fermé"
+                            " (seulement les membres du club + invités) ou est"
+                            " il ouvert à tous ? (oui / non)")
             if oui_non != "oui" and oui_non != "non":
                 print("merci de répondre par 'oui' ou par 'non'")
                 input("Tapez 'enter' pour recommencer")
@@ -249,34 +276,45 @@ class ViewInformationsTournoi :
                 if re.match(r'^[a-zA-Z]{2}\d{5}$', identifiant):
                     id_valide = True
                 else:
-                    print("L'Identifiant National entré est invalide ! Veuillez le ressaisir sous la forme 'XX12345'.")
+                    print("L'Identifiant National entré est invalide !"
+                          " Veuillez le ressaisir sous la forme 'XX12345'.")
             nom = input("Quel est votre nom ?")
             prenom = input("Quel est votre prénom ?")
             sexe = "NSP"
             while sexe != "Homme" and sexe != "Femme":
                 sexe = input("Etes-vous un homme ou une femme ?")
                 if sexe != "Homme" and sexe != "Femme":
-                    input("Merci de répondre par 'Homme' ou par 'Femme'. Tapez 'ENTER' pour continuer")
+                    input("Merci de répondre par 'Homme' ou par 'Femme'. Tapez"
+                          " 'ENTER' pour continuer")
             date_valide = False
             while not date_valide:
-                date_naissance = input("Quelle est votre date de naissance (JJ/MM/AAAA)? ")
+                date_naissance = input("Quelle est votre date de naissance"
+                                       " (JJ/MM/AAAA)? ")
                 try:
-                    date = datetime.datetime.strptime(date_naissance, '%d/%m/%Y').date()
+                    date = datetime.datetime.strptime(date_naissance,
+                                                      '%d/%m/%Y').date()
                     print("La date de naissance entrée est valide : ", date)
                     date_valide = True
                 except ValueError:
-                    print("La date de naissance entrée est invalide ! Veuillez ressaisir une date.")
-            reponses_formulaire = {"ID": identifiant, "nom_joueur": nom, "prenom_joueur": prenom, "sexe": sexe,
-                                   "date_naissance": date_naissance, "points": 0}
+                    print("La date de naissance entrée est invalide !"
+                          " Veuillez ressaisir une date.")
+            reponses_formulaire = {"ID": identifiant, "nom_joueur": nom,
+                                   "prenom_joueur": prenom, "sexe": sexe,
+                                   "date_naissance": date_naissance,
+                                   "points": 0}
             liste_joueurs.append(reponses_formulaire)
             if len(liste_joueurs) == 0 or len(liste_joueurs) == 1:
-                print("Il y a actuellement " + str(len(liste_joueurs)) + " joueur enregistré")
+                print("Il y a actuellement " + str(len(liste_joueurs)) +
+                      " joueur enregistré")
             else:
-                print("Il y a actuellement " + str(len(liste_joueurs)) + " joueurs enregistrés")
+                print("Il y a actuellement " + str(len(liste_joueurs)) +
+                      " joueurs enregistrés")
 
-            是不是 = input("Voulez vous ajouter un nouveau joueur ? (oui / non) ")
+            是不是 = input("Voulez vous ajouter un nouveau joueur ?"
+                           " (oui / non) ")
             if 是不是 != "oui" and 是不是 != "non":
-                print("Votre saisie est invalide, veuillez répondre par 'oui' ou par 'non' !")
+                print("Votre saisie est invalide, veuillez répondre par"
+                      " 'oui' ou par 'non' !")
             elif 是不是 == "non":
                 return liste_joueurs
 
@@ -293,7 +331,8 @@ class ViewInformationsTournoi :
     def pret_pour_archivage():
         print("=" * 29)
         print(" ")
-        print("Quand vous serez prêt pour terminer le tournoi et l'archiver, pressez 'ENTER' !")
+        print("Quand vous serez prêt pour terminer le tournoi et l'archiver,"
+              " pressez 'ENTER' !")
         print(" ")
         print("=" * 29)
         input("Pressez 'ENTER' pour continuer")
@@ -301,52 +340,72 @@ class ViewInformationsTournoi :
     @staticmethod
     def ajout_joueurs_invites(preliste_joueurs):
         if len(preliste_joueurs) == 0 or len(preliste_joueurs) == 1:
-            print("Il y a actuellement " + str(len(preliste_joueurs)) + " joueur enregistré dans la base de données")
+            print("Il y a actuellement " + str(len(preliste_joueurs)) +
+                  " joueur enregistré dans la base de données")
         else:
-            print("Il y a actuellement " + str(len(preliste_joueurs)) + " joueurs enregistrés dans la base de données")
+            print("Il y a actuellement " + str(len(preliste_joueurs)) +
+                  " joueurs enregistrés dans la base de données")
 
         liste_joueurs = []
         for joueur in preliste_joueurs:
-            joueur = {"ID": joueur["Identifiant national"], "nom_joueur": joueur["Nom du joueur"],
-                      "prenom_joueur": joueur["Prénom du joueur"], "sexe": joueur["Sexe"],
-                      "date_naissance": joueur["Date de naissance"], "points": 0}
+            joueur = {"ID": joueur["Identifiant national"],
+                      "nom_joueur": joueur["Nom du joueur"],
+                      "prenom_joueur": joueur["Prénom du joueur"],
+                      "sexe": joueur["Sexe"],
+                      "date_naissance": joueur["Date de naissance"],
+                      "points": 0}
             liste_joueurs.append(joueur)
 
         o_n = "peut-être"
         while o_n != "oui" and o_n != "non":
-            o_n = input("Souhaitez vous ajouter manuellement des invités ? (oui / non)")
+            o_n = input("Souhaitez vous ajouter manuellement des invités ?"
+                        " (oui / non)")
             if o_n != "oui" and o_n != "non":
-                print("Votre saisie est invalide, veuillez répondre par 'oui' ou par 'non' !")
+                print("Votre saisie est invalide, veuillez répondre par"
+                      " 'oui' ou par 'non' !")
             elif o_n == "oui":
                 是不是 = "oui"
                 while 是不是 == "oui":
-                    identifiant = input("Quel est votre identifiant national ?")
+                    identifiant = input("Quel est votre identifiant"
+                                        " national ?")
                     nom = input("Quel est votre nom ?")
                     prenom = input("Quel est votre prénom ?")
                     sexe = "NSP"
-                    while sexe != "Homme" and sexe != "Femme" :
+                    while sexe != "Homme" and sexe != "Femme":
                         sexe = input("Etes-vous un homme ou une femme ?")
-                        if sexe != "Homme" and sexe != "Femme" :
-                            input("Merci de répondre par 'Homme' ou par 'Femme'. Tapez 'ENTER' pour continuer")
-                    date_naissance = input("Quelle est votre date de naissance ?")
-                    reponses_formulaire = {"ID": identifiant, "nom_joueur": nom, "prenom_joueur": prenom, "sexe": sexe,
-                                           "date_naissance": date_naissance, "points": 0}
+                        if sexe != "Homme" and sexe != "Femme":
+                            input("Merci de répondre par 'Homme' ou par"
+                                  " 'Femme'. Tapez 'ENTER' pour continuer")
+                    date_naissance = input("Quelle est votre date de"
+                                           " naissance ?")
+                    reponses_formulaire = {
+                        "ID": identifiant,
+                        "nom_joueur": nom,
+                        "prenom_joueur": prenom,
+                        "sexe": sexe,
+                        "date_naissance": date_naissance,
+                        "points": 0
+                    }
                     liste_joueurs.append(reponses_formulaire)
                     if len(liste_joueurs) == 0 or len(liste_joueurs) == 1:
-                        print("Il y a actuellement " + str(len(liste_joueurs)) + " joueur enregistré")
+                        print("Il y a actuellement " +
+                              str(len(liste_joueurs)) + " joueur enregistré")
                     else:
-                        print("Il y a actuellement " + str(len(liste_joueurs)) + " joueurs enregistrés")
+                        print("Il y a actuellement " +
+                              str(len(liste_joueurs)) + " joueurs enregistrés")
 
-                    是不是 = input("Voulez vous ajouter un nouveau joueur ? (oui / non) ")
+                    是不是 = input("Voulez vous ajouter un nouveau joueur ?"
+                                   " (oui / non) ")
                     if 是不是 != "oui" and 是不是 != "non":
-                        print("Votre saisie est invalide, veuillez répondre par 'oui' ou par 'non' !")
+                        print("Votre saisie est invalide, veuillez répondre"
+                              " par 'oui' ou par 'non' !")
                     elif 是不是 == "non":
                         return liste_joueurs
             elif o_n == "non":
                 return liste_joueurs
 
 
-class ViewInformationTour :
+class ViewInformationTour:
     @staticmethod
     def lancement_tour(tour, nb_matchs):
         print("=" * 29)
@@ -372,28 +431,33 @@ class ViewInformationTour :
         date_fin_tour = date_brut_fin_tour.strftime("%d/%m/%Y à %I:%M%p")
         print("le ", date_fin_tour)
         print("Voici les scores :")
-        for joueur in liste_joueurs :
-            print(joueur.nom_joueur, joueur.prenom_joueur, "score :", joueur.score_actuel)
+        for joueur in liste_joueurs:
+            print(joueur.nom_joueur, joueur.prenom_joueur, "score :",
+                  joueur.score_actuel)
         print(" ")
         print("=" * 29)
         input("pressez 'ENTER' pour continuer.")
         return date_fin_tour
 
 
-class ViewMatch :
+class ViewMatch:
     @staticmethod
     def choix_match(liste_matchs_restant):
-        #On commence par afficher la liste des matchs restant dans la tour en cours
+        # On commence par afficher la liste des matchs restant dans
+        # le tour en cours
         print("Voici la liste des matchs restant à jouer :")
-        for match in liste_matchs_restant :
+        for match in liste_matchs_restant:
             print("match :", match.nom_match,
-                  "- Joueur Blanc :", match.joueur_blanc.nom_joueur, match.joueur_blanc.prenom_joueur,
-                  "- Joueur Noir :", match.joueur_noir.nom_joueur, match.joueur_noir.prenom_joueur)
+                  "- Joueur Blanc :", match.joueur_blanc.nom_joueur,
+                  match.joueur_blanc.prenom_joueur,
+                  "- Joueur Noir :", match.joueur_noir.nom_joueur,
+                  match.joueur_noir.prenom_joueur)
             print("-" * 29)
 
-        #Puis on demande à l'utilisateur de choisir son match
+        # Puis on demande à l'utilisateur de choisir son match
         while True:
-            choix_match = input("Entrez le nom du match dont vous avez le retour ?")
+            choix_match = input("Entrez le nom du match dont vous avez le"
+                                " retour ?")
             for recherche_choix_match in liste_matchs_restant:
                 if recherche_choix_match.nom_match == choix_match:
                     return recherche_choix_match
@@ -402,60 +466,69 @@ class ViewMatch :
     @staticmethod
     def declaration_scores(match):
         score = "Pas de score"
-        while score != "JB" and score != "JN" and score != "N" :
+        while score != "JB" and score != "JN" and score != "N":
             print("=" * 29)
             print(" ")
-            print("Résultat du match", match.nom_match, "opposant", match.joueur_blanc.prenom_joueur, match.joueur_blanc.nom_joueur,
-                  "vs", match.joueur_noir.prenom_joueur, match.joueur_noir.nom_joueur)
+            print("Résultat du match", match.nom_match, "opposant",
+                  match.joueur_blanc.prenom_joueur,
+                  match.joueur_blanc.nom_joueur,
+                  "vs", match.joueur_noir.prenom_joueur,
+                  match.joueur_noir.nom_joueur)
             print(" ")
             print("=" * 29)
             print("- En cas de match nul, répondez 'N'")
-            print("- Pour le joueur blanc", match.joueur_blanc.prenom_joueur, match.joueur_blanc.nom_joueur, "répondez 'JB'")
-            print("- Pour le joueur noir", match.joueur_noir.prenom_joueur, match.joueur_noir.nom_joueur, "répondez 'JN'")
+            print("- Pour le joueur blanc", match.joueur_blanc.prenom_joueur,
+                  match.joueur_blanc.nom_joueur, "répondez 'JB'")
+            print("- Pour le joueur noir", match.joueur_noir.prenom_joueur,
+                  match.joueur_noir.nom_joueur, "répondez 'JN'")
             score = input("Qui a gagné le match ?")
             print("=" * 29)
-            if score != "JB" and score != "JN" and score != "N" :
+            if score != "JB" and score != "JN" and score != "N":
                 print("Merci de répondre par 'JB', 'JN' ou 'N' uniquement !")
                 input("Pressez 'ENTER' pour continuer")
                 print("=" * 29)
-            else :
+            else:
                 return score
 
 
-class RapportsTournois :
+class RapportsTournois:
 
     @staticmethod
     def quelle_date_tournoi(liste_tournois):
         print("*" * 66)
         print(" ")
-        print("Bienvenue dans le menu visionnage des matchs archivés, quelle est la date de début du match que vous "
+        print("Bienvenue dans le menu visionnage des matchs archivés, quelle"
+              " est la date de début du match que vous "
               "souhaitez consulter ?")
         print(" ")
         verif_date = 0
         date_existe = 0
-        while verif_date == 0 or date_existe == 0 :
+        while verif_date == 0 or date_existe == 0:
             date_tournoi = input("Tapez une date au format JJ/MM/AAAA : ")
             verif_date = verification_date(date_tournoi)
-            if verif_date == 0 :
+            if verif_date == 0:
                 print("La date", date_tournoi, "n'est pas une date correcte.")
-            if verif_date == 1 :
-                for tournoi in liste_tournois :
-                    if tournoi.debut_tournoi == date_tournoi :
+            if verif_date == 1:
+                for tournoi in liste_tournois:
+                    if tournoi.debut_tournoi == date_tournoi:
                         date_existe = 1
                         return date_tournoi
-                if date_existe == 0 :
-                    input("Il n'y a pas de tournoi à cette date, merci de saisir une autre date. Pressez 'ENTER' "
-                          "pour continuer.")
+                if date_existe == 0:
+                    input("Il n'y a pas de tournoi à cette date, merci de"
+                          " saisir une autre date. Pressez 'ENTER' pour"
+                          " continuer.")
 
     @staticmethod
     def affichage_infos_tournoi(date_tournoi, liste_tournois):
-        for tournoi in liste_tournois :
+        for tournoi in liste_tournois:
             if tournoi.debut_tournoi == date_tournoi:
                 print(" ")
                 print("*" * 66)
                 print(" ")
-                print("Vous avez demandé à voir les information du tournoi", tournoi.nom_tournoi, "s'étant déroulé à",
-                      tournoi.lieu_tournoi, "du", tournoi.debut_tournoi, "au", tournoi.fin_tournoi, ":")
+                print("Vous avez demandé à voir les information du tournoi",
+                      tournoi.nom_tournoi, "s'étant déroulé à",
+                      tournoi.lieu_tournoi, "du", tournoi.debut_tournoi,
+                      "au", tournoi.fin_tournoi, ":")
                 print(" ")
                 if len(tournoi.gagnant) == 1:
                     for gagnant in tournoi.gagnant:
@@ -463,10 +536,12 @@ class RapportsTournois :
                         valeurs = gagnant[cle]
                         prenom = valeurs[0]
                         nom = valeurs[1]
-                        print("Ce tournoi s'est déroulé en", tournoi.nb_tours, "tours. Le vainqueur est le joueur N°",
-                              cle, ":", prenom, nom)
+                        print("Ce tournoi s'est déroulé en", tournoi.nb_tours,
+                              "tours. Le vainqueur est le joueur N°", cle, ":",
+                              prenom, nom)
                 else:
-                    print("Ce tournoi s'est déroulé en", tournoi.nb_tours, "tours. Les vainqueurs sont :")
+                    print("Ce tournoi s'est déroulé en", tournoi.nb_tours,
+                          "tours. Les vainqueurs sont :")
                     for gagnant in tournoi.gagnant:
                         cle = list(gagnant.keys())[0]
                         valeurs = gagnant[cle]
@@ -480,9 +555,11 @@ class RapportsTournois :
                 print(" ")
                 print("-" * 66)
                 print("La liste des joueurs inscrits au tournoi est :")
-                # On trie de la liste des joueurs par ordre alphabétique du nom de famille
-                liste_joueurs_triee = sorted(tournoi.liste_joueurs, key=lambda x: x[list(x.keys())[0]][1])
-                #On fait l'affichage sous forme "numéro : prénom nom"
+                # On trie de la liste des joueurs par ordre alphabétique du
+                # nom de famille
+                liste_joueurs_triee = sorted(tournoi.liste_joueurs, key=lambda
+                    x: x[list(x.keys())[0]][1])
+                # On fait l'affichage sous forme "numéro : prénom nom"
                 for joueur in liste_joueurs_triee:
                     joueur_numero = list(joueur.keys())[0]
                     joueur_nom_prenom = joueur[joueur_numero]
@@ -498,7 +575,8 @@ class RapportsTournois :
                 print(" ")
                 print("Voici la liste des matchs du tournoi :")
 
-                print("Voici la liste des matchs, les joueurs gagnants sont affichés avec une étoile.")
+                print("Voici la liste des matchs, les joueurs gagnants sont"
+                      " affichés avec une étoile.")
 
                 # Parcourir chaque tour et chaque match
                 for tour in tournoi.liste_matchs:
@@ -555,9 +633,10 @@ class RapportsTournois :
         print(" ")
 
     @staticmethod
-    def menu_rapports() :
+    def menu_rapports():
         code_menu_tournois = 0
-        while code_menu_tournois != 1 and code_menu_tournois != 2 and code_menu_tournois != 3 :
+        while code_menu_tournois != 1 and code_menu_tournois != 2 and\
+                code_menu_tournois != 3:
             print("*" * 66)
             print("-" * 66)
             print("Bienvenue dans le menu visionnage des matchs archivés")
@@ -577,8 +656,8 @@ class RapportsTournois :
                 print(" ")
                 print("Merci de choisir parmis les options 1, 2, 3, ou 4 !")
                 print(" ")
-            if code_menu_tournois != 0 and code_menu_tournois != 1 and code_menu_tournois != 2 and\
-                    code_menu_tournois != 3:
+            if code_menu_tournois != 0 and code_menu_tournois != 1 and\
+                    code_menu_tournois != 2 and code_menu_tournois != 3:
                 print(" ")
                 print("Merci de choisir parmis les options 1, 2 ou 3 !")
                 print(" ")
@@ -586,21 +665,24 @@ class RapportsTournois :
 
     @staticmethod
     def affichage_liste_tournois(liste_tournois):
-        print("Voici l'ensemble des tournois enregistrés dans la base de données :")
+        print("Voici l'ensemble des tournois enregistrés dans la base de"
+              " données :")
         print(" ")
-        for tournoi in liste_tournois :
+        for tournoi in liste_tournois:
             print(" ")
-            print("Nom du tournoi :", tournoi.nom_tournoi, ", commencé le", tournoi.debut_tournoi, "et terminé le",
-                  tournoi.fin_tournoi, "à", tournoi.lieu_tournoi)
-            print("Nombre de tours :", tournoi.nb_tours, "- Nombre de joueurs :", len(tournoi.liste_joueurs))
-            if len(tournoi.gagnant) == 1 :
+            print("Nom du tournoi :", tournoi.nom_tournoi, ", commencé le",
+                  tournoi.debut_tournoi, "et terminé le", tournoi.fin_tournoi,
+                  "à", tournoi.lieu_tournoi)
+            print("Nombre de tours :", tournoi.nb_tours,
+                  "- Nombre de joueurs :", len(tournoi.liste_joueurs))
+            if len(tournoi.gagnant) == 1:
                 for gagnant in tournoi.gagnant:
                     cle = list(gagnant.keys())[0]
                     valeurs = gagnant[cle]
                     prenom = valeurs[0]
                     nom = valeurs[1]
                     print("Le gagnant est le joueur N°", cle, ":", prenom, nom)
-            else :
+            else:
                 print("Les gagnants sont :")
                 for gagnant in tournoi.gagnant:
                     cle = list(gagnant.keys())[0]
@@ -613,11 +695,11 @@ class RapportsTournois :
         input("Pressez 'ENTER' pour retourner au menu")
 
 
-
-class Erreurs :
+class Erreurs:
     @staticmethod
     def erreur1():
-        print("Aucune base de données n'est présente. Merci de contacter votre administrateur !")
+        print("Aucune base de données n'est présente. Merci de contacter votre"
+              " administrateur !")
         input("Tapez 'ENTER' pour retourner au menu principal")
         Lancement.lancementMenuPrincipal(0)
 
@@ -630,11 +712,10 @@ class Erreurs :
     @staticmethod
     def erreur3():
         print(" ")
-        print("Nous n'avons pas pu mettre les informations des joueurs à jour, le fichier 'joueurs.json'"
-              " est introuvable")
+        print("Nous n'avons pas pu mettre les informations des joueurs à jour,"
+              " le fichier 'joueurs.json' est introuvable")
         print(" ")
         input("Pressez 'ENTER' pour continuer")
-
 
 
 if __name__ == "__main__":

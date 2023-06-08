@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>flake8 violations: view\view.py</title>
+      <meta http-equiv="Content-Type" value="text/html; charset=UTF-8">
+      <link rel="stylesheet" href="styles.css">
+<script>
+function bindHandler(link) {
+   var code = link.getAttribute('data-code');
+   var key = location.pathname + '#' + code;
+
+   var ul = link.parentNode.querySelector('.details');
+   if (sessionStorage[key] != 'open') {
+      ul.style.display = 'none';
+   }
+   link.addEventListener('click', function (event) {
+      if (!ul.style.display || ul.style.display == 'none') {
+         ul.style.display = 'block';
+         sessionStorage[key] = 'open';
+      } else {
+         ul.style.display = 'none';
+         sessionStorage[key] = 'closed';
+      }
+   });
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+   var links = document.querySelectorAll('#index > li > a');
+   for (var i = 0; i < links.length; i++) {
+      bindHandler(links[i]);
+   }
+});
+</script>
+   </head>
+   <body>
+      <div id="masthead" class="sev-1"></div>
+      <div id="page">
+         <p id="srclink">
+            <a title="View full annotated source"
+               href="view.view.source.html">
+               <img src="file.svg" alt="&#x2261;">
+            </a></p>
+         <h1>
+            <a href="index.html">
+               <img src="back.svg" alt="&#x2B05;">
+               view\view.py
+            </a>
+         </h1>
+
+         <ul id="index">
+         
+         <li>
+            <a data-code="F405">
+               <span class="count sev-1">
+                  4
+               </span>
+               <strong>F405:</strong> 'verification_date' may be undefined, or defined from star imports: fonctions.fonctions, models.models
+               
+                  (and 1 similar)
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <p>'verification_date' may be undefined, or defined from star imports: fonctions.fonctions, models.models:</p>
+               
+               <a href="view.view.source.html#l105">
+                  <tt><i>105</i>             <span class="n">verif_date</span> <span class="o">=</span> <span class="n">verification_date</span><span class="p">(</span><span class="n">date_naissance</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'verification_date' may be undefined, or defined from star imports: fonctions.fonctions, models.models:</p>
+               
+               <a href="view.view.source.html#l508">
+                  <tt><i>508</i>             <span class="n">verif_date</span> <span class="o">=</span> <span class="n">verification_date</span><span class="p">(</span><span class="n">date_tournoi</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'Lancement' may be undefined, or defined from star imports: fonctions.fonctions, models.models:</p>
+               
+               <a href="view.view.source.html#l704">
+                  <tt><i>704</i>         <span class="n">Lancement</span><span class="o">.</span><span class="n">lancementMenuPrincipal</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'Lancement' may be undefined, or defined from star imports: fonctions.fonctions, models.models:</p>
+               
+               <a href="view.view.source.html#l710">
+                  <tt><i>710</i>         <span class="n">Lancement</span><span class="o">.</span><span class="n">lancementMenuPrincipal</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="F403">
+               <span class="count sev-1">
+                  2
+               </span>
+               <strong>F403:</strong> 'from models.models import *' used; unable to detect undefined names
+               
+                  (and 1 similar)
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <p>'from models.models import *' used; unable to detect undefined names:</p>
+               
+               <a href="view.view.source.html#l4">
+                  <tt><i>4</i> <span class="kn">from</span> <span class="nn">models.models</span> <span class="kn">import</span> <span class="o">*</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'from fonctions.fonctions import *' used; unable to detect undefined names:</p>
+               
+               <a href="view.view.source.html#l5">
+                  <tt><i>5</i> <span class="kn">from</span> <span class="nn">fonctions.fonctions</span> <span class="kn">import</span> <span class="o">*</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E127">
+               <span class="count sev-2">
+                  5
+               </span>
+               <strong>E127:</strong> continuation line over-indented for visual indent
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="view.view.source.html#l108">
+                  <tt><i>108</i>                        <span class="s2">&quot;) n&#39;est pas une date valide. Merci de recommencer.&quot;</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="view.view.source.html#l187">
+                  <tt><i>187</i>                             <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="n">duree_tournoi</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="view.view.source.html#l192">
+                  <tt><i>192</i>                                <span class="s2">&quot; Souhaitez vous modifier ?&quot;</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="view.view.source.html#l314">
+                  <tt><i>314</i>                            <span class="s2">&quot; (oui / non) &quot;</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="view.view.source.html#l398">
+                  <tt><i>398</i>                                    <span class="s2">&quot; (oui / non) &quot;</span><span class="p">)</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E128">
+               <span class="count sev-2">
+                  2
+               </span>
+               <strong>E128:</strong> continuation line under-indented for visual indent
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="view.view.source.html#l155">
+                  <tt><i>155</i>             <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;Nom du joueur&#39;</span><span class="p">])</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="view.view.source.html#l561">
+                  <tt><i>561</i>                     <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]][</span><span class="mi">1</span><span class="p">])</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         </ul>
+      </div>
+   </body>
+</html>

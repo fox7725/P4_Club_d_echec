@@ -1,9 +1,8 @@
 
 from controller.controller import Lancement
-from view.view import MenuPrincipal
 
 
-def accueil() :
+def accueil():
     print("=" * 29)
     print(" ")
     print("BIENVENUE DANS VOTRE LOGICIEL")
@@ -14,6 +13,7 @@ def accueil() :
     input("Pressez 'ENTER' pour continuer")
     Lancement.lancementMenuPrincipal(0)
 
-if __name__ == "__main__" :
-    #Affichage du message de bienvenue
+
+if __name__ == "__main__":
+    # Affichage du message de bienvenue
     accueil()

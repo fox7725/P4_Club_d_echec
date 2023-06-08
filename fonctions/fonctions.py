@@ -8,20 +8,23 @@ def liste_joueur_JSON():
     os.makedirs("JSON", exist_ok=True)
     bdd_joueurs = "JSON/joueurs.json"
     if os.path.exists(bdd_joueurs):
-        # Si le fichier JSON pour les joueurs existe, on récupère la liste des joueurs
+        # Si le fichier JSON pour les joueurs existe, on récupère la liste des
+        # joueurs
         with open(bdd_joueurs, 'r') as f:
             contenu = json.load(f)
     else:
         contenu = "ERR01"
     return contenu
 
-def verification_date(date) :
+
+def verification_date(date):
     format_date = "%d/%m/%Y"
-    try :
+    try:
         validation_date = datetime.datetime.strptime(date, format_date)
-    except ValueError :
+    except ValueError:
         return 0
     return 1
+
 
 def rapports_tournois():
     os.makedirs("JSON/archives", exist_ok=True)

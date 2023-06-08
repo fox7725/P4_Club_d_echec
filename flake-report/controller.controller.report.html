@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>flake8 violations: controller\controller.py</title>
+      <meta http-equiv="Content-Type" value="text/html; charset=UTF-8">
+      <link rel="stylesheet" href="styles.css">
+<script>
+function bindHandler(link) {
+   var code = link.getAttribute('data-code');
+   var key = location.pathname + '#' + code;
+
+   var ul = link.parentNode.querySelector('.details');
+   if (sessionStorage[key] != 'open') {
+      ul.style.display = 'none';
+   }
+   link.addEventListener('click', function (event) {
+      if (!ul.style.display || ul.style.display == 'none') {
+         ul.style.display = 'block';
+         sessionStorage[key] = 'open';
+      } else {
+         ul.style.display = 'none';
+         sessionStorage[key] = 'closed';
+      }
+   });
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+   var links = document.querySelectorAll('#index > li > a');
+   for (var i = 0; i < links.length; i++) {
+      bindHandler(links[i]);
+   }
+});
+</script>
+   </head>
+   <body>
+      <div id="masthead" class="sev-1"></div>
+      <div id="page">
+         <p id="srclink">
+            <a title="View full annotated source"
+               href="controller.controller.source.html">
+               <img src="file.svg" alt="&#x2261;">
+            </a></p>
+         <h1>
+            <a href="index.html">
+               <img src="back.svg" alt="&#x2B05;">
+               controller\controller.py
+            </a>
+         </h1>
+
+         <ul id="index">
+         
+         <li>
+            <a data-code="F405">
+               <span class="count sev-1">
+                  36
+               </span>
+               <strong>F405:</strong> 'MenuPrincipal' may be undefined, or defined from star imports: fonctions.fonctions, models.models, view.view
+               
+                  (and 14 similar)
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <p>'MenuPrincipal' may be undefined, or defined from star imports: fonctions.fonctions, models.models, view.view:</p>
+               
+               <a href="controller.controller.source.html#l18">
+                  <tt><i>18</i>             <span class="n">reponse</span> <span class="o">=</span> <span class="n">MenuPrincipal</span><span class="o">.</span><span class="n">menuprincipal</span><span class="p">(</span><span class="n">reponse</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'ViewInformationsTournoi' may be undefined, or defined from star imports: fonctions.fonctions, models.models, view.view:</p>
+               
+               <a href="controller.controller.source.html#l22">
+                  <tt><i>22</i>             <span class="n">infos_tournoi</span> <span class="o">=</span> <span class="n">ViewInformationsTournoi</span><span class="o">.</span><span class="n">infos_generales_tournoi</span><span class="p">()</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'ViewInformationsTournoi' may be undefined, or defined from star imports: fonctions.fonctions, models.models, view.view:</p>
+               
+               <a href="controller.controller.source.html#l24">
+                  <tt><i>24</i>             <span class="n">demande_nv_joueur</span> <span class="o">=</span> <span class="n">ViewInformationsTournoi</span><span class="o">.</span><span class="n">demande_nv_joueurs</span><span class="p">()</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'liste_joueur_JSON' may be undefined, or defined from star imports: fonctions.fonctions, models.models, view.view:</p>
+               
+               <a href="controller.controller.source.html#l29">
+                  <tt><i>29</i>                 <span class="n">preliste_joueurs</span> <span class="o">=</span> <span class="n">liste_joueur_JSON</span><span class="p">()</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'Erreurs' may be undefined, or defined from star imports: fonctions.fonctions, models.models, view.view:</p>
+               
+               <a href="controller.controller.source.html#l31">
+                  <tt><i>31</i>                     <span class="n">Erreurs</span><span class="o">.</span><span class="n">erreur1</span><span class="p">()</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'ViewInformationsTournoi' may be undefined, or defined from star imports: fonctions.fonctions, models.models, view.view:</p>
+               
+               <a href="controller.controller.source.html#l34">
+                  <tt><i>34</i>                     <span class="n">liste_joueurs</span> <span class="o">=</span> <span class="n">ViewInformationsTournoi</span><span class="o">.</span><span class="n">ajout_joueurs_invites</span><span class="p">(</span><span class="n">preliste_joueurs</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'ViewInformationsTournoi' may be undefined, or defined from star imports: fonctions.fonctions, models.models, view.view:</p>
+               
+               <a href="controller.controller.source.html#l36">
+                  <tt><i>36</i>                 <span class="n">liste_joueurs</span> <span class="o">=</span> <span class="n">ViewInformationsTournoi</span><span class="o">.</span><span class="n">ajout_joueurs</span><span class="p">()</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'Joueur' may be undefined, or defined from star imports: fonctions.fonctions, models.models, view.view:</p>
+               
+               <a href="controller.controller.source.html#l41">
+                  <tt><i>41</i>                 <span class="n">joueur</span> <span class="o">=</span> <span class="n">Joueur</span><span class="p">(</span><span class="n">j</span><span class="p">[</span><span class="s2">&quot;ID&quot;</span><span class="p">],</span> <span class="n">j</span><span class="p">[</span><span class="s2">&quot;nom_joueur&quot;</span><span class="p">],</span> <span class="n">j</span><span class="p">[</span><span class="s2">&quot;prenom_joueur&quot;</span><span class="p">],</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'Tournoi' may be undefined, or defined from star imports: fonctions.fonctions, models.models, view.view:</p>
+               
+               <a href="controller.controller.source.html#l52">
+                  <tt><i>52</i>             <span class="n">tournoi</span> <span class="o">=</span> <span class="n">Tournoi</span><span class="p">(</span><span class="n">nom_tournoi</span><span class="p">,</span> <span class="n">lieu_tournoi</span><span class="p">,</span> <span class="n">remarque_tournoi</span><span class="p">,</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'ViewInformationTour' may be undefined, or defined from star imports: fonctions.fonctions, models.models, view.view:</p>
+               
+               <a href="controller.controller.source.html#l87">
+                  <tt><i>87</i>                 <span class="n">date_debut_tour</span> <span class="o">=</span> <span class="n">ViewInformationTour</span><span class="o">.</span><span class="n">lancement_tour</span><span class="p">(</span><span class="n">nom_tour</span><span class="p">,</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'Tour' may be undefined, or defined from star imports: fonctions.fonctions, models.models, view.view:</p>
+               
+               <a href="controller.controller.source.html#l91">
+                  <tt><i>91</i>                 <span class="n">tour</span> <span class="o">=</span> <span class="n">Tour</span><span class="p">(</span><span class="n">num_tour</span><span class="p">,</span> <span class="n">nom_tour</span><span class="p">,</span> <span class="n">liste_joueurs_tour</span><span class="p">,</span> <span class="n">nb_match</span><span class="p">,</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'Match' may be undefined, or defined from star imports: fonctions.fonctions, models.models, view.view:</p>
+               
+               <a href="controller.controller.source.html#l129">
+                  <tt><i>129</i>                     <span class="n">match</span> <span class="o">=</span> <span class="n">Match</span><span class="p">(</span><span class="n">tour</span><span class="o">.</span><span class="n">nom_tour</span><span class="p">,</span> <span class="n">nom_match</span><span class="p">,</span> <span class="n">joueur_blanc</span><span class="p">,</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'ViewMatch' may be undefined, or defined from star imports: fonctions.fonctions, models.models, view.view:</p>
+               
+               <a href="controller.controller.source.html#l142">
+                  <tt><i>142</i>                         <span class="n">choix_match</span> <span class="o">=</span> <span class="n">ViewMatch</span><span class="o">.</span><span class="n">choix_match</span><span class="p">(</span><span class="n">liste_matchs_restant</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'ViewMatch' may be undefined, or defined from star imports: fonctions.fonctions, models.models, view.view:</p>
+               
+               <a href="controller.controller.source.html#l148">
+                  <tt><i>148</i>                     <span class="n">score</span> <span class="o">=</span> <span class="n">ViewMatch</span><span class="o">.</span><span class="n">declaration_scores</span><span class="p">(</span><span class="n">choix_match</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'ViewInformationTour' may be undefined, or defined from star imports: fonctions.fonctions, models.models, view.view:</p>
+               
+               <a href="controller.controller.source.html#l182">
+                  <tt><i>182</i>                 <span class="n">date_fin_de_tour</span> <span class="o">=</span> <span class="n">ViewInformationTour</span><span class="o">.</span><span class="n">fin_tour</span><span class="p">(</span><span class="n">tour</span><span class="o">.</span><span class="n">nom_tour</span><span class="p">,</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'ViewInformationsTournoi' may be undefined, or defined from star imports: fonctions.fonctions, models.models, view.view:</p>
+               
+               <a href="controller.controller.source.html#l207">
+                  <tt><i>207</i>             <span class="n">ViewInformationsTournoi</span><span class="o">.</span><span class="n">infos_fin_tournoi</span><span class="p">(</span><span class="n">liste_gagnants</span><span class="p">,</span> <span class="n">tournoi</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'ViewInformationsTournoi' may be undefined, or defined from star imports: fonctions.fonctions, models.models, view.view:</p>
+               
+               <a href="controller.controller.source.html#l210">
+                  <tt><i>210</i>             <span class="n">ViewInformationsTournoi</span><span class="o">.</span><span class="n">pret_pour_archivage</span><span class="p">()</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'ViewInformationsTournoi' may be undefined, or defined from star imports: fonctions.fonctions, models.models, view.view:</p>
+               
+               <a href="controller.controller.source.html#l212">
+                  <tt><i>212</i>             <span class="n">ViewInformationsTournoi</span><span class="o">.</span><span class="n">archivage_tournoi</span><span class="p">(</span><span class="n">archivage_tournoi</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'Erreurs' may be undefined, or defined from star imports: fonctions.fonctions, models.models, view.view:</p>
+               
+               <a href="controller.controller.source.html#l221">
+                  <tt><i>221</i>                         <span class="n">Erreurs</span><span class="o">.</span><span class="n">erreur3</span><span class="p">()</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'rapports_tournois' may be undefined, or defined from star imports: fonctions.fonctions, models.models, view.view:</p>
+               
+               <a href="controller.controller.source.html#l231">
+                  <tt><i>231</i>             <span class="n">rapports</span> <span class="o">=</span> <span class="n">rapports_tournois</span><span class="p">()</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'Erreurs' may be undefined, or defined from star imports: fonctions.fonctions, models.models, view.view:</p>
+               
+               <a href="controller.controller.source.html#l233">
+                  <tt><i>233</i>                 <span class="n">Erreurs</span><span class="o">.</span><span class="n">erreur1</span><span class="p">()</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'TournoisJSON' may be undefined, or defined from star imports: fonctions.fonctions, models.models, view.view:</p>
+               
+               <a href="controller.controller.source.html#l249">
+                  <tt><i>249</i>                 <span class="n">tournoi_instance</span> <span class="o">=</span> <span class="n">TournoisJSON</span><span class="p">(</span><span class="n">nom_tournoi</span><span class="p">,</span> <span class="n">lieu_tournoi</span><span class="p">,</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'RapportsTournois' may be undefined, or defined from star imports: fonctions.fonctions, models.models, view.view:</p>
+               
+               <a href="controller.controller.source.html#l259">
+                  <tt><i>259</i>             <span class="n">code_rapport_tournoi</span> <span class="o">=</span> <span class="n">RapportsTournois</span><span class="o">.</span><span class="n">menu_rapports</span><span class="p">()</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'RapportsTournois' may be undefined, or defined from star imports: fonctions.fonctions, models.models, view.view:</p>
+               
+               <a href="controller.controller.source.html#l268">
+                  <tt><i>268</i>                 <span class="n">RapportsTournois</span><span class="o">.</span><span class="n">affichage_liste_tournois</span><span class="p">(</span><span class="n">liste_tournois</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'RapportsTournois' may be undefined, or defined from star imports: fonctions.fonctions, models.models, view.view:</p>
+               
+               <a href="controller.controller.source.html#l274">
+                  <tt><i>274</i>                 <span class="n">date_tournoi</span> <span class="o">=</span> <span class="n">RapportsTournois</span><span class="o">.</span><span class="n">quelle_date_tournoi</span><span class="p">(</span><span class="n">liste_tournois</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'RapportsTournois' may be undefined, or defined from star imports: fonctions.fonctions, models.models, view.view:</p>
+               
+               <a href="controller.controller.source.html#l275">
+                  <tt><i>275</i>                 <span class="n">RapportsTournois</span><span class="o">.</span><span class="n">affichage_infos_tournoi</span><span class="p">(</span><span class="n">date_tournoi</span><span class="p">,</span> <span class="n">liste_tournois</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'MenuGestionJoueur' may be undefined, or defined from star imports: fonctions.fonctions, models.models, view.view:</p>
+               
+               <a href="controller.controller.source.html#l283">
+                  <tt><i>283</i>                 <span class="n">code_menu_joueur</span> <span class="o">=</span> <span class="n">MenuGestionJoueur</span><span class="o">.</span><span class="n">menujoueur</span><span class="p">()</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'liste_joueur_JSON' may be undefined, or defined from star imports: fonctions.fonctions, models.models, view.view:</p>
+               
+               <a href="controller.controller.source.html#l287">
+                  <tt><i>287</i>                     <span class="n">liste_joueurs_abonnes</span> <span class="o">=</span> <span class="n">liste_joueur_JSON</span><span class="p">()</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'MenuGestionJoueur' may be undefined, or defined from star imports: fonctions.fonctions, models.models, view.view:</p>
+               
+               <a href="controller.controller.source.html#l288">
+                  <tt><i>288</i>                     <span class="n">code_menu_joueur</span> <span class="o">=</span> <span class="n">MenuGestionJoueur</span><span class="o">.</span><span class="n">affichage_liste_abonnes</span><span class="p">(</span><span class="n">liste_joueurs_abonnes</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'MenuGestionJoueur' may be undefined, or defined from star imports: fonctions.fonctions, models.models, view.view:</p>
+               
+               <a href="controller.controller.source.html#l294">
+                  <tt><i>294</i>                         <span class="n">reponses_formulaire</span> <span class="o">=</span> <span class="n">MenuGestionJoueur</span><span class="o">.</span><span class="n">questionnaire_recherche_joueur</span><span class="p">()</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'MenuGestionJoueur' may be undefined, or defined from star imports: fonctions.fonctions, models.models, view.view:</p>
+               
+               <a href="controller.controller.source.html#l306">
+                  <tt><i>306</i>                                     <span class="n">oui_non</span> <span class="o">=</span> <span class="n">MenuGestionJoueur</span><span class="o">.</span><span class="n">affichage</span><span class="p">(</span><span class="n">joueur</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'MenuGestionJoueur' may be undefined, or defined from star imports: fonctions.fonctions, models.models, view.view:</p>
+               
+               <a href="controller.controller.source.html#l314">
+                  <tt><i>314</i>                         <span class="n">reponses_formulaire</span> <span class="o">=</span> <span class="n">MenuGestionJoueur</span><span class="o">.</span><span class="n">formulaire_nouveau_joueur</span><span class="p">()</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'JoueurJSON' may be undefined, or defined from star imports: fonctions.fonctions, models.models, view.view:</p>
+               
+               <a href="controller.controller.source.html#l315">
+                  <tt><i>315</i>                         <span class="n">creation</span> <span class="o">=</span> <span class="n">JoueurJSON</span><span class="p">(</span><span class="n">reponses_formulaire</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'MenuGestionJoueur' may be undefined, or defined from star imports: fonctions.fonctions, models.models, view.view:</p>
+               
+               <a href="controller.controller.source.html#l325">
+                  <tt><i>325</i>                         <span class="n">retour</span> <span class="o">=</span> <span class="n">MenuGestionJoueur</span><span class="o">.</span><span class="n">joueur_enregistre</span><span class="p">(</span><span class="n">resultat</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'Erreurs' may be undefined, or defined from star imports: fonctions.fonctions, models.models, view.view:</p>
+               
+               <a href="controller.controller.source.html#l334">
+                  <tt><i>334</i>                     <span class="n">Erreurs</span><span class="o">.</span><span class="n">erreur2</span><span class="p">()</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'Erreurs' may be undefined, or defined from star imports: fonctions.fonctions, models.models, view.view:</p>
+               
+               <a href="controller.controller.source.html#l341">
+                  <tt><i>341</i>             <span class="n">Erreurs</span><span class="o">.</span><span class="n">erreur2</span><span class="p">()</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="F403">
+               <span class="count sev-1">
+                  3
+               </span>
+               <strong>F403:</strong> 'from view.view import *' used; unable to detect undefined names
+               
+                  (and 2 similar)
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <p>'from view.view import *' used; unable to detect undefined names:</p>
+               
+               <a href="controller.controller.source.html#l6">
+                  <tt><i>6</i> <span class="kn">from</span> <span class="nn">view.view</span> <span class="kn">import</span> <span class="o">*</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'from models.models import *' used; unable to detect undefined names:</p>
+               
+               <a href="controller.controller.source.html#l7">
+                  <tt><i>7</i> <span class="kn">from</span> <span class="nn">models.models</span> <span class="kn">import</span> <span class="o">*</span></tt>
+               </a>
+            </li><li>
+               
+               <p>'from fonctions.fonctions import *' used; unable to detect undefined names:</p>
+               
+               <a href="controller.controller.source.html#l8">
+                  <tt><i>8</i> <span class="kn">from</span> <span class="nn">fonctions.fonctions</span> <span class="kn">import</span> <span class="o">*</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="F401">
+               <span class="count sev-1">
+                  1
+               </span>
+               <strong>F401:</strong> 'datetime' imported but unused
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="controller.controller.source.html#l2">
+                  <tt><i>2</i> <span class="kn">import</span> <span class="nn">datetime</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E501">
+               <span class="count sev-2">
+                  14
+               </span>
+               <strong>E501:</strong> line too long (99 > 79 characters)
+               
+                  (and 9 similar)
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <p>Line too long (99 > 79 characters):</p>
+               
+               <a href="controller.controller.source.html#l34">
+                  <tt><i>34</i>                     <span class="n">liste_joueurs</span> <span class="o">=</span> <span class="n">ViewInformationsTournoi</span><span class="o">.</span><span class="n">ajout_joueurs_invites</span><span class="p">(</span><span class="n">preliste_joueurs</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (81 > 79 characters):</p>
+               
+               <a href="controller.controller.source.html#l142">
+                  <tt><i>142</i>                         <span class="n">choix_match</span> <span class="o">=</span> <span class="n">ViewMatch</span><span class="o">.</span><span class="n">choix_match</span><span class="p">(</span><span class="n">liste_matchs_restant</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (84 > 79 characters):</p>
+               
+               <a href="controller.controller.source.html#l158">
+                  <tt><i>158</i>                                     <span class="n">choix_match</span><span class="o">.</span><span class="n">joueur_blanc</span><span class="o">.</span><span class="n">identifiant_national</span><span class="p">:</span> <span class="p">[</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (83 > 79 characters):</p>
+               
+               <a href="controller.controller.source.html#l167">
+                  <tt><i>167</i>                                     <span class="n">choix_match</span><span class="o">.</span><span class="n">joueur_noir</span><span class="o">.</span><span class="n">identifiant_national</span><span class="p">:</span> <span class="p">[</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (86 > 79 characters):</p>
+               
+               <a href="controller.controller.source.html#l183">
+                  <tt><i>183</i>                                                                 <span class="n">tournoi</span><span class="o">.</span><span class="n">liste_joueurs</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (103 > 79 characters):</p>
+               
+               <a href="controller.controller.source.html#l218">
+                  <tt><i>218</i>                     <span class="n">retour_mise_a_jour</span> <span class="o">=</span> <span class="n">joueur_a_modifier</span><span class="o">.</span><span class="n">mise_a_jour_fin_tournoi</span><span class="p">(</span><span class="n">tournoi</span><span class="o">.</span><span class="n">nom_tournoi</span><span class="p">,</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (105 > 79 characters):</p>
+               
+               <a href="controller.controller.source.html#l219">
+                  <tt><i>219</i>                                                                                    <span class="n">tournoi</span><span class="o">.</span><span class="n">debut_tournoi</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (83 > 79 characters):</p>
+               
+               <a href="controller.controller.source.html#l274">
+                  <tt><i>274</i>                 <span class="n">date_tournoi</span> <span class="o">=</span> <span class="n">RapportsTournois</span><span class="o">.</span><span class="n">quelle_date_tournoi</span><span class="p">(</span><span class="n">liste_tournois</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (86 > 79 characters):</p>
+               
+               <a href="controller.controller.source.html#l275">
+                  <tt><i>275</i>                 <span class="n">RapportsTournois</span><span class="o">.</span><span class="n">affichage_infos_tournoi</span><span class="p">(</span><span class="n">date_tournoi</span><span class="p">,</span> <span class="n">liste_tournois</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (103 > 79 characters):</p>
+               
+               <a href="controller.controller.source.html#l288">
+                  <tt><i>288</i>                     <span class="n">code_menu_joueur</span> <span class="o">=</span> <span class="n">MenuGestionJoueur</span><span class="o">.</span><span class="n">affichage_liste_abonnes</span><span class="p">(</span><span class="n">liste_joueurs_abonnes</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (96 > 79 characters):</p>
+               
+               <a href="controller.controller.source.html#l294">
+                  <tt><i>294</i>                         <span class="n">reponses_formulaire</span> <span class="o">=</span> <span class="n">MenuGestionJoueur</span><span class="o">.</span><span class="n">questionnaire_recherche_joueur</span><span class="p">()</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (89 > 79 characters):</p>
+               
+               <a href="controller.controller.source.html#l305">
+                  <tt><i>305</i>                                 <span class="k">if</span> <span class="n">joueur</span><span class="p">[</span><span class="s2">&quot;Identifiant national&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">reponses_formulaire</span><span class="p">:</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (81 > 79 characters):</p>
+               
+               <a href="controller.controller.source.html#l306">
+                  <tt><i>306</i>                                     <span class="n">oui_non</span> <span class="o">=</span> <span class="n">MenuGestionJoueur</span><span class="o">.</span><span class="n">affichage</span><span class="p">(</span><span class="n">joueur</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Line too long (91 > 79 characters):</p>
+               
+               <a href="controller.controller.source.html#l314">
+                  <tt><i>314</i>                         <span class="n">reponses_formulaire</span> <span class="o">=</span> <span class="n">MenuGestionJoueur</span><span class="o">.</span><span class="n">formulaire_nouveau_joueur</span><span class="p">()</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E128">
+               <span class="count sev-2">
+                  1
+               </span>
+               <strong>E128:</strong> continuation line under-indented for visual indent
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="controller.controller.source.html#l155">
+                  <tt><i>155</i>                         <span class="p">(</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         </ul>
+      </div>
+   </body>
+</html>
