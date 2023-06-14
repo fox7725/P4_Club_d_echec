@@ -119,6 +119,22 @@ class Tournoi:
         self.liste_joueurs = liste_joueurs
         self.gagnant = gagnant
 
+    @classmethod
+    def from_json(cls):
+        with open('JSON/en_cours.tournoi.json') as fichier:
+            tournoi_en_cours = json.load(fichier)
+
+        return cls(
+            tournoi_en_cours["nom_tournoi"],
+            tournoi_en_cours["lieu_tournoi"],
+            tournoi_en_cours["remarque_tournoi"],
+            tournoi_en_cours["debut_tournoi"],
+            tournoi_en_cours["fin_tournoi"],
+            tournoi_en_cours["nb_tours"],
+            tournoi_en_cours["liste_joueurs"],
+            tournoi_en_cours["gagnant"]
+        )
+
     def sauver_tournoi(self):
         # On créé le dossier "en_cours" s'il n'existe pas pour sauvegarder le
         # tournoi en cours
@@ -298,7 +314,22 @@ class Match:
         self.joueur_noir.score_actuel += self.score_JN
 
     @staticmethod
-    def sauvegarde_matchs(liste_matchs_joues):
+    def sauvegarde_matchs_restant(liste_matchs_restant):
+        # On sauvegarde les matchs à jouer dans un JSON pour la récupération
+        liste_matchs_dict = []
+        for match in liste_matchs_restant :
+            match_dict = {
+                "nom_tour": match.nom_tour,
+                "nom_match": match.nom_match,
+                "joueur_blanc": match.joueur_blanc.identifiant_national,
+                "joueur_noir": match.joueur_noir.identifiant_national,
+            }
+            liste_matchs_dict.append(match_dict)
+        with open("JSON/en_cours/matchs_restants.json", "w") as fichier:
+            json.dump(liste_matchs_dict, fichier, indent=4)
+
+    @staticmethod
+    def sauvegarde_matchs_joues(liste_matchs_joues):
         # On sauvegarde les matchs joués dans un JSON
         liste_matchs_joues_dict = []
         for match_joue in liste_matchs_joues:

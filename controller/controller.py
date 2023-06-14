@@ -19,17 +19,14 @@ class Lancement:
     @staticmethod
     def reprise():
         # On vérifie s'il y a un tournoi en cours
+        reprendre = 0
         reponse = 0
         verif_encours = "JSON/en_cours/joueurs_tournoi.json"
         if os.path.exists(verif_encours):
             reprendre = MenuPrincipal.reprise_tournoi()
 
-            # Reprendre le tournoi
-            if reprendre == 1:
-                pass
-
             # Ne pas reprendre et supprimer le tournoi en cours
-            elif reprendre == 2:
+            if reprendre == 2:
                 suppression_encours()
                 reponse = MenuPrincipal.menuprincipal(reponse)
 
@@ -38,58 +35,103 @@ class Lancement:
                 reponse = MenuPrincipal.menuprincipal(reponse)
         else:
             reponse = MenuPrincipal.menuprincipal(reponse)
-        return reponse
+        reponses = {"reprendre" : reprendre, "reponse" : reponse}
+        return reponses
 
+    @staticmethod
+    def infos_reprise():
+        # On commence par charger la class Tournoi
+        tournoi = Tournoi.from_json()
+
+        # On charge la liste des joueurs
+        with open('JSON/en_cours/joueurs_tournoi.json') as fichier:
+            joueurs_sauve = json.load(fichier)
+        # Création des instances de la classe Joueur
+        liste_joueurs = []
+        for joueur_infos in joueurs_sauve:
+            joueur = Joueur(joueur_infos['identifiant_national'],
+                            joueur_infos['nom_joueur'],
+                            joueur_infos['prenom_joueur'],
+                            joueur_infos['sexe'],
+                            joueur_infos['date_naissance'],
+                            joueur_infos['score_actuel'])
+            liste_joueurs.append(joueur)
+
+        # Dans l'objet tournoi on remet les instances des joueurs
+        tournoi.liste_joueurs = liste_joueurs
+
+        #On peut maintenant charger les infos des tours et des matchs joués
+
+        # On peut envoyer les infos
+        infos_de_reprise = {"tournoi" : tournoi,
+                            "liste_joueurs" : liste_joueurs}
+        return infos_de_reprise
 
     @staticmethod
     def lancementMenuPrincipal(reponse):
         if reponse == 0:
-            reponse = Lancement.reprise()
+            # On vérifie s'il existe un tournoi en cours
+            reponses = Lancement.reprise()
+            reponse = reponses["reponse"]
+            reprendre = reponses["reprendre"]
 
         # 1. Commencer un nouveau tournoi
         if reponse == 1:
-            infos_tournoi = ViewInformationsTournoi.infos_generales_tournoi()
+            # Dans le cas où il n'y a pas de reprise de tournoi
+            if reprendre != 1 :
+                infos_tournoi = ViewInformationsTournoi.infos_generales_tournoi()
 
-            demande_nv_joueur = ViewInformationsTournoi.demande_nv_joueurs()
+                demande_nv_joueur = ViewInformationsTournoi.demande_nv_joueurs()
 
-            # On demande à l'organisateur s'il veut récupérer la liste des
-            # joueurs (réponse "oui") ou s'il veut la créer ("non")
-            if demande_nv_joueur == "oui":
-                preliste_joueurs = liste_joueur_JSON()
-                if preliste_joueurs == "ERR01":
-                    Erreurs.erreur1()
-                    Lancement.lancementMenuPrincipal(0)
+                # On demande à l'organisateur s'il veut récupérer la liste des
+                # joueurs (réponse "oui") ou s'il veut la créer ("non")
+                if demande_nv_joueur == "oui":
+                    preliste_joueurs = liste_joueur_JSON()
+                    if preliste_joueurs == "ERR01":
+                        Erreurs.erreur1()
+                        Lancement.lancementMenuPrincipal(0)
+                    else:
+                        liste_joueurs = ViewInformationsTournoi.ajout_joueurs_invites(preliste_joueurs)
                 else:
-                    liste_joueurs = ViewInformationsTournoi.ajout_joueurs_invites(preliste_joueurs)
-            else:
-                liste_joueurs = ViewInformationsTournoi.ajout_joueurs()
+                    liste_joueurs = ViewInformationsTournoi.ajout_joueurs()
 
-            # Création des objets joueur et concaténation en liste
-            liste_objets_joueurs = []
-            for j in liste_joueurs:
-                joueur = Joueur(j["ID"], j["nom_joueur"], j["prenom_joueur"],
-                                j["sexe"], j["date_naissance"], score_actuel=0)
-                liste_objets_joueurs.append(joueur)
+                # Création des objets joueur et concaténation en liste
+                liste_objets_joueurs = []
+                for j in liste_joueurs:
+                    joueur = Joueur(
+                        j["ID"],
+                        j["nom_joueur"],
+                        j["prenom_joueur"],
+                        j["sexe"],
+                        j["date_naissance"],
+                        score_actuel=0)
+                    liste_objets_joueurs.append(joueur)
 
-            # Création de l'objet Tournoi
-            nom_tournoi = infos_tournoi[0]
-            lieu_tournoi = infos_tournoi[1]
-            remarque_tournoi = infos_tournoi[2]
-            debut_tournoi = infos_tournoi[3]
-            fin_tournoi = infos_tournoi[4]
-            nb_tours = infos_tournoi[5]
-            tournoi = Tournoi(nom_tournoi, lieu_tournoi, remarque_tournoi,
-                              debut_tournoi, fin_tournoi, nb_tours,
-                              liste_objets_joueurs)
-            # On sauvegarde le tournoi lancé et la liste des joueurs pour les
-            # récupérer en cas de coupure
-            tournoi.sauver_tournoi()
-            tournoi.sauver_joueurs()
+                # Création de l'objet Tournoi
+                nom_tournoi = infos_tournoi[0]
+                lieu_tournoi = infos_tournoi[1]
+                remarque_tournoi = infos_tournoi[2]
+                debut_tournoi = infos_tournoi[3]
+                fin_tournoi = infos_tournoi[4]
+                nb_tours = infos_tournoi[5]
+                tournoi = Tournoi(nom_tournoi, lieu_tournoi, remarque_tournoi,
+                                  debut_tournoi, fin_tournoi, nb_tours,
+                                  liste_objets_joueurs)
+                # On sauvegarde le tournoi lancé et la liste des joueurs pour les
+                # récupérer en cas de coupure
+                tournoi.sauver_tournoi()
+                tournoi.sauver_joueurs()
 
-            # On créé les itérations des tours via une première boucle
-            liste_tours = []
-            liste_matchs_joues = []
-            num_tour = 0
+                # On créé les itérations des tours via une première boucle
+                liste_tours = []
+                liste_matchs_joues = []
+                num_tour = 0
+
+            # Si il y a une reprise de Tournoi, il faut charger les infos
+            else :
+                infos_de_reprise = Lancement.infos_reprise()
+
+            # On peut passer au traitement du tournoi lui-même
             while num_tour < tournoi.nb_tours:
                 num_tour += 1
                 # On nomme les tours : 'Round 1', 'Round 2', ...
@@ -123,8 +165,8 @@ class Lancement:
                 # On va maintenant pouvoir créer une nouvelle boucle pour créer
                 # les matchs
                 liste_paires_passees = []
-                liste_matchs = []
                 num_match = 0
+                liste_matchs = []
                 while num_match < nb_match:
                     num_match += 1
                     # On nomme les matchs : 'M1', 'M2', ...
@@ -174,12 +216,16 @@ class Lancement:
                         choix_match = liste_matchs_restant[0]
                         liste_matchs_restant.remove(choix_match)
 
+                    # On enregistre la liste des matchs restants pour
+                    # récupération
+                    Match.sauvegarde_matchs_restant(liste_matchs_restant)
+
                     # On récupère ensuite les scores et on sauvegarde à chaque
                     # fin de match
                     score = ViewMatch.declaration_scores(choix_match)
                     choix_match.score(score)
                     liste_matchs_joues.append(choix_match)
-                    Match.sauvegarde_matchs(liste_matchs_joues)
+                    Match.sauvegarde_matchs_joues(liste_matchs_joues)
                     # On fait le tuple demandé qu'on va aussi utiliser dans les
                     # saugardes
                     tuple_match_joue = {choix_match.nom_match:
