@@ -8,7 +8,7 @@ Ce logiciel entièrement rédigé en Python gère intégralement les tournois et
 # Comment utiliser le fichier python
 ## Etape 1 : Créer votre environnement virtuel :
 **Attention, les commande ci dessous fonctionnent sous windows 11, elles n'ont pas été testées sous d'autres systèmes d'exploitation.**
-**De même, l'application présentée ici fonctionne de façon optimale sous Python 3.3 et n'a pas été testée sous des versions antérieure**
+**De même, l'application présentée ici fonctionne de façon optimale sous Python 3.3 et n'a pas été testée sous des versions antérieures**
 
 Pour chaque nouveau projet, il est recommandé d'installer un environnement virtuel pour partir sur de nouvelles bases
 - Ouvrez votre Terminal préféré
@@ -25,8 +25,7 @@ pour vérifier que le code de ce logiciel respecte les normes **PEP8**, il vous 
 
 ## Etape 4 : Quitter l'environnement virtuel
 N'oubliez pas de fermer la porte de votre environnement virtuel (et d'y éteindre la lumière) avec la commande `deactivate`
-Vous pouvez maintenant aller chercher les fichiers image dans le dossier **"images"**, elles sont toutes classées dans des sous-dossiers aux noms des catégories.
-Vous trouverez le fichier **livres.csv** dans le dossier CSV.
+
 
 # Remerciements
 Un grand merci à mon mentor **Aurélien MALVE** qui a su me guider tout en douceur et à **Zozor** (l'ancienne mascotte du site) qui m'a donné envie de revenir sur **le Site du Zéro** pour apprendre le Python

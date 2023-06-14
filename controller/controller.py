@@ -1,6 +1,7 @@
 import sys
 import random
 import json
+import os
 
 from view.view import MenuPrincipal, MenuGestionJoueur
 from view.view import ViewInformationsTournoi, ViewInformationTour, ViewMatch
@@ -8,16 +9,42 @@ from view.view import RapportsTournois, Erreurs
 from models.models import Joueur, JoueurJSON, Tournoi, TournoisJSON, Tour
 from models.models import Match
 from fonctions.fonctions import liste_joueur_JSON, rapports_tournois
+from fonctions.fonctions import suppression_encours
 
 
 class Lancement:
-    '''Gestion du menu principal et des différentes options (lancement de
+    '''Gestion du menu prin cipal et des différentes options (lancement de
      tournoi, enregistrement de joeurs, édition des rapports'''
+
+    @staticmethod
+    def reprise():
+        # On vérifie s'il y a un tournoi en cours
+        reponse = 0
+        verif_encours = "JSON/en_cours/joueurs_tournoi.json"
+        if os.path.exists(verif_encours):
+            reprendre = MenuPrincipal.reprise_tournoi()
+
+            # Reprendre le tournoi
+            if reprendre == 1:
+                pass
+
+            # Ne pas reprendre et supprimer le tournoi en cours
+            elif reprendre == 2:
+                suppression_encours()
+                reponse = MenuPrincipal.menuprincipal(reponse)
+
+            # Ne pas reprendre et ne pas supprimer le tournoi en cours
+            elif reprendre == 3:
+                reponse = MenuPrincipal.menuprincipal(reponse)
+        else:
+            reponse = MenuPrincipal.menuprincipal(reponse)
+        return reponse
+
 
     @staticmethod
     def lancementMenuPrincipal(reponse):
         if reponse == 0:
-            reponse = MenuPrincipal.menuprincipal(reponse)
+            reponse = Lancement.reprise()
 
         # 1. Commencer un nouveau tournoi
         if reponse == 1:
@@ -146,11 +173,13 @@ class Lancement:
                     else:
                         choix_match = liste_matchs_restant[0]
                         liste_matchs_restant.remove(choix_match)
-                    # On récupère ensuite les score
+
+                    # On récupère ensuite les scores et on sauvegarde à chaque
+                    # fin de match
                     score = ViewMatch.declaration_scores(choix_match)
                     choix_match.score(score)
                     liste_matchs_joues.append(choix_match)
-
+                    Match.sauvegarde_matchs(liste_matchs_joues)
                     # On fait le tuple demandé qu'on va aussi utiliser dans les
                     # saugardes
                     tuple_match_joue = {choix_match.nom_match:
@@ -166,7 +195,8 @@ class Lancement:
                             ],
                             [
                                 {
-                                    choix_match.joueur_noir.identifiant_national: [
+                                    choix_match.joueur_noir.identifiant_national:
+                                    [
                                         choix_match.joueur_noir.prenom_joueur,
                                         choix_match.joueur_noir.nom_joueur
                                     ]
@@ -233,6 +263,7 @@ class Lancement:
             rapports = rapports_tournois()
             if rapports == "ERR01":
                 Erreurs.erreur1()
+                Lancement.lancementMenuPrincipal(0)
 
             # On désérialise les données
             liste_tournois = []
@@ -334,6 +365,7 @@ class Lancement:
 
                 else:
                     Erreurs.erreur2()
+                    Lancement.lancementMenuPrincipal(0)
 
         # 4. quitter le programme
         elif reponse == 4:
@@ -341,6 +373,7 @@ class Lancement:
 
         else:
             Erreurs.erreur2()
+            Lancement.lancementMenuPrincipal(0)
 
 
 if __name__ == "__main__":

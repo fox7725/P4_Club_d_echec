@@ -1,7 +1,6 @@
 import datetime
 import re
 
-from controller.controller import Lancement
 from fonctions.fonctions import verification_date
 
 
@@ -42,6 +41,37 @@ class MenuPrincipal:
                 print(" ")
                 input("Pressez 'ENTER' pour continuer")
         return code_menu_principal
+
+    @staticmethod
+    def reprise_tournoi():
+        print("Il existe actuellement un tournoi en cours")
+        tournoi_existe = "réponse"
+        while tournoi_existe != "oui" and tournoi_existe != "non":
+            tournoi_existe = input("Souhaitez-vous reprendre ? (oui / non)")
+            if tournoi_existe == "oui":
+                print(" ")
+                reprendre = 1
+            elif tournoi_existe == "non":
+                supprimer = "réponse"
+                while supprimer != "oui" and supprimer != "non :":
+                    supprimer = input("Souhaitez-vous supprimer le tournoi en"
+                                      " cours ? (oui / non)")
+                    if supprimer == "oui":
+                        print(" ")
+                        reprendre = 2
+                    elif supprimer == "non":
+                        print(" ")
+                        reprendre = 3
+                    else :
+                        print(" ")
+                        print("Merci de répondre par 'oui' ou par 'non' !")
+                        input("Pressez 'ENTER' pour continuer.")
+            else:
+                print(" ")
+                print("Merci de répondre par 'oui' ou par 'non' !")
+                input("Pressez 'ENTER' pour continuer.")
+
+            return reprendre
 
 
 class MenuGestionJoueur:
@@ -701,13 +731,11 @@ class Erreurs:
         print("Aucune base de données n'est présente. Merci de contacter votre"
               " administrateur !")
         input("Tapez 'ENTER' pour retourner au menu principal")
-        Lancement.lancementMenuPrincipal(0)
 
     @staticmethod
     def erreur2():
         print("Une erreur s'est produite")
         input("Pressez 'ENTER' pour continuer")
-        Lancement.lancementMenuPrincipal(0)
 
     @staticmethod
     def erreur3():

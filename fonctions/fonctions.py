@@ -1,6 +1,7 @@
 import json
 import os
 import datetime
+import send2trash
 
 
 def liste_joueur_JSON():
@@ -35,3 +36,16 @@ def rapports_tournois():
     else:
         contenu = "ERR01"
     return contenu
+
+
+def suppression_encours():
+    # On regarde les fichiers et les sous-répertoires dans le répertoire
+    for dossier, sous_repertoires, fichiers in os.walk("JSON/en_cours"):
+        # On supprime les fichiers en les déplaçant dans la corbeille pour
+        # plus de sécurité
+        for fichier in fichiers:
+            chemin_fichier = os.path.join(dossier, fichier)
+            send2trash.send2trash(chemin_fichier)
+
+    # On supprime le répertoire vide restant
+    os.rmdir("JSON/en_cours")
