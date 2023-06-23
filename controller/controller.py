@@ -13,7 +13,7 @@ from fonctions.fonctions import suppression_encours
 
 
 class Lancement:
-    '''Gestion du menu prin cipal et des différentes options (lancement de
+    '''Gestion du menu principal et des différentes options (lancement de
      tournoi, enregistrement de joeurs, édition des rapports'''
 
     @staticmethod
@@ -24,6 +24,10 @@ class Lancement:
         verif_encours = "JSON/en_cours/joueurs_tournoi.json"
         if os.path.exists(verif_encours):
             reprendre = MenuPrincipal.reprise_tournoi()
+
+            # Reprendre le tournoi en cours
+            if reprendre == 1:
+                reponse = 1
 
             # Ne pas reprendre et supprimer le tournoi en cours
             if reprendre == 2:
@@ -44,8 +48,8 @@ class Lancement:
         tournoi = Tournoi.from_json()
 
         # On charge la liste des joueurs
-        with open('JSON/en_cours/joueurs_tournoi.json') as fichier:
-            joueurs_sauve = json.load(fichier)
+        with open('JSON/en_cours/joueurs_tournoi.json') as fichier_joueurs:
+            joueurs_sauve = json.load(fichier_joueurs)
         # Création des instances de la classe Joueur
         liste_joueurs = []
         for joueur_infos in joueurs_sauve:
@@ -60,11 +64,65 @@ class Lancement:
         # Dans l'objet tournoi on remet les instances des joueurs
         tournoi.liste_joueurs = liste_joueurs
 
-        #On peut maintenant charger les infos des tours et des matchs joués
+        #On peut maintenant charger les infos des tours terminés
+        with open('JSON/en_cours/tours_joues.json') as fichier_tours:
+            tours_joues = json.load(fichier_tours)
+        # Cration des instances des tours
+        liste_tours_finis = []
+        for tour in tours_joues:
+            tour_fini = Tour(tour['num_tour'],
+                             tour['nom_tour'],
+                             tournoi.liste_joueurs,
+                             tour['nb_matchs'],
+                             tour['date_debut_tour'],
+                             tour['liste_match'],
+                             tour['date_fin_tour'])
+            liste_tours_finis.append(tour_fini)
+
+        # Maintenant on récupère la liste des matchs terminés
+        with open('JSON/en_cours/matchs_joues.json') as fichier_matchs_joues:
+            matchs_joues = json.load(fichier_matchs_joues)
+        # Création des instances des matchs joués
+        liste_matchs_joues = []
+        for match in matchs_joues:
+            match_joue = Match(match['nom_tour'],
+                               match['nom_match'],
+                               [joueur for joueur in tournoi.liste_joueurs if
+                                joueur.identifiant_national == match[
+                                    'joueur_blanc']][0],
+                               [joueur for joueur in tournoi.liste_joueurs if
+                                joueur.identifiant_national == match[
+                                    'joueur_noir']][0],
+                               match['score_JB'],
+                               match['score_JN'])
+            liste_matchs_joues.append(match_joue)
+
+        # Pour finir, on récupère les matchs à jouer dans le tour en cours
+        with open('JSON/en_cours/matchs_restants.json') as fichier_matchs_restants:
+            matchs_restants = json.load(fichier_matchs_restants)
+        # Création des instances des matchs restants dans le tour en cours s'il
+        # y en a
+        liste_matchs_restants = []
+        if len(matchs_restants) > 0:
+            for match in matchs_restants:
+                match_restant = Match(match['nom_tour'],
+                                   match['nom_match'],
+                                   [joueur for joueur in tournoi.liste_joueurs if
+                                    joueur.identifiant_national == match[
+                                        'joueur_blanc']][0],
+                                   [joueur for joueur in tournoi.liste_joueurs if
+                                    joueur.identifiant_national == match[
+                                        'joueur_noir']][0],
+                                   0,
+                                   0)
+                liste_matchs_restants.append(match_restant)
 
         # On peut envoyer les infos
         infos_de_reprise = {"tournoi" : tournoi,
-                            "liste_joueurs" : liste_joueurs}
+                            "liste_joueurs" : liste_joueurs,
+                            "tours_finis" : liste_tours_finis,
+                            "liste_matchs_joues" : liste_matchs_joues,
+                            "liste_matchs_restants" : liste_matchs_restants}
         return infos_de_reprise
 
     @staticmethod
@@ -122,20 +180,71 @@ class Lancement:
                 tournoi.sauver_tournoi()
                 tournoi.sauver_joueurs()
 
-                # On créé les itérations des tours via une première boucle
+                # On initialise les variables du tour
+                liste_tuples_matchs_tour = []
                 liste_tours = []
                 liste_matchs_joues = []
                 num_tour = 0
 
-            # Si il y a une reprise de Tournoi, il faut charger les infos
+            # Si il y a une reprise de Tournoi, il faut charger les infos pour
+            # reprendre exactement où on s'est arrêté
             else :
                 infos_de_reprise = Lancement.infos_reprise()
+                tournoi = infos_de_reprise["tournoi"]
+                num_tour = infos_de_reprise["tours_finis"][-1].num_tour
+                liste_tours = infos_de_reprise["tours_finis"]
+                liste_matchs_joues = [match_joue for match_joue in
+                                      infos_de_reprise["liste_matchs_joues"] if
+                                      match_joue.nom_tour == liste_tours[-1].nom_tour]
+                liste_tuples_matchs_tour = []
+                for match_joue in liste_matchs_joues:
+                    tuple_match_tour = {
+                        match_joue.nom_match:
+                            (
+                                [
+                                    {
+                                        match_joue.joueur_blanc.identifiant_national: [
+                                            match_joue.joueur_blanc.prenom_joueur,
+                                            match_joue.joueur_blanc.nom_joueur
+                                        ]
+                                    },
+                                    match_joue.score_JB
+                                ],
+                                [
+                                    {
+                                        match_joue.joueur_noir.identifiant_national:
+                                            [
+                                                match_joue.joueur_noir.prenom_joueur,
+                                                match_joue.joueur_noir.nom_joueur
+                                            ]
+                                    },
+                                    match_joue.score_JN
+                                ]
+                            )
+                    }
+                    liste_tuples_matchs_tour.append(tuple_match_tour)
 
             # On peut passer au traitement du tournoi lui-même
-            while num_tour < tournoi.nb_tours:
-                num_tour += 1
-                # On nomme les tours : 'Round 1', 'Round 2', ...
-                nom_tour = "Round " + str(num_tour)
+            while num_tour <= tournoi.nb_tours:
+                # S'il s'agit de la repise d'un tournoi et qu'il y a un tour
+                # non terminé
+                if reprendre == 1 and infos_de_reprise["tours_finis"][-1].date_fin_tour == " ":
+                    num_tour = infos_de_reprise["tours_finis"][-1].num_tour
+                    nom_tour = infos_de_reprise["tours_finis"][-1].nom_tour
+                    nb_match = infos_de_reprise["tours_finis"][-1].nb_matchs
+                    date_debut_tour = infos_de_reprise["tours_finis"][-1].date_debut_tour
+                elif num_tour < tournoi.nb_tours:
+                    num_tour += 1
+                    # On nomme les tours : 'Round 1', 'Round 2', ...
+                    nom_tour = "Round " + str(num_tour)
+
+                    # Dans les tours, on doit savoir combien il y a de match
+                    nb_match = len(tournoi.liste_joueurs) // 2
+
+                    # On récupère la date et l'heure du début du tour et on les
+                    # affiche à l'utilisateur
+                    date_debut_tour = ViewInformationTour.lancement_tour(nom_tour,
+                                                                         nb_match)
 
                 # Dans les tours, on doit classer les joueurs en fonction de
                 # leur score et du nom (random si 1er tour)
@@ -149,65 +258,75 @@ class Lancement:
                 else:
                     liste_joueurs_tour.sort(key=lambda x: (-x.score_actuel,
                                                            x.nom_joueur))
-
-                # Dans les tours, on doit savoir combien il y a de match
-                nb_match = len(liste_joueurs_tour) // 2
-
-                # On récupère la date et l'heure du début du tour et on les
-                # affiche à l'utilisateur
-                date_debut_tour = ViewInformationTour.lancement_tour(nom_tour,
-                                                                     nb_match)
-
                 # On peut maintenant créer l'objet tour
                 tour = Tour(num_tour, nom_tour, liste_joueurs_tour, nb_match,
                             date_debut_tour, date_fin_tour=" ")
+                # On en fait une première sauvegarde pour reprise éventuelle
+                tour.sauvegarde_tour(liste_tours,
+                                     liste_tuples_matchs_tour,
+                                     tour)
 
-                # On va maintenant pouvoir créer une nouvelle boucle pour créer
-                # les matchs
+                # S'il s'agit d'une reprise, on regarde déjà s'il reste des
+                # matchs à jouer dans le tour en cours
                 liste_paires_passees = []
-                num_match = 0
-                liste_matchs = []
-                while num_match < nb_match:
-                    num_match += 1
-                    # On nomme les matchs : 'M1', 'M2', ...
-                    nom_match = "M" + str(num_match)
+                if reprendre == 1:
+                    # On commence par récupérer la liste des paires ayant joué
+                    if len(infos_de_reprise["liste_matchs_joues"]) > 0:
+                        for match_joue in infos_de_reprise["liste_matchs_joues"]:
+                            paire_passee = [
+                                match_joue.joueur_blanc,
+                                match_joue.joueur_noir
+                            ]
+                            liste_paires_passees.append(paire_passee)
+                    if len(infos_de_reprise["liste_matchs_restants"]) > 0:
+                        liste_matchs_restant = infos_de_reprise["liste_matchs_restants"]
 
-                    # On doit associer une paire de joueur à chaque match en
-                    # veillant à ce qu'ils n'aient pas déjà joué ensemble
-                    i = 1
-                    paire = [liste_joueurs_tour[0], liste_joueurs_tour[i]]
-                    if paire in liste_paires_passees:
-                        while paire in liste_paires_passees and\
-                                i < len(liste_joueurs_tour) - 1:
-                            i += 1
-                            paire = [liste_joueurs_tour[0],
-                                     liste_joueurs_tour[i]]
+                if (reprendre == 1 and len(infos_de_reprise["liste_matchs_joues"]) == 0) or reprendre != 1:
+                    # On va maintenant pouvoir créer une nouvelle boucle pour créer
+                    # les matchs
+                    num_match = 0
+                    liste_matchs = []
+                    while num_match < nb_match:
+                        num_match += 1
+                        # On nomme les matchs : 'M1', 'M2', ...
+                        nom_match = "M" + str(num_match)
 
-                    # On ajoute la paire de joueur dans une variable pour
-                    # éviter qu'ils ne rejouent ensemble
-                    liste_paires_passees.append(paire)
+                        # On doit associer une paire de joueur à chaque match en
+                        # veillant à ce qu'ils n'aient pas déjà joué ensemble
+                        i = 1
+                        paire = [liste_joueurs_tour[0], liste_joueurs_tour[i]]
+                        if paire in liste_paires_passees:
+                            while paire in liste_paires_passees and\
+                                    i < len(liste_joueurs_tour) - 1:
+                                i += 1
+                                paire = [liste_joueurs_tour[0],
+                                         liste_joueurs_tour[i]]
 
-                    # On choisit au hasard dans la paire pour la couleur de
-                    # chaque joueur
-                    liste_joueurs_tour.remove(liste_joueurs_tour[0])
-                    liste_joueurs_tour.remove(liste_joueurs_tour[i - 1])
-                    joueur_blanc = random.choice(paire)
-                    paire.remove(joueur_blanc)
-                    joueur_noir = paire[0]
-                    paire.remove(joueur_noir)
+                        # On ajoute la paire de joueur dans une variable pour
+                        # éviter qu'ils ne rejouent ensemble
+                        liste_paires_passees.append(paire)
 
-                    # on crée l'objet match
-                    match = Match(tour.nom_tour, nom_match, joueur_blanc,
-                                  joueur_noir)
+                        # On choisit au hasard dans la paire pour la couleur de
+                        # chaque joueur
+                        liste_joueurs_tour.remove(liste_joueurs_tour[0])
+                        liste_joueurs_tour.remove(liste_joueurs_tour[i - 1])
+                        joueur_blanc = random.choice(paire)
+                        paire.remove(joueur_blanc)
+                        joueur_noir = paire[0]
+                        paire.remove(joueur_noir)
 
-                    # on fait une liste avec tous les matchs
-                    liste_matchs.append(match)
+                        # on crée l'objet match
+                        match = Match(tour.nom_tour, nom_match, joueur_blanc,
+                                      joueur_noir)
+
+                        # on fait une liste avec tous les matchs
+                        liste_matchs.append(match)
+
                     # on définit la variable qui contiendra les matchs restant
                     # à jouer dans le tour
                     liste_matchs_restant = liste_matchs.copy()
 
                 # L'opérateur sélectionne le match dont il a le retour
-                liste_tuples_matchs_tour = []
                 while len(liste_matchs_restant) > 0:
                     if len(liste_matchs_restant) > 1:
                         choix_match = ViewMatch.choix_match(liste_matchs_restant)
@@ -265,7 +384,12 @@ class Lancement:
                 # On ajoute le tour terminé dans une liste et on sauvegarde
                 # dans un JSON
                 liste_tours.append(tour)
-                tour.sauvegarde_tour(liste_tours, liste_tuples_matchs_tour)
+                tour.sauvegarde_tour(liste_tours,
+                                     liste_tuples_matchs_tour,
+                                     " ")
+
+                if num_tour == tournoi.nb_tours:
+                    break
 
             # On termine le tournoi en indiquant le ou les gagnants, puis en
             # enregistrant et en archivant le tout

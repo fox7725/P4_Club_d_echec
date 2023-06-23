@@ -6,7 +6,6 @@ from fonctions.fonctions import verification_date
 
 class MenuPrincipal:
     @staticmethod
-    # On crée une classe pour appeler le menu principal quand on le souhaite
     def menuprincipal(code_menu_principal):
         # On fait une boucle pour que le menu s'affiche tant que l'utilisateur
         # ne donne pas une réponse autorisée
@@ -53,7 +52,7 @@ class MenuPrincipal:
                 reprendre = 1
             elif tournoi_existe == "non":
                 supprimer = "réponse"
-                while supprimer != "oui" and supprimer != "non :":
+                while supprimer != "oui" and supprimer != "non":
                     supprimer = input("Souhaitez-vous supprimer le tournoi en"
                                       " cours ? (oui / non)")
                     if supprimer == "oui":

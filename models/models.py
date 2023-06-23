@@ -121,7 +121,7 @@ class Tournoi:
 
     @classmethod
     def from_json(cls):
-        with open('JSON/en_cours.tournoi.json') as fichier:
+        with open('JSON/en_cours/tournoi.json') as fichier:
             tournoi_en_cours = json.load(fichier)
 
         return cls(
@@ -273,7 +273,7 @@ class Tour:
         self.date_fin_tour = date_fin_tour
 
     @staticmethod
-    def sauvegarde_tour(liste_tours, liste_tuples_matchs_tour):
+    def sauvegarde_tour(liste_tours, liste_tuples_matchs_tour, tour_en_cours):
         liste_tours_dict = []
         for tour_a_sauver in liste_tours:
             tour_a_sauver.liste_tuples_matchs_tour = liste_tuples_matchs_tour
@@ -284,6 +284,16 @@ class Tour:
                 "liste_match": tour_a_sauver.liste_tuples_matchs_tour,
                 "date_debut_tour": tour_a_sauver.date_debut_tour,
                 "date_fin_tour": tour_a_sauver.date_fin_tour
+            }
+            liste_tours_dict.append(tour_dict)
+        if tour_en_cours != " ":
+            tour_dict = {
+                "num_tour": tour_en_cours.num_tour,
+                "nom_tour": tour_en_cours.nom_tour,
+                "nb_matchs": tour_en_cours.nb_matchs,
+                "liste_match": [],
+                "date_debut_tour": tour_en_cours.date_debut_tour,
+                "date_fin_tour": " "
             }
             liste_tours_dict.append(tour_dict)
         with open("JSON/en_cours/tours_joues.json", "w") as fichier_bis:
