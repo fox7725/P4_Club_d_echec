@@ -39,7 +39,7 @@ class Lancement:
                 reponse = MenuPrincipal.menuprincipal(reponse)
         else:
             reponse = MenuPrincipal.menuprincipal(reponse)
-        reponses = {"reprendre" : reprendre, "reponse" : reponse}
+        reponses = {"reprendre": reprendre, "reponse": reponse}
         return reponses
 
     @staticmethod
@@ -64,7 +64,7 @@ class Lancement:
         # Dans l'objet tournoi on remet les instances des joueurs
         tournoi.liste_joueurs = liste_joueurs
 
-        #On peut maintenant charger les infos des tours terminés
+        # On peut maintenant charger les infos des tours terminés
         with open('JSON/en_cours/tours_joues.json') as fichier_tours:
             tours_joues = json.load(fichier_tours)
         # Cration des instances des tours
@@ -118,11 +118,11 @@ class Lancement:
                 liste_matchs_restants.append(match_restant)
 
         # On peut envoyer les infos
-        infos_de_reprise = {"tournoi" : tournoi,
-                            "liste_joueurs" : liste_joueurs,
-                            "tours_finis" : liste_tours_finis,
-                            "liste_matchs_joues" : liste_matchs_joues,
-                            "liste_matchs_restants" : liste_matchs_restants}
+        infos_de_reprise = {"tournoi": tournoi,
+                            "liste_joueurs": liste_joueurs,
+                            "tours_finis": liste_tours_finis,
+                            "liste_matchs_joues": liste_matchs_joues,
+                            "liste_matchs_restants": liste_matchs_restants}
         return infos_de_reprise
 
     @staticmethod
@@ -136,7 +136,7 @@ class Lancement:
         # 1. Commencer un nouveau tournoi
         if reponse == 1:
             # Dans le cas où il n'y a pas de reprise de tournoi
-            if reprendre != 1 :
+            if reprendre != 1:
                 infos_tournoi = ViewInformationsTournoi.infos_generales_tournoi()
 
                 demande_nv_joueur = ViewInformationsTournoi.demande_nv_joueurs()
@@ -188,7 +188,7 @@ class Lancement:
 
             # Si il y a une reprise de Tournoi, il faut charger les infos pour
             # reprendre exactement où on s'est arrêté
-            else :
+            else:
                 infos_de_reprise = Lancement.infos_reprise()
                 tournoi = infos_de_reprise["tournoi"]
                 num_tour = infos_de_reprise["tours_finis"][-1].num_tour

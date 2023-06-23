@@ -61,7 +61,7 @@ class MenuPrincipal:
                     elif supprimer == "non":
                         print(" ")
                         reprendre = 3
-                    else :
+                    else:
                         print(" ")
                         print("Merci de répondre par 'oui' ou par 'non' !")
                         input("Pressez 'ENTER' pour continuer.")

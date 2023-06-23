@@ -3,6 +3,7 @@ import os
 
 from fonctions.fonctions import suppression_encours
 
+
 class Joueur:
     def __init__(self, identifiant_national, nom_joueur, prenom_joueur, sexe,
                  date_naissance, score_actuel=0):
@@ -327,7 +328,7 @@ class Match:
     def sauvegarde_matchs_restant(liste_matchs_restant):
         # On sauvegarde les matchs à jouer dans un JSON pour la récupération
         liste_matchs_dict = []
-        for match in liste_matchs_restant :
+        for match in liste_matchs_restant:
             match_dict = {
                 "nom_tour": match.nom_tour,
                 "nom_match": match.nom_match,
