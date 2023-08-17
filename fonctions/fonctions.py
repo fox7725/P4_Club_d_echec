@@ -6,7 +6,7 @@ import send2trash
 
 
 def maintenant():
-    date_brute = datetime.date.today()
+    date_brute = datetime.datetime.now()
     date = date_brute.strftime("%d/%m/%Y %H:%M:%S")
     return date
 
