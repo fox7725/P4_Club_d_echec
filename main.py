@@ -1,5 +1,5 @@
 
-from MVC.controller import Lancement
+from MVC.controller import Reprise
 
 
 def accueil():
@@ -11,7 +11,7 @@ def accueil():
     print(" ")
     print("=" * 29)
     input("Pressez 'ENTER' pour continuer")
-    Lancement.lancementMenuPrincipal(0)
+    Reprise.reprise()
 
 
 if __name__ == "__main__":

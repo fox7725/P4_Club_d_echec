@@ -1,50 +1,446 @@
 import json
 import os
+import random
 
-from fonctions.fonctions import suppression_encours
+from fonctions.fonctions import suppression_encours, maintenant
 
 
 class Joueur:
     def __init__(self, identifiant_national, nom_joueur, prenom_joueur, sexe,
-                 date_naissance, score_actuel=0):
+                 date_naissance, points= 0):
         self.identifiant_national = identifiant_national
         self.nom_joueur = nom_joueur
         self.prenom_joueur = prenom_joueur
         self.sexe = sexe
         self.date_naissance = date_naissance
-        self.score_actuel = score_actuel
+        self.points = points
 
-    def mise_a_jour_fin_tournoi(self, nom_tournoi, date_tournoi):
-        # On crée un tuple contenant les info sur le tournoi que le joueur
-        # vient de jouer
-        info_tournoi = (nom_tournoi, date_tournoi,
-                        {"score": self.score_actuel})
-        # on accède au fichier JSON pour la charger et chercher le joueur
-        os.makedirs("JSON", exist_ok=True)
-        bdd_joueurs = "JSON/joueurs.json"
-        if os.path.exists(bdd_joueurs):
-            # Si le fichier JSON pour les joueurs existe, on vérifie que le
-            # joueur n'existe pas déjà et on l'enregistre
-            with open(bdd_joueurs, 'r') as f:
-                contenu = json.load(f)
-            for rjoueur in contenu:
-                # On commence par vérifier si le joueur existe déjà
-                if rjoueur["Identifiant national"] == self.identifiant_national:
-                    # On calcul la moyenne des scores du joueur
-                    nombre_tournoi_participe = len(rjoueur["Liste des tournois"])
-                    calcul_moyenne = ((rjoueur["Moyenne des points par tournoi"]
-                                       * nombre_tournoi_participe) +
-                                      self.score_actuel) / (nombre_tournoi_participe + 1)
+    @classmethod
+    def creation(cls, j):
+        return cls(
+            j["ID"],
+            j["nom_joueur"],
+            j["prenom_joueur"],
+            j["sexe"],
+            j["date_naissance"],
+            points = 0
+        )
 
-                    # on met à jour les informations du joueur
-                    rjoueur["Liste des tournois"].append(info_tournoi)
-                    rjoueur["Moyenne des points par tournoi"] = calcul_moyenne
-            with open(bdd_joueurs, "w") as f:
-                json.dump(contenu, f, indent=4)
-            return 1
 
+class Tournoi:
+    def __init__(self, nom_tournoi, lieu_tournoi, remarque_tournoi, debut_tournoi, fin_tournoi, nb_tours, liste_tours,
+                 liste_joueurs, gagnant=[]):
+        self.nom_tournoi = nom_tournoi
+        self.lieu_tournoi = lieu_tournoi
+        self.remarque_tournoi = remarque_tournoi
+        self.debut_tournoi = debut_tournoi
+        self.fin_tournoi = fin_tournoi
+        self.nb_tours = nb_tours
+        self.liste_joueurs = liste_joueurs
+        self.liste_tours = liste_tours
+        self.gagnant = gagnant
+
+
+    @classmethod
+    def creation(cls, infos_tournoi, liste_joueurs):
+        nom_tournoi=infos_tournoi[0]
+        lieu_tournoi=infos_tournoi[1]
+        remarque_tournoi=infos_tournoi[2]
+        debut_tournoi=infos_tournoi[3]
+        fin_tournoi=infos_tournoi[4]
+        nb_tours=infos_tournoi[5]
+
+        return cls(
+            nom_tournoi,
+            lieu_tournoi,
+            remarque_tournoi,
+            debut_tournoi,
+            fin_tournoi,
+            nb_tours,
+            liste_tours=[],
+            liste_joueurs=liste_joueurs,
+            gagnant=[]
+        )
+
+
+    @classmethod
+    def from_json(cls):
+        with open('JSON/en_cours/tournoi.json') as fichier:
+            tournoi_dict = json.load(fichier)
+
+        # Extraction des données du dictionnaire JSON pour créer un objet Tournoi
+        nom_tournoi = tournoi_dict["nom_tournoi"]
+        lieu_tournoi = tournoi_dict["lieu_tournoi"]
+        remarque_tournoi = tournoi_dict["remarque_tournoi"]
+        debut_tournoi = tournoi_dict["debut_tournoi"]
+        fin_tournoi = tournoi_dict["fin_tournoi"]
+        nb_tours = tournoi_dict["nb_tours"]
+
+        # Liste des joueurs
+        liste_joueurs_infos = tournoi_dict["liste_joueurs"]
+        liste_joueurs = []
+        for joueur_infos in liste_joueurs_infos:
+            joueur = Joueur(joueur_infos[0], joueur_infos[1],
+                            joueur_infos[2], joueur_infos[3],
+                            joueur_infos[4], joueur_infos[5])
+            liste_joueurs.append(joueur)
+
+        # Liste des tours
+        liste_tours_infos = tournoi_dict["liste_tours"]
+        liste_tours = []
+        for tour_infos in liste_tours_infos:
+            num_tour = tour_infos[0]
+            nom_tour = tour_infos[1]
+            date_debut_tour = tour_infos[6]
+            date_fin_tour = tour_infos[7]
+
+            # Liste des matchs
+            liste_matchs_infos = tour_infos[2]
+            liste_matchs = []
+            for match_infos in liste_matchs_infos:
+                nom_match = match_infos[0]
+                joueur_blanc_infos = match_infos[1][0]
+                score_JB = match_infos[1][1]
+                joueur_noir_infos = match_infos[2][0]
+                score_JN = match_infos[2][1]
+
+                # Sélection du joueur blanc
+                for joueur in liste_joueurs:
+                    if joueur.identifiant_national == joueur_blanc_infos[0]:
+                        joueur_blanc = joueur
+
+                # Sélection du joueur blanc
+                for joueur in liste_joueurs:
+                    if joueur.identifiant_national == joueur_noir_infos[0]:
+                        joueur_noir = joueur
+
+                match = Match(nom_tour, nom_match, joueur_blanc, joueur_noir, score_JB, score_JN)
+                liste_matchs.append(match)
+
+            tour = Tour(num_tour, nom_tour, liste_joueurs, len(liste_matchs), date_debut_tour, liste_matchs,
+                        date_fin_tour)
+            liste_tours.append(tour)
+
+        # Liste des gagnants
+        gagnants_infos = tournoi_dict["gagnant"]
+        gagnants = []
+        for gagnant_infos in gagnants_infos:
+            for joueur in liste_joueurs:
+                if joueur.identifiant_national == gagnant_infos[0]:
+                    gagnant = joueur
+
+            gagnants.append(gagnant)
+
+        return cls(
+            nom_tournoi,
+            lieu_tournoi,
+            remarque_tournoi,
+            debut_tournoi,
+            fin_tournoi,
+            nb_tours,
+            liste_joueurs,
+            gagnants
+        )
+
+    def to_json(self):
+        # On créé le dossier "en_cours" s'il n'existe pas pour sauvegarder le tournoi en cours
+        os.makedirs("JSON/en_cours", exist_ok=True)
+
+        # On enregistre le tournoi dans un JSON pour le récupérer en cas de coupure
+        # Convertion de l'objet Tournoi en un dictionnaire JSON
+        tournoi_dict = {
+            "nom_tournoi": self.nom_tournoi,
+            "lieu_tournoi": self.lieu_tournoi,
+            "remarque_tournoi": self.remarque_tournoi,
+            "debut_tournoi": self.debut_tournoi,
+            "fin_tournoi": self.fin_tournoi,
+            "nb_tours": self.nb_tours,
+            "liste_joueurs": [
+                [
+                joueur.identifiant_national,
+                joueur.nom_joueur,
+                joueur.prenom_joueur,
+                joueur.sexe,
+                joueur.date_naissance,
+                joueur.points
+                ]
+                for joueur in self.liste_joueurs
+            ],
+            "liste_tours":
+                [
+                [
+                    tour.num_tour,
+                    tour.nom_tour,
+                    # Liste des matchs
+                    [
+                        [
+                            match.nom_match,
+                            [
+                                [
+                                    match.joueur_blanc.identifiant_national,
+                                    match.joueur_blanc.nom_joueur,
+                                    match.joueur_blanc.prenom_joueur,
+                                    match.joueur_blanc.sexe,
+                                    match.joueur_blanc.date_naissance,
+                                    match.joueur_blanc.points
+                                ],
+                                match.score_JB
+                            ],
+                            [
+                                [
+                                    match.joueur_noir.identifiant_national,
+                                    match.joueur_noir.nom_joueur,
+                                    match.joueur_noir.prenom_joueur,
+                                    match.joueur_noir.sexe,
+                                    match.joueur_noir.date_naissance,
+                                    match.joueur_noir.points
+                                ],
+                                match.score_JN
+                            ]
+                        ]
+                    for match in tour.liste_matchs
+                    ],
+                    tour.date_debut_tour,
+                    tour.date_fin_tour
+                ]
+                for tour in self.liste_tours
+            ],
+            "gagnant": [
+                [
+                joueur.identifiant_national,
+                joueur.nom_joueur,
+                joueur.prenom_joueur,
+                joueur.sexe,
+                joueur.date_naissance,
+                joueur.points
+                ]
+                for joueur in self.gagnant
+            ]
+        }
+
+        # Enregistrement du dictionnaire JSON dans un fichier
+        with open("JSON/en_cours/tournoi.json", "w") as fichier:
+            json.dump(tournoi_dict, fichier, indent=4)
+
+    def sauvegarde_fin_tournoi(self):
+        # On crée le dossier archives s'il n'existe pas
+        os.makedirs("JSON/archives", exist_ok=True)
+
+        # On classe les joueurs par ordre alphabétique
+        joueurs_tries = sorted(self.liste_joueurs, key=lambda joueur: joueur.nom_joueur)
+        self.liste_joueurs = joueurs_tries
+        # On crée un dictionnaire avec les données à enregistrer dans le JSON
+        tournoi_dict = {
+            "nom_tournoi": self.nom_tournoi,
+            "lieu_tournoi": self.lieu_tournoi,
+            "remarque_tournoi": self.remarque_tournoi,
+            "debut_tournoi": self.debut_tournoi,
+            "fin_tournoi": self.fin_tournoi,
+            "nb_tours": self.nb_tours,
+            "liste_matchs": [
+                [
+                    {
+                        tour.nom_tour:
+                    # Liste des matchs
+                    [
+                        [
+                            {match.nom_match:
+                                [
+                                    [
+                                        {
+                                            match.joueur_blanc.identifiant_national: [
+                                                match.joueur_blanc.prenom_joueur,
+                                                match.joueur_blanc.nom_joueur
+                                            ]
+                                        },
+                                        match.score_JB
+                                    ],
+                                    [
+                                        {
+                                            match.joueur_noir.identifiant_national:
+                                                [
+                                                    match.joueur_noir.prenom_joueur,
+                                                    match.joueur_noir.nom_joueur
+                                                ]
+                                        },
+                                        match.score_JN
+                                    ]
+                                ]
+                            }
+                        ]
+                    for match in tour.liste_matchs
+                    ]
+                    }
+                ]
+                for tour in self.liste_tours
+            ],
+            "liste_joueurs": [
+                [
+                joueur.identifiant_national,
+                joueur.nom_joueur,
+                joueur.prenom_joueur,
+                joueur.sexe,
+                joueur.date_naissance,
+                joueur.points
+                ]
+                for joueur in self.liste_joueurs
+            ],
+            "gagnant": [
+                [
+                joueur.identifiant_national,
+                joueur.nom_joueur,
+                joueur.prenom_joueur,
+                joueur.sexe,
+                joueur.date_naissance,
+                joueur.points
+                ]
+                for joueur in self.gagnant
+            ]
+        }
+
+        # On vérifie si une archive existe déjà
+        bdd_tournoi = "JSON/archives/tournois.json"
+        if os.path.exists(bdd_tournoi):
+            # On charge le fichier en mémoire
+            with open(bdd_tournoi, 'r') as f: contenu = json.load(f)
+            # On ajoute le tournoi qui vient de se terminer, pas besoin de faire un classement car le dernier
+            # tournoi terminé sera le dernier ajouté
+            contenu.append(tournoi_dict)
+            with open(bdd_tournoi, "w") as f: json.dump(contenu, f, indent=4)
         else:
-            return 0
+            # Si l'archive n'existe pas encore, on la crée et on y ajoute le tournoi
+            liste_tournoi_dict = []
+            liste_tournoi_dict.append(tournoi_dict)
+            with open(bdd_tournoi, "w") as f: json.dump(liste_tournoi_dict, f, indent=4)
+
+        # On peut maintenant supprimer le dossier "en_cours" et les JSON temporaires qu'il contient :
+        suppression_encours()
+        reponse = "Le tournoi a bien été archivé."
+        return reponse
+
+
+class Tour:
+    def __init__(self, num_tour, nom_tour, liste_matchs, date_debut_tour,
+                 date_fin_tour=" "):
+        self.num_tour = num_tour
+        self.nom_tour = nom_tour
+        self.liste_matchs = liste_matchs
+        self.date_debut_tour = date_debut_tour
+        self.date_fin_tour = date_fin_tour
+
+    @classmethod
+    def initialisation(cls, num_tour, liste_matchs):
+        nom_tour = "Round " + str(num_tour)
+        return cls(
+            num_tour,
+            nom_tour,
+            liste_matchs=[],
+            date_debut_tour=" ",
+            date_fin_tour=" ",
+        )
+
+    def organisation_tour(self, tournoi, paires_ayant_joue):
+        # On commence par récupérer les paires de joueurs ayant joué ensemble sur les tours terminés
+        match_restant = []
+        if self.date_fin_tour != " ":
+            for match in self.liste_matchs:
+                paire = [match.joueur_blanc, match.joueur_noir]
+                paires_ayant_joue.append(paire)
+
+        # Si le tour n'a pas commencé on crée la liste des matchs
+        if self.date_debut_tour == " ":
+            # On enregistre la date de lancement du tour
+            self.date_debut_tour = maintenant()
+            # On récupère et on classe la liste des joueurs
+            liste_joueurs_tour = tournoi.liste_joueurs
+            if self.nom_tour == "Round 1":
+                random.shuffle(liste_joueurs_tour)
+            else:
+                liste_joueurs_tour.sort(key=lambda x: (-x.points, x.nom_joueur))
+            for match in self.liste_matchs:
+                # On vérifie que la paire qu'on va créer n'a pas déjà joué ensemble
+                i = 1
+                duo = [liste_joueurs_tour[0], liste_joueurs_tour[i]]
+                if duo in paires_ayant_joue:
+                    while duo in paires_ayant_joue and  i < len(liste_joueurs_tour) - 1:
+                        i += 1
+                        duo = [liste_joueurs_tour[0], liste_joueurs_tour[i]]
+
+                # On crée la paire et on l'ajoute aux paires ayant joué
+                match.joueur_blanc = duo[0]
+                match.joueur_noir = duo[1]
+                paire = [match.joueur_blanc, match.joueur_noir]
+                paires_ayant_joue.append(paire)
+
+                # On retire ces joueurs de la liste pour éviter les doublons
+                liste_joueurs_tour.remove(match.joueur_noir)
+                liste_joueurs_tour.remove(match.joueur_blanc)
+
+                # On ajoute le match aux matchs à jouer
+                match_restant.append(match)
+
+        # Si le tour a déjà commencé mais n'est pas terminé
+        if self.date_fin_tour == " " and self.date_debut_tour != " ":
+            for match in self.liste_matchs:
+                # On récupère les paires
+                paire = [match.joueur_blanc, match.joueur_noir]
+                paires_ayant_joue.append(paire)
+                # si les deux joueurs ont un score à 0, le match n'a pas été joué
+                if match.score_JB == 0 and match.score_JN == 0:
+                    match_restant.append(match)
+
+        organisation = [paires_ayant_joue, match_restant]
+        return organisation
+
+
+class Match:
+    def __init__(self, nom_match, joueur_blanc = None, joueur_noir=None, score_JB=0,score_JN=0):
+        self.nom_match = nom_match
+        self.joueur_blanc = joueur_blanc
+        self.joueur_noir = joueur_noir
+        self.score_JB = score_JB
+        self.score_JN = score_JN
+
+    @classmethod
+    def initialisation(cls, num_match):
+        nom_match = "M" + str(num_match)
+        return cls(
+            nom_match,
+            joueur_blanc = None,
+            joueur_noir=None,
+            score_JB=0,
+            score_JN=0
+        )
+
+    def score(self, score):
+        if not self.joueur_blanc or not self.joueur_noir:
+            return
+        if score == "JB":
+            self.score_JB = 1
+            self.score_JN = 0
+        elif score == "JN":
+            self.score_JB = 0
+            self.score_JN = 1
+        elif score == "N":
+            self.score_JB = 0.5
+            self.score_JN = 0.5
+        self.joueur_blanc.score_actuel += self.score_JB
+        self.joueur_noir.score_actuel += self.score_JN
+
+
+class TournoisJSON:
+    def __init__(self, nom_tournoi, lieu_tournoi, remarque_tournoi,
+                 debut_tournoi, fin_tournoi, nb_tours, liste_matchs,
+                 liste_joueurs, gagnant):
+        self.nom_tournoi = nom_tournoi
+        self.lieu_tournoi = lieu_tournoi
+        self.remarque_tournoi = remarque_tournoi
+        self.debut_tournoi = debut_tournoi
+        self.fin_tournoi = fin_tournoi
+        self.nb_tours = nb_tours
+        self.liste_matchs = liste_matchs
+        self.liste_joueurs = liste_joueurs
+        self.gagnant = gagnant
 
 
 class JoueurJSON:
@@ -77,285 +473,27 @@ class JoueurJSON:
         bdd_joueurs = "JSON/joueurs.json"
         joueur_voulu = "//"
         if os.path.exists(bdd_joueurs):
-            # Si le fichier JSON pour les joueurs existe, on vérifie que le
-            # joueur n'existe pas déjà et on l'enregistre
+            # Si le fichier JSON pour les joueurs existe, on vérifie que le joueur n'existe pas déjà et on l'enregistre
             with open(bdd_joueurs, 'r') as f:
                 contenu = json.load(f)
             for rjoueur in contenu:
                 if rjoueur["Identifiant national"] == self.identifiant_national:
                     # On commence par vérifier si le joueur existe déjà
-                    joueur_voulu = rjoueur["Nom du joueur"] + " " +\
-                                   rjoueur["Prénom du joueur"]
+                    joueur_voulu = rjoueur["Nom du joueur"] + " " + rjoueur["Prénom du joueur"]
                     break
             if joueur_voulu != "//":
                 reponse = "Le joueur " + joueur_voulu + " existe déjà."
                 return reponse
             else:
-                # Si le joueur n'existe pas, on peut le créer et ajouter le
-                # joueur
+                # Si le joueur n'existe pas, on peut le créer et ajouter le joueur
                 with open(bdd_joueurs, "w") as f:
                     contenu.append(self.dictionnaire())
                     json.dump(contenu, f, indent=4)
                     reponse = "Le joueur a bien été créé."
                     return reponse
         else:
-            # Si le fichier JSON pour les joueurs n'existe pas encore, on le
-            # crée et on y ajoute le nouveau joueur
+            # Si le fichier JSON pour les joueurs n'existe pas encore, on le crée et on y ajoute le nouveau joueur
             with open(bdd_joueurs, "w") as f:
                 json.dump([self.dictionnaire()], f)
                 reponse = "Le joueur a bien été créé."
                 return reponse
-
-
-class Tournoi:
-    def __init__(self, nom_tournoi, lieu_tournoi, remarque_tournoi,
-                 debut_tournoi, fin_tournoi, nb_tours, liste_joueurs,
-                 gagnant=[]):
-        self.nom_tournoi = nom_tournoi
-        self.lieu_tournoi = lieu_tournoi
-        self.remarque_tournoi = remarque_tournoi
-        self.debut_tournoi = debut_tournoi
-        self.fin_tournoi = fin_tournoi
-        self.nb_tours = nb_tours
-        self.liste_joueurs = liste_joueurs
-        self.gagnant = gagnant
-
-    @classmethod
-    def from_json(cls):
-        with open('JSON/en_cours/tournoi.json') as fichier:
-            tournoi_en_cours = json.load(fichier)
-
-        return cls(
-            tournoi_en_cours["nom_tournoi"],
-            tournoi_en_cours["lieu_tournoi"],
-            tournoi_en_cours["remarque_tournoi"],
-            tournoi_en_cours["debut_tournoi"],
-            tournoi_en_cours["fin_tournoi"],
-            tournoi_en_cours["nb_tours"],
-            tournoi_en_cours["liste_joueurs"],
-            tournoi_en_cours["gagnant"]
-        )
-
-    def sauver_tournoi(self):
-        # On créé le dossier "en_cours" s'il n'existe pas pour sauvegarder le
-        # tournoi en cours
-        os.makedirs("JSON/en_cours", exist_ok=True)
-
-        # On enregistre le tournoi dans un JSON pour le récupérer en cas de
-        # coupure
-        # Convertion de l'objet Tournoi en un dictionnaire JSON
-        tournoi_dict = {
-            "nom_tournoi": self.nom_tournoi,
-            "lieu_tournoi": self.lieu_tournoi,
-            "remarque_tournoi": self.remarque_tournoi,
-            "debut_tournoi": self.debut_tournoi,
-            "fin_tournoi": self.fin_tournoi,
-            "nb_tours": self.nb_tours,
-            "liste_joueurs": [joueur.identifiant_national for joueur in
-                              self.liste_joueurs],
-            "gagnant": self.gagnant
-        }
-
-        # Enregistrement du dictionnaire JSON dans un fichier
-        with open("JSON/en_cours/tournoi.json", "w") as fichier:
-            json.dump(tournoi_dict, fichier, indent=4)
-
-    def sauver_joueurs(self):
-        # Conversion de la liste des joueurs en dictionnaire
-        liste_joueurs_dict = []
-        for joueur in self.liste_joueurs:
-            joueur_dict = {
-                "identifiant_national": joueur.identifiant_national,
-                "nom_joueur": joueur.nom_joueur,
-                "prenom_joueur": joueur.prenom_joueur,
-                "sexe": joueur.sexe,
-                "date_naissance": joueur.date_naissance,
-                "score_actuel": joueur.score_actuel
-            }
-            liste_joueurs_dict.append(joueur_dict)
-        # Enregistrement du dictionnaire des joueurs dans un fichier JSON
-        with open("JSON/en_cours/joueurs_tournoi.json", "w") as fichier_bis:
-            json.dump(liste_joueurs_dict, fichier_bis, indent=4)
-
-    def sauvegarde_fin_tournoi(self, liste_tours):
-        # On crée le dossier archives s'il n'existe pas
-        os.makedirs("JSON/archives", exist_ok=True)
-
-        # On récupère le nom et le prénom des joueurs gagnants et on en fait
-        # une liste
-        gagnants = []
-        for gagnant in self.gagnant:
-            for le_joueur in self.liste_joueurs:
-                if le_joueur.identifiant_national == gagnant:
-                    joueur_gagnant = {le_joueur.identifiant_national:
-                                          [le_joueur.prenom_joueur,
-                                           le_joueur.nom_joueur]}
-                    gagnants.append(joueur_gagnant)
-                    break
-
-        # On classe les joueurs par ordre alphabétique
-        joueurs_tries = sorted(self.liste_joueurs,
-                               key=lambda joueur: joueur.nom_joueur)
-        # On crée un dictionnaire avec les données à enregistrer dans le JSON
-        tournoi_dict = {
-            "nom_tournoi": self.nom_tournoi,
-            "lieu_tournoi": self.lieu_tournoi,
-            "remarque_tournoi": self.remarque_tournoi,
-            "debut_tournoi": self.debut_tournoi,
-            "fin_tournoi": self.fin_tournoi,
-            "nb_tours": self.nb_tours,
-            "liste_matchs": [{tour.nom_tour: tour.liste_tuples_matchs_tour}
-                             for tour in liste_tours],
-            "liste_joueurs": [
-                {
-                    joueur.identifiant_national: [
-                        joueur.prenom_joueur,
-                        joueur.nom_joueur
-                    ]
-                }
-                for joueur in joueurs_tries
-            ],
-            "gagnant": gagnants
-        }
-
-        # On vérifie si une archive existe déjà
-        bdd_tournoi = "JSON/archives/tournois.json"
-        if os.path.exists(bdd_tournoi):
-            # On charge le fichier en mémoire
-            with open(bdd_tournoi, 'r') as f:
-                contenu = json.load(f)
-            # On ajoute le tournoi qui vient de se terminer, pas besoin de
-            # faire un classement car le dernier tournoi terminé sera le
-            # dernier ajouté
-            with open(bdd_tournoi, "w") as f:
-                contenu.append(tournoi_dict)
-                json.dump(contenu, f, indent=4)
-        else:
-            # Si l'archive n'existe pas encore, on la crée et on y ajoute le
-            # tournoi
-            liste_tournoi_dict = []
-            liste_tournoi_dict.append(tournoi_dict)
-            with open(bdd_tournoi, "w") as f:
-                json.dump(liste_tournoi_dict, f, indent=4)
-
-        # On peut maintenant supprimer le dossier "en_cours" et les JSON
-        # temporaires qu'il contient :
-        suppression_encours()
-
-        reponse = "Le tournoi a bien été archivé."
-        return reponse
-
-
-class TournoisJSON:
-    def __init__(self, nom_tournoi, lieu_tournoi, remarque_tournoi,
-                 debut_tournoi, fin_tournoi, nb_tours, liste_matchs,
-                 liste_joueurs, gagnant):
-        self.nom_tournoi = nom_tournoi
-        self.lieu_tournoi = lieu_tournoi
-        self.remarque_tournoi = remarque_tournoi
-        self.debut_tournoi = debut_tournoi
-        self.fin_tournoi = fin_tournoi
-        self.nb_tours = nb_tours
-        self.liste_matchs = liste_matchs
-        self.liste_joueurs = liste_joueurs
-        self.gagnant = gagnant
-
-
-class Tour:
-    def __init__(self, num_tour, nom_tour, liste_joueurs, nb_matchs,
-                 date_debut_tour, liste_tuples_matchs_tour=[],
-                 date_fin_tour=" "):
-        self.num_tour = num_tour
-        self.nom_tour = nom_tour
-        self.liste_joueurs = liste_joueurs
-        self.nb_matchs = nb_matchs
-        self.date_debut_tour = date_debut_tour
-        self.liste_tuples_matchs_tour = liste_tuples_matchs_tour
-        self.date_fin_tour = date_fin_tour
-
-    @staticmethod
-    def sauvegarde_tour(liste_tours, liste_tuples_matchs_tour, tour_en_cours):
-        liste_tours_dict = []
-        for tour_a_sauver in liste_tours:
-            tour_a_sauver.liste_tuples_matchs_tour = liste_tuples_matchs_tour
-            tour_dict = {
-                "num_tour": tour_a_sauver.num_tour,
-                "nom_tour": tour_a_sauver.nom_tour,
-                "nb_matchs": tour_a_sauver.nb_matchs,
-                "liste_match": tour_a_sauver.liste_tuples_matchs_tour,
-                "date_debut_tour": tour_a_sauver.date_debut_tour,
-                "date_fin_tour": tour_a_sauver.date_fin_tour
-            }
-            liste_tours_dict.append(tour_dict)
-        if tour_en_cours != " ":
-            tour_dict = {
-                "num_tour": tour_en_cours.num_tour,
-                "nom_tour": tour_en_cours.nom_tour,
-                "nb_matchs": tour_en_cours.nb_matchs,
-                "liste_match": [],
-                "date_debut_tour": tour_en_cours.date_debut_tour,
-                "date_fin_tour": " "
-            }
-            liste_tours_dict.append(tour_dict)
-        with open("JSON/en_cours/tours_joues.json", "w") as fichier_bis:
-            json.dump(liste_tours_dict, fichier_bis, indent=4)
-
-
-class Match:
-    def __init__(self, nom_tour, nom_match, joueur_blanc, joueur_noir,
-                 score_JB=0, score_JN=0):
-        self.nom_tour = nom_tour
-        self.nom_match = nom_match
-        self.joueur_blanc = joueur_blanc
-        self.joueur_noir = joueur_noir
-        self.score_JB = score_JB
-        self.score_JN = score_JN
-
-    def score(self, score):
-        if score == "JB":
-            self.score_JB = 1
-            self.score_JN = 0
-        elif score == "JN":
-            self.score_JB = 0
-            self.score_JN = 1
-        elif score == "N":
-            self.score_JB = 0.5
-            self.score_JN = 0.5
-        self.joueur_blanc.score_actuel += self.score_JB
-        self.joueur_noir.score_actuel += self.score_JN
-
-    @staticmethod
-    def sauvegarde_matchs_restant(liste_matchs_restant):
-        # On sauvegarde les matchs à jouer dans un JSON pour la récupération
-        liste_matchs_dict = []
-        for match in liste_matchs_restant:
-            match_dict = {
-                "nom_tour": match.nom_tour,
-                "nom_match": match.nom_match,
-                "joueur_blanc": match.joueur_blanc.identifiant_national,
-                "joueur_noir": match.joueur_noir.identifiant_national,
-            }
-            liste_matchs_dict.append(match_dict)
-        with open("JSON/en_cours/matchs_restants.json", "w") as fichier:
-            json.dump(liste_matchs_dict, fichier, indent=4)
-
-    @staticmethod
-    def sauvegarde_matchs_joues(liste_matchs_joues):
-        # On sauvegarde les matchs joués dans un JSON
-        liste_matchs_joues_dict = []
-        for match_joue in liste_matchs_joues:
-            match_joue_dict = {
-                "nom_tour": match_joue.nom_tour,
-                "nom_match": match_joue.nom_match,
-                "joueur_blanc": match_joue.joueur_blanc.identifiant_national,
-                "joueur_noir": match_joue.joueur_noir.identifiant_national,
-                "score_JB": match_joue.score_JB,
-                "score_JN": match_joue.score_JN
-            }
-            liste_matchs_joues_dict.append(match_joue_dict)
-        with open("JSON/en_cours/matchs_joues.json", "w") as fichier:
-            json.dump(liste_matchs_joues_dict, fichier, indent=4)
-
-
-if __name__ == "__main__":
-    print("Merci de commencer par lancer main.py")
