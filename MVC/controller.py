@@ -3,11 +3,11 @@ import random
 import json
 import os
 
-from view.view import MenuPrincipal, MenuGestionJoueur
-from view.view import ViewInformationsTournoi, ViewInformationTour, ViewMatch
-from view.view import RapportsTournois, Erreurs
-from models.models import Joueur, JoueurJSON, Tournoi, TournoisJSON, Tour
-from models.models import Match
+from MVC.view import MenuPrincipal, MenuGestionJoueur
+from MVC.view import ViewInformationsTournoi, ViewInformationTour, ViewMatch
+from MVC.view import RapportsTournois, Erreurs
+from MVC.models import Joueur, JoueurJSON, Tournoi, TournoisJSON, Tour
+from MVC.models import Match
 from fonctions.fonctions import liste_joueur_JSON, rapports_tournois
 from fonctions.fonctions import suppression_encours
 
@@ -269,6 +269,7 @@ class Lancement:
                 # S'il s'agit d'une reprise, on regarde déjà s'il reste des
                 # matchs à jouer dans le tour en cours
                 liste_paires_passees = []
+                liste_matchs_restant = []
                 if reprendre == 1:
                     # On commence par récupérer la liste des paires ayant joué
                     if len(infos_de_reprise["liste_matchs_joues"]) > 0:
@@ -462,7 +463,7 @@ class Lancement:
             code_rapport_tournoi = RapportsTournois.menu_rapports()
 
             # On traite le choix de l'utilisateur
-            # code 5 : retour au menu principal
+            # code 3 : retour au menu principal
             if code_rapport_tournoi == 3:
                 Lancement.lancementMenuPrincipal(0)
 
