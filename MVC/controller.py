@@ -233,7 +233,6 @@ class Lancement:
                     tour = Tour.initialisation(num_tour, liste_matchs)
                     liste_tours.append(tour)
                 tournoi.liste_tours = liste_tours
-
                 # On fait une première sauvegarde du tournoi
                 tournoi.to_json()
 

@@ -341,6 +341,11 @@ class Tour:
 
     def organisation_tour(self, tournoi, paires_ayant_joue):
         # On commence par récupérer les paires de joueurs ayant joué ensemble sur les tours terminés
+        print("num tour", self.num_tour)
+        print("nom tour", self.nom_tour)
+        print("liste matchs", self.liste_matchs)
+        print("date debut", self.date_debut_tour)
+        print("date fin", self.date_fin_tour)
         match_restant = []
         if self.date_fin_tour != " ":
             for match in self.liste_matchs:
