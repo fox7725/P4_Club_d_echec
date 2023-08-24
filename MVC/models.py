@@ -320,8 +320,7 @@ class Tournoi:
 
 
 class Tour:
-    def __init__(self, num_tour, nom_tour, liste_matchs, date_debut_tour,
-                 date_fin_tour=" "):
+    def __init__(self, num_tour, nom_tour, liste_matchs, date_debut_tour=" ", date_fin_tour=" "):
         self.num_tour = num_tour
         self.nom_tour = nom_tour
         self.liste_matchs = liste_matchs
@@ -395,6 +394,12 @@ class Tour:
                     match_restant.append(match)
 
         organisation = [paires_ayant_joue, match_restant]
+        print("num tour 2", self.num_tour)
+        print("nom tour 2", self.nom_tour)
+        print("liste matchs 2", self.liste_matchs)
+        print("matchs restants 2", match_restant)
+        print("date debut 2", self.date_debut_tour)
+        print("date fin 2", self.date_fin_tour)
         return organisation
 
 

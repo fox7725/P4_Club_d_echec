@@ -241,6 +241,7 @@ class Lancement:
             matchs_restant = []
             for tour in tournoi.liste_tours:
                 # On commence par organiser les tours
+                # organisation_du_tour = [paires_ayant_joue, match_restant]
                 organisation_du_tour = tour.organisation_tour(tournoi, paires_ayant_joue)
                 paires_ayant_joue.append(organisation_du_tour[0])
                 matchs_restant.append(organisation_du_tour[1])
@@ -255,7 +256,7 @@ class Lancement:
                         matchs_restant.remove(choix_match)
                     if len(matchs_restant) > 1:
                         # L'opérateur choisi le match dont il a le retour
-                        choix_match = ViewMatch.choix_match(matchs_restant)
+                        choix_match = ViewMatch.choix_match(matchs_restant[0])
                         matchs_restant.remove(choix_match)
 
                     # On récupère les scores
