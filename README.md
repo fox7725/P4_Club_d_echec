@@ -8,7 +8,8 @@ Ce logiciel entièrement rédigé en Python gère intégralement les tournois et
 # Comment utiliser le fichier python
 ## Etape 1 : Créer votre environnement virtuel :
 **Attention, les commande ci dessous fonctionnent sous windows 11, elles n'ont pas été testées sous d'autres systèmes d'exploitation.**
-**De même, l'application présentée ici fonctionne de façon optimale sous Python 3.3 et n'a pas été testée sous des versions antérieures**
+**De même, l'application présentée ici fonctionne de façon optimale sous 
+Python 3.1 et n'a pas été testée sous des versions antérieures**
 
 Pour chaque nouveau projet, il est recommandé d'installer un environnement virtuel pour partir sur de nouvelles bases
 - Ouvrez votre Terminal préféré
