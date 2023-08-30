@@ -195,12 +195,10 @@ class Lancement:
             else:
                 # On commence par demander les informations sur le tournoi infos_tournoi = [nom_tournoi,
                 # lieu_tournoi, remarque_tournoi, debut_tournoi, fin_tournoi, nb_tours]
-                infos_tournoi = \
-                    ViewInformationsTournoi.infos_generales_tournoi()
+                infos_tournoi = ViewInformationsTournoi.infos_generales_tournoi()
 
                 # On demande si on ajoute les joueurs manuellement
-                demande_nv_joueur = \
-                    ViewInformationsTournoi.demande_nv_joueurs()
+                demande_nv_joueur = ViewInformationsTournoi.demande_nv_joueurs()
 
                 if demande_nv_joueur == "oui":
                     preliste_joueurs = liste_joueur_JSON()
@@ -244,7 +242,7 @@ class Lancement:
                 # organisation_du_tour = [paires_ayant_joue, match_restant]
                 organisation_du_tour = tour.organisation_tour(tournoi, paires_ayant_joue)
                 paires_ayant_joue.append(organisation_du_tour[0])
-                matchs_restant.append(organisation_du_tour[1])
+                matchs_restant.extend(organisation_du_tour[1])
                 # On sauvegarde pour garder les modifications s'il y en a
                 tournoi.to_json()
 
@@ -256,7 +254,7 @@ class Lancement:
                         matchs_restant.remove(choix_match)
                     if len(matchs_restant) > 1:
                         # L'opérateur choisi le match dont il a le retour
-                        choix_match = ViewMatch.choix_match(matchs_restant[0])
+                        choix_match = ViewMatch.choix_match(matchs_restant)
                         matchs_restant.remove(choix_match)
 
                     # On récupère les scores

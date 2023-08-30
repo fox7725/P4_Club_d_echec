@@ -183,7 +183,7 @@ class Tournoi:
                                     match.joueur_blanc.sexe,
                                     match.joueur_blanc.date_naissance,
                                     match.joueur_blanc.points
-                                ],
+                                ] if match.joueur_blanc else None,
                                 match.score_JB
                             ],
                             [
@@ -194,7 +194,7 @@ class Tournoi:
                                     match.joueur_noir.sexe,
                                     match.joueur_noir.date_naissance,
                                     match.joueur_noir.points
-                                ],
+                                ] if match.joueur_noir else None,
                                 match.score_JN
                             ]
                         ]
@@ -215,7 +215,7 @@ class Tournoi:
                 joueur.points
                 ]
                 for joueur in self.gagnant
-            ]
+            ] if self.gagnant else None
         }
 
         # Enregistrement du dictionnaire JSON dans un fichier
@@ -333,30 +333,35 @@ class Tour:
         return cls(
             num_tour,
             nom_tour,
-            liste_matchs=[],
+            liste_matchs=liste_matchs,
             date_debut_tour=" ",
             date_fin_tour=" ",
         )
 
     def organisation_tour(self, tournoi, paires_ayant_joue):
         # On commence par récupérer les paires de joueurs ayant joué ensemble sur les tours terminés
-        print("num tour", self.num_tour)
-        print("nom tour", self.nom_tour)
-        print("liste matchs", self.liste_matchs)
-        print("date debut", self.date_debut_tour)
-        print("date fin", self.date_fin_tour)
         match_restant = []
         if self.date_fin_tour != " ":
             for match in self.liste_matchs:
                 paire = [match.joueur_blanc, match.joueur_noir]
                 paires_ayant_joue.append(paire)
 
+        # Si le tour a déjà commencé mais n'est pas terminé
+        if self.date_fin_tour == " " and self.date_debut_tour != " ":
+            for match in self.liste_matchs:
+                # On récupère les paires
+                paire = [match.joueur_blanc, match.joueur_noir]
+                paires_ayant_joue.append(paire)
+                # si les deux joueurs ont un score à 0, le match n'a pas été joué
+                if match.score_JB == 0 and match.score_JN == 0:
+                    match_restant.append(match)
+
         # Si le tour n'a pas commencé on crée la liste des matchs
         if self.date_debut_tour == " ":
             # On enregistre la date de lancement du tour
             self.date_debut_tour = maintenant()
             # On récupère et on classe la liste des joueurs
-            liste_joueurs_tour = tournoi.liste_joueurs
+            liste_joueurs_tour = tournoi.liste_joueurs.copy()
             if self.nom_tour == "Round 1":
                 random.shuffle(liste_joueurs_tour)
             else:
@@ -369,6 +374,13 @@ class Tour:
                     while duo in paires_ayant_joue and  i < len(liste_joueurs_tour) - 1:
                         i += 1
                         duo = [liste_joueurs_tour[0], liste_joueurs_tour[i]]
+
+                        # Si on a parcouru toutes les possibilités de paires, on revient à la paire d'origine
+                        if i == len(liste_joueurs_tour) - 1:
+                            i = 1
+                            duo = [liste_joueurs_tour[0], liste_joueurs_tour[1]]
+
+                        break
 
                 # On crée la paire et on l'ajoute aux paires ayant joué
                 match.joueur_blanc = duo[0]
@@ -383,23 +395,7 @@ class Tour:
                 # On ajoute le match aux matchs à jouer
                 match_restant.append(match)
 
-        # Si le tour a déjà commencé mais n'est pas terminé
-        if self.date_fin_tour == " " and self.date_debut_tour != " ":
-            for match in self.liste_matchs:
-                # On récupère les paires
-                paire = [match.joueur_blanc, match.joueur_noir]
-                paires_ayant_joue.append(paire)
-                # si les deux joueurs ont un score à 0, le match n'a pas été joué
-                if match.score_JB == 0 and match.score_JN == 0:
-                    match_restant.append(match)
-
         organisation = [paires_ayant_joue, match_restant]
-        print("num tour 2", self.num_tour)
-        print("nom tour 2", self.nom_tour)
-        print("liste matchs 2", self.liste_matchs)
-        print("matchs restants 2", match_restant)
-        print("date debut 2", self.date_debut_tour)
-        print("date fin 2", self.date_fin_tour)
         return organisation
 
 
@@ -417,7 +413,7 @@ class Match:
         return cls(
             nom_match,
             joueur_blanc = None,
-            joueur_noir=None,
+            joueur_noir = None,
             score_JB=0,
             score_JN=0
         )
@@ -434,8 +430,8 @@ class Match:
         elif score == "N":
             self.score_JB = 0.5
             self.score_JN = 0.5
-        self.joueur_blanc.score_actuel += self.score_JB
-        self.joueur_noir.score_actuel += self.score_JN
+        self.joueur_blanc.points += self.score_JB
+        self.joueur_noir.points += self.score_JN
 
 
 class TournoisJSON:
