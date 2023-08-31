@@ -142,6 +142,51 @@ class Reprise:
         Lancement.lancement_menu_principal(reprendre, reponse)
 
 
+class NouveauTournoi:
+    @staticmethod
+    def mise_en_place():
+        # On commence par demander les informations sur le tournoi infos_tournoi = [nom_tournoi,
+        # lieu_tournoi, remarque_tournoi, debut_tournoi, fin_tournoi, nb_tours]
+        infos_tournoi = ViewInformationsTournoi.infos_generales_tournoi()
+
+        # On demande si on ajoute les joueurs manuellement
+        demande_nv_joueur = ViewInformationsTournoi.demande_nv_joueurs()
+
+        if demande_nv_joueur == "oui":
+            preliste_joueurs = liste_joueur_JSON()
+            if preliste_joueurs == "ERR01":
+                liste_joueurs_infos = None
+                Erreurs.erreur1()
+                Reprise.reprise()
+            else:
+                liste_joueurs_infos = ViewInformationsTournoi.ajout_joueurs_invites(preliste_joueurs)
+        else:
+            liste_joueurs_infos = ViewInformationsTournoi.ajout_joueurs()
+
+        # On peut maintenant créer une liste d'objets joueurs
+        liste_joueurs = []
+        for j in liste_joueurs_infos:
+            joueur = Joueur.creation(j)
+            liste_joueurs.append(joueur)
+
+        # On crée une instance de tournoi à partir des informations
+        # données
+        tournoi = Tournoi.creation(infos_tournoi, liste_joueurs)
+
+        # On peut maintenant créer la liste des tours et des matchs
+        liste_tours = []
+        for num_tour in range(1, tournoi.nb_tours + 1):
+            liste_matchs = []
+            for num_match in range(1, len(liste_joueurs) // 2 + 1):
+                match = Match.initialisation(num_match)
+                liste_matchs.append(match)
+            tour = Tour.initialisation(num_tour, liste_matchs)
+            liste_tours.append(tour)
+        tournoi.liste_tours = liste_tours
+        # On fait une première sauvegarde du tournoi
+        tournoi.to_json()
+        return tournoi
+
 class Lancement:
     @staticmethod
     def lancement_menu_principal(reprendre, reponse):
@@ -158,46 +203,7 @@ class Lancement:
 
             # Si on commence un nouveau tournoi
             else:
-                # On commence par demander les informations sur le tournoi infos_tournoi = [nom_tournoi,
-                # lieu_tournoi, remarque_tournoi, debut_tournoi, fin_tournoi, nb_tours]
-                infos_tournoi = ViewInformationsTournoi.infos_generales_tournoi()
-
-                # On demande si on ajoute les joueurs manuellement
-                demande_nv_joueur = ViewInformationsTournoi.demande_nv_joueurs()
-
-                if demande_nv_joueur == "oui":
-                    preliste_joueurs = liste_joueur_JSON()
-                    if preliste_joueurs == "ERR01":
-                        liste_joueurs_infos = None
-                        Erreurs.erreur1()
-                        Reprise.reprise()
-                    else:
-                        liste_joueurs_infos = ViewInformationsTournoi.ajout_joueurs_invites(preliste_joueurs)
-                else:
-                    liste_joueurs_infos = ViewInformationsTournoi.ajout_joueurs()
-
-                # On peut maintenant créer une liste d'objets joueurs
-                liste_joueurs = []
-                for j in liste_joueurs_infos:
-                    joueur = Joueur.creation(j)
-                    liste_joueurs.append(joueur)
-
-                # On crée une instance de tournoi à partir des informations
-                # données
-                tournoi = Tournoi.creation(infos_tournoi, liste_joueurs)
-
-                # On peut maintenant créer la liste des tours et des matchs
-                liste_tours = []
-                for num_tour in range(1, tournoi.nb_tours + 1):
-                    liste_matchs = []
-                    for num_match in range(1, len(liste_joueurs) // 2 + 1):
-                        match = Match.initialisation(num_match)
-                        liste_matchs.append(match)
-                    tour = Tour.initialisation(num_tour, liste_matchs)
-                    liste_tours.append(tour)
-                tournoi.liste_tours = liste_tours
-                # On fait une première sauvegarde du tournoi
-                tournoi.to_json()
+                tournoi = NouveauTournoi.mise_en_place()
 
             # Le tournoi peut maintenant commencer
             paires_ayant_joue = []
