@@ -141,40 +141,6 @@ class Reprise:
 
         Lancement.lancement_menu_principal(reprendre, reponse)
 
-    @staticmethod
-    def donnees_reprise():
-        # On commence par charger la class Tournoi
-        tournoi = Tournoi.from_json()
-
-        # On recrée la liste des joueurs
-        liste_joueurs = []
-        for joueur_infos in tournoi.liste_joueurs:
-            joueur = Joueur(
-                joueur_infos["identifiant_national"],
-                joueur_infos["nom_joueur"],
-                joueur_infos["prenom_joueur"],
-                joueur_infos["sexe"],
-                joueur_infos["date_naissance"],
-                joueur_infos["points"]
-            )
-            liste_joueurs.append(joueur)
-
-        # On récupère la liste des tours
-        liste_tours = []
-        for tour_infos in tournoi.liste_tours:
-            tour = Tour(
-                tour_infos[0],
-                tour_infos[1],
-                tour_infos[2],
-                tour_infos[3],
-                tour_infos[4]
-            )
-            liste_tours.append(tour)
-
-        # On récupère les données pour les envoyer au code principal
-        donnees = [tournoi, liste_joueurs, liste_tours]
-        return donnees
-
 
 class Lancement:
     @staticmethod
@@ -188,8 +154,7 @@ class Lancement:
             # Si on souhaite reprendre le tournoi en cours
             if reprendre == 1:
                 # On récupère les informations du tournoi
-                donnees_tournoi = Reprise.donnees_reprise()
-                tournoi = donnees_tournoi[0]
+                tournoi = Tournoi.from_json()
 
             # Si on commence un nouveau tournoi
             else:
@@ -254,7 +219,7 @@ class Lancement:
                         matchs_restant.remove(choix_match)
                     if len(matchs_restant) > 1:
                         # L'opérateur choisi le match dont il a le retour
-                        choix_match = ViewMatch.choix_match(matchs_restant)
+                        choix_match = ViewMatch.choix_match(matchs_restant, tour.nom_tour)
                         matchs_restant.remove(choix_match)
 
                     # On récupère les scores

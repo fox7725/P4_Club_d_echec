@@ -28,16 +28,16 @@ class Joueur:
 
 
 class Tournoi:
-    def __init__(self, nom_tournoi, lieu_tournoi, remarque_tournoi, debut_tournoi, fin_tournoi, nb_tours, liste_tours,
-                 liste_joueurs, gagnant=[]):
+    def __init__(self, nom_tournoi, lieu_tournoi, remarque_tournoi, debut_tournoi, fin_tournoi, nb_tours,
+                 liste_joueurs, liste_tours, gagnant=[]):
         self.nom_tournoi = nom_tournoi
         self.lieu_tournoi = lieu_tournoi
         self.remarque_tournoi = remarque_tournoi
         self.debut_tournoi = debut_tournoi
         self.fin_tournoi = fin_tournoi
         self.nb_tours = nb_tours
-        self.liste_tours = liste_tours
         self.liste_joueurs = liste_joueurs
+        self.liste_tours = liste_tours
         self.gagnant = gagnant
 
 
@@ -147,6 +147,7 @@ class Tournoi:
             fin_tournoi,
             nb_tours,
             liste_joueurs,
+            liste_tours,
             gagnants
         )
 

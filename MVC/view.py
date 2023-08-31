@@ -584,9 +584,9 @@ class MenuGestionJoueur:
 
 class ViewMatch:
     @staticmethod
-    def choix_match(matchs_restant):
+    def choix_match(matchs_restant, tour):
         # On commence par afficher la liste des matchs restant dans le tour en cours
-        print("Voici la liste des matchs restant à jouer :")
+        print("Vous êtes dans le " + tour + ". Voici la liste des matchs restant à jouer :")
         for match in matchs_restant:
             print("match :", match.nom_match, "- Joueur Blanc :", match.joueur_blanc.nom_joueur,
                   match.joueur_blanc.prenom_joueur, "- Joueur Noir :", match.joueur_noir.nom_joueur,
