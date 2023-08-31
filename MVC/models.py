@@ -36,8 +36,8 @@ class Tournoi:
         self.debut_tournoi = debut_tournoi
         self.fin_tournoi = fin_tournoi
         self.nb_tours = nb_tours
-        self.liste_joueurs = liste_joueurs
         self.liste_tours = liste_tours
+        self.liste_joueurs = liste_joueurs
         self.gagnant = gagnant
 
 
@@ -91,8 +91,8 @@ class Tournoi:
         for tour_infos in liste_tours_infos:
             num_tour = tour_infos[0]
             nom_tour = tour_infos[1]
-            date_debut_tour = tour_infos[6]
-            date_fin_tour = tour_infos[7]
+            date_debut_tour = tour_infos[3]
+            date_fin_tour = tour_infos[4]
 
             # Liste des matchs
             liste_matchs_infos = tour_infos[2]
@@ -106,30 +106,38 @@ class Tournoi:
 
                 # Sélection du joueur blanc
                 for joueur in liste_joueurs:
-                    if joueur.identifiant_national == joueur_blanc_infos[0]:
-                        joueur_blanc = joueur
+                    if joueur_blanc_infos != None:
+                        if joueur.identifiant_national == joueur_blanc_infos[0]:
+                            joueur_blanc = joueur
+                    else:
+                        joueur_blanc = None
 
-                # Sélection du joueur blanc
+                # Sélection du joueur noir
                 for joueur in liste_joueurs:
-                    if joueur.identifiant_national == joueur_noir_infos[0]:
-                        joueur_noir = joueur
+                    if joueur_noir_infos != None:
+                        if joueur.identifiant_national == joueur_noir_infos[0]:
+                            joueur_noir = joueur
+                    else:
+                        joueur_noir = None
 
-                match = Match(nom_tour, nom_match, joueur_blanc, joueur_noir, score_JB, score_JN)
+                match = Match(nom_match, joueur_blanc, joueur_noir, score_JB, score_JN)
                 liste_matchs.append(match)
 
-            tour = Tour(num_tour, nom_tour, liste_joueurs, len(liste_matchs), date_debut_tour, liste_matchs,
-                        date_fin_tour)
+            tour = Tour(num_tour, nom_tour, liste_matchs, date_debut_tour, date_fin_tour)
             liste_tours.append(tour)
 
         # Liste des gagnants
         gagnants_infos = tournoi_dict["gagnant"]
-        gagnants = []
-        for gagnant_infos in gagnants_infos:
-            for joueur in liste_joueurs:
-                if joueur.identifiant_national == gagnant_infos[0]:
-                    gagnant = joueur
+        if gagnants_infos != None:
+            gagnants = []
+            for gagnant_infos in gagnants_infos:
+                for joueur in liste_joueurs:
+                    if joueur.identifiant_national == gagnant_infos[0]:
+                        gagnant = joueur
 
-            gagnants.append(gagnant)
+                gagnants.append(gagnant)
+        else:
+            gagnants = None
 
         return cls(
             nom_tournoi,
