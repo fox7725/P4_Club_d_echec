@@ -424,23 +424,19 @@ class RapportsTournois:
 
                     # Parcourir chaque match dans le tour
                     for match in tour.liste_matchs:
-                        # Extraire les informations des joueurs
-                        joueur1 = joueurs[0][0]
-                        score1 = joueurs[0][1]
-                        joueur2 = joueurs[1][0]
-                        score2 = joueurs[1][1]
-
                         # on mémorise les données à afficher
-                        impr_joueur1 = "        " + list(joueur1.keys())[0] + " : " + joueur1[list(joueur1.keys())[
-                            0]][1] + " " + joueur1[list(joueur1.keys())[0]][0]
+                        impr_joueur1 = ("        Blanc :" + match.joueur_blanc.identifiant_national + " - " +
+                                        match.joueur_blanc.nom_joueur + " " + match.joueur_blanc.prenom_joueur + " - "
+                                         + str(match.score_JB) + " points.")
 
-                        impr_joueur2 = "        " + list(joueur2.keys())[0] + " : " + joueur2[list(joueur2.keys())[
-                            0]][1] + " " + joueur2[list(joueur2.keys())[0]][0]
+                        impr_joueur2 = ("        Noir :" + match.joueur_noir.identifiant_national + " - " +
+                                        match.joueur_noir.nom_joueur + " " + match.joueur_noir.prenom_joueur + " - "
+                                         + str(match.score_JN) + " points.")
 
                         # on détermine le joueur gagnant
-                        if score1 > score2:
+                        if match.score_JB > match.score_JN:
                             impr_joueur1 += " ***"
-                        elif score2 > score1:
+                        elif match.score_JN > match.score_JB:
                             impr_joueur2 += " ***"
 
                         # Afficher les informations du match
