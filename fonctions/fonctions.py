@@ -32,6 +32,12 @@ def verification_date(date):
     return 1
 
 
+def charger_tournoi_en_cours():
+    with open('JSON/en_cours/tournoi.json') as fichier:
+        tournoi_dict = json.load(fichier)
+    return tournoi_dict
+
+
 def rapports_tournois():
     os.makedirs("JSON/archives", exist_ok=True)
     bdd_tournois = "JSON/archives/tournois.json"

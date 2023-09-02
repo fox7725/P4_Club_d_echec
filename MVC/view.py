@@ -338,19 +338,13 @@ class RapportsTournois:
             print("Nombre de tours :", tournoi.nb_tours, "- Nombre de joueurs :", len(tournoi.liste_joueurs))
             if len(tournoi.gagnant) == 1:
                 for gagnant in tournoi.gagnant:
-                    cle = list(gagnant.keys())[0]
-                    valeurs = gagnant[cle]
-                    prenom = valeurs[0]
-                    nom = valeurs[1]
-                    print("Le gagnant est le joueur N°", cle, ":", prenom, nom)
+                    print("Le gagnant est le joueur N°", gagnant.identifiant_national, ":", gagnant.prenom_joueur,
+                          gagnant.nom_joueur, "avec", gagnant.points, "points.")
             else:
                 print("Les gagnants sont :")
                 for gagnant in tournoi.gagnant:
-                    cle = list(gagnant.keys())[0]
-                    valeurs = gagnant[cle]
-                    prenom = valeurs[0]
-                    nom = valeurs[1]
-                    print("=> Joueur numéro", cle, "Nom :", prenom, nom)
+                    print("=> Joueur numéro", gagnant.identifiant_national, "Nom :", gagnant.prenom_joueur,
+                          gagnant.nom_joueur, "avec", gagnant.points, "points.")
             print(" ")
             print("-" * 66)
         input("Pressez 'ENTER' pour retourner au menu")
@@ -390,20 +384,13 @@ class RapportsTournois:
                 print(" ")
                 if len(tournoi.gagnant) == 1:
                     for gagnant in tournoi.gagnant:
-                        cle = list(gagnant.keys())[0]
-                        valeurs = gagnant[cle]
-                        prenom = valeurs[0]
-                        nom = valeurs[1]
-                        print("Ce tournoi s'est déroulé en", tournoi.nb_tours, "tours. Le vainqueur est le joueur "
-                                                                               "N°", cle, ":", prenom, nom)
+                        print("Le gagnant est le joueur N°", gagnant.identifiant_national, ":", gagnant.prenom_joueur,
+                              gagnant.nom_joueur, "avec", gagnant.points, "points.")
                 else:
-                    print("Ce tournoi s'est déroulé en", tournoi.nb_tours, "tours. Les vainqueurs sont :")
+                    print("Les gagnants sont :")
                     for gagnant in tournoi.gagnant:
-                        cle = list(gagnant.keys())[0]
-                        valeurs = gagnant[cle]
-                        prenom = valeurs[0]
-                        nom = valeurs[1]
-                        print("=> Joueur numéro", cle, "Nom :", prenom, nom)
+                        print("=> Joueur numéro", gagnant.identifiant_national, "Nom :", gagnant.prenom_joueur,
+                              gagnant.nom_joueur, "avec", gagnant.points, "points.")
                 print(" ")
                 print("-" * 66)
                 print(" ")
@@ -413,15 +400,11 @@ class RapportsTournois:
                 print("La liste des joueurs inscrits au tournoi est :")
                 # On trie de la liste des joueurs par ordre alphabétique du
                 # nom de famille
-                liste_joueurs_triee = sorted(tournoi.liste_joueurs, key=lambda
-                    x: x[list(x.keys())[0]][1])
+                liste_joueurs_triee = sorted(tournoi.liste_joueurs, key=lambda x: x.nom_joueur)
                 # On fait l'affichage sous forme "numéro : prénom nom"
                 for joueur in liste_joueurs_triee:
-                    joueur_numero = list(joueur.keys())[0]
-                    joueur_nom_prenom = joueur[joueur_numero]
-                    prenom = joueur_nom_prenom[0]
-                    nom = joueur_nom_prenom[1]
-                    print(f"{joueur_numero} : {prenom} {nom}")
+                    print(f"- {joueur.identifiant_national} : {joueur.prenom_joueur} {joueur.nom_joueur} - "
+                          f"{joueur.points} points")
                 print(" ")
                 print("-" * 66)
                 print(" ")
@@ -434,19 +417,13 @@ class RapportsTournois:
                 print("Voici la liste des matchs, les joueurs gagnants sont affichés avec une étoile.")
 
                 # Parcourir chaque tour et chaque match
-                for tour in tournoi.liste_matchs:
-                    nom_tour = list(tour.keys())[0]
-                    matches = tour[nom_tour]
-
+                for tour in tournoi.liste_tours:
                     # Afficher le nom du tour
                     print("=" * 66)
-                    print(nom_tour + " :")
+                    print(tour.nom_tour + " :")
 
                     # Parcourir chaque match dans le tour
-                    for match in matches:
-                        match_name = list(match.keys())[0]
-                        joueurs = match[match_name]
-
+                    for match in tour.liste_matchs:
                         # Extraire les informations des joueurs
                         joueur1 = joueurs[0][0]
                         score1 = joueurs[0][1]
@@ -467,7 +444,7 @@ class RapportsTournois:
                             impr_joueur2 += " ***"
 
                         # Afficher les informations du match
-                        print("    " + match_name + " :")
+                        print("    " + match.nom_match + " :")
                         print(impr_joueur1)
                         print(impr_joueur2)
 

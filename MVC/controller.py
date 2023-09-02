@@ -4,7 +4,7 @@ import os
 
 from MVC.models import Joueur, Tournoi, Tour, Match, TournoisJSON, JoueurJSON
 from MVC.view import MenuPrincipal, Erreurs, RapportsTournois, MenuGestionJoueur, ViewInformationsTournoi, ViewMatch
-from fonctions.fonctions import liste_joueur_JSON, rapports_tournois, suppression_encours
+from fonctions.fonctions import liste_joueur_JSON, rapports_tournois, suppression_encours, charger_tournoi_en_cours
 
 
 class Archives:
@@ -18,23 +18,10 @@ class Archives:
 
         # On désérialise les données
         liste_tournois = []
-        for tournoi in rapports:
-            nom_tournoi = tournoi["nom_tournoi"]
-            lieu_tournoi = tournoi["lieu_tournoi"]
-            remarque_tournoi = tournoi["remarque_tournoi"]
-            debut_tournoi = tournoi["debut_tournoi"]
-            fin_tournoi = tournoi["fin_tournoi"]
-            nb_tours = tournoi["nb_tours"]
-            liste_matchs = tournoi["liste_matchs"]
-            liste_joueurs = tournoi["liste_joueurs"]
-            gagnant = tournoi["gagnant"]
-
-            # On crée une instance par tournoi
-            tournoi_instance = TournoisJSON(nom_tournoi, lieu_tournoi, remarque_tournoi, debut_tournoi, fin_tournoi,
-                                            nb_tours, liste_matchs, liste_joueurs, gagnant)
-
+        for t in rapports:
+            tournoi = Tournoi.from_json(t)
             # On crée une liste de toutes les instances
-            liste_tournois.append(tournoi_instance)
+            liste_tournois.append(tournoi)
 
         # On affiche le menu de gestion des rapports
         code_rapport_tournoi = RapportsTournois.menu_rapports()
@@ -187,6 +174,7 @@ class NouveauTournoi:
         tournoi.to_json()
         return tournoi
 
+
 class Lancement:
     @staticmethod
     def lancement_menu_principal(reprendre, reponse):
@@ -199,7 +187,8 @@ class Lancement:
             # Si on souhaite reprendre le tournoi en cours
             if reprendre == 1:
                 # On récupère les informations du tournoi
-                tournoi = Tournoi.from_json()
+                tournoi_dict = charger_tournoi_en_cours()
+                tournoi = Tournoi.from_json(tournoi_dict)
 
             # Si on commence un nouveau tournoi
             else:
@@ -250,7 +239,6 @@ class Lancement:
 
             # Fin du tournoi
             Reprise.reprise()
-
 
         # 2. Consulter les anciens tournois
         if reponse == 2:

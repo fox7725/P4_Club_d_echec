@@ -64,10 +64,7 @@ class Tournoi:
 
 
     @classmethod
-    def from_json(cls):
-        with open('JSON/en_cours/tournoi.json') as fichier:
-            tournoi_dict = json.load(fichier)
-
+    def from_json(cls, tournoi_dict):
         # Extraction des données du dictionnaire JSON pour créer un objet Tournoi
         nom_tournoi = tournoi_dict["nom_tournoi"]
         lieu_tournoi = tournoi_dict["lieu_tournoi"]
@@ -75,7 +72,6 @@ class Tournoi:
         debut_tournoi = tournoi_dict["debut_tournoi"]
         fin_tournoi = tournoi_dict["fin_tournoi"]
         nb_tours = tournoi_dict["nb_tours"]
-
         # Liste des joueurs
         liste_joueurs_infos = tournoi_dict["liste_joueurs"]
         liste_joueurs = []
@@ -84,7 +80,6 @@ class Tournoi:
                             joueur_infos[2], joueur_infos[3],
                             joueur_infos[4], joueur_infos[5])
             liste_joueurs.append(joueur)
-
         # Liste des tours
         liste_tours_infos = tournoi_dict["liste_tours"]
         liste_tours = []
@@ -125,7 +120,6 @@ class Tournoi:
 
             tour = Tour(num_tour, nom_tour, liste_matchs, date_debut_tour, date_fin_tour)
             liste_tours.append(tour)
-
         # Liste des gagnants
         gagnants_infos = tournoi_dict["gagnant"]
         if gagnants_infos != None:
@@ -246,65 +240,67 @@ class Tournoi:
             "debut_tournoi": self.debut_tournoi,
             "fin_tournoi": self.fin_tournoi,
             "nb_tours": self.nb_tours,
-            "liste_matchs": [
-                [
-                    {
-                        tour.nom_tour:
-                    # Liste des matchs
-                    [
-                        [
-                            {match.nom_match:
-                                [
-                                    [
-                                        {
-                                            match.joueur_blanc.identifiant_national: [
-                                                match.joueur_blanc.prenom_joueur,
-                                                match.joueur_blanc.nom_joueur
-                                            ]
-                                        },
-                                        match.score_JB
-                                    ],
-                                    [
-                                        {
-                                            match.joueur_noir.identifiant_national:
-                                                [
-                                                    match.joueur_noir.prenom_joueur,
-                                                    match.joueur_noir.nom_joueur
-                                                ]
-                                        },
-                                        match.score_JN
-                                    ]
-                                ]
-                            }
-                        ]
-                    for match in tour.liste_matchs
-                    ]
-                    }
-                ]
-                for tour in self.liste_tours
-            ],
             "liste_joueurs": [
                 [
-                joueur.identifiant_national,
-                joueur.nom_joueur,
-                joueur.prenom_joueur,
-                joueur.sexe,
-                joueur.date_naissance,
-                joueur.points
+                    joueur.identifiant_national,
+                    joueur.nom_joueur,
+                    joueur.prenom_joueur,
+                    joueur.sexe,
+                    joueur.date_naissance,
+                    joueur.points
                 ]
                 for joueur in self.liste_joueurs
             ],
+            "liste_tours":
+                [
+                    [
+                        tour.num_tour,
+                        tour.nom_tour,
+                        # Liste des matchs
+                        [
+                            [
+                                match.nom_match,
+                                [
+                                    [
+                                        match.joueur_blanc.identifiant_national,
+                                        match.joueur_blanc.nom_joueur,
+                                        match.joueur_blanc.prenom_joueur,
+                                        match.joueur_blanc.sexe,
+                                        match.joueur_blanc.date_naissance,
+                                        match.joueur_blanc.points
+                                    ] if match.joueur_blanc else None,
+                                    match.score_JB
+                                ],
+                                [
+                                    [
+                                        match.joueur_noir.identifiant_national,
+                                        match.joueur_noir.nom_joueur,
+                                        match.joueur_noir.prenom_joueur,
+                                        match.joueur_noir.sexe,
+                                        match.joueur_noir.date_naissance,
+                                        match.joueur_noir.points
+                                    ] if match.joueur_noir else None,
+                                    match.score_JN
+                                ]
+                            ]
+                            for match in tour.liste_matchs
+                        ],
+                        tour.date_debut_tour,
+                        tour.date_fin_tour
+                    ]
+                    for tour in self.liste_tours
+                ],
             "gagnant": [
                 [
-                joueur.identifiant_national,
-                joueur.nom_joueur,
-                joueur.prenom_joueur,
-                joueur.sexe,
-                joueur.date_naissance,
-                joueur.points
+                    joueur.identifiant_national,
+                    joueur.nom_joueur,
+                    joueur.prenom_joueur,
+                    joueur.sexe,
+                    joueur.date_naissance,
+                    joueur.points
                 ]
                 for joueur in self.gagnant
-            ]
+            ] if self.gagnant else None
         }
 
         # On vérifie si une archive existe déjà
