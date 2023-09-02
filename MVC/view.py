@@ -318,7 +318,7 @@ class RapportsTournois:
             else:
                 code_menu_tournois = 0
                 print(" ")
-                print("Merci de choisir parmis les options 1, 2, 3, ou 4 !")
+                print("Merci de choisir parmis les options 1, 2 ou 3 !")
                 print(" ")
             if (code_menu_tournois != 0 and code_menu_tournois != 1 and code_menu_tournois != 2 and
                     code_menu_tournois != 3):
@@ -425,13 +425,13 @@ class RapportsTournois:
                     # Parcourir chaque match dans le tour
                     for match in tour.liste_matchs:
                         # on mémorise les données à afficher
-                        impr_joueur1 = ("        Blanc :" + match.joueur_blanc.identifiant_national + " - " +
+                        impr_joueur1 = ("        Blanc : " + match.joueur_blanc.identifiant_national + " - " +
                                         match.joueur_blanc.nom_joueur + " " + match.joueur_blanc.prenom_joueur + " - "
-                                         + str(match.score_JB) + " points.")
+                                         + str(match.score_JB) + " point(s).")
 
-                        impr_joueur2 = ("        Noir :" + match.joueur_noir.identifiant_national + " - " +
+                        impr_joueur2 = ("        Noir : " + match.joueur_noir.identifiant_national + " - " +
                                         match.joueur_noir.nom_joueur + " " + match.joueur_noir.prenom_joueur + " - "
-                                         + str(match.score_JN) + " points.")
+                                         + str(match.score_JN) + " point(s).")
 
                         # on détermine le joueur gagnant
                         if match.score_JB > match.score_JN:
