@@ -31,12 +31,10 @@ def verification_date(date):
         return 0
     return 1
 
-
 def charger_tournoi_en_cours():
     with open('JSON/en_cours/tournoi.json') as fichier:
         tournoi_dict = json.load(fichier)
     return tournoi_dict
-
 
 def rapports_tournois():
     os.makedirs("JSON/archives", exist_ok=True)
@@ -47,7 +45,6 @@ def rapports_tournois():
     else:
         contenu = "ERR01"
     return contenu
-
 
 def suppression_encours():
     # On regarde les fichiers et les sous-répertoires dans le répertoire
