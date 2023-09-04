@@ -439,21 +439,6 @@ class Match:
         self.joueur_noir.points += self.score_JN
 
 
-class TournoisJSON:
-    def __init__(self, nom_tournoi, lieu_tournoi, remarque_tournoi,
-                 debut_tournoi, fin_tournoi, nb_tours, liste_matchs,
-                 liste_joueurs, gagnant):
-        self.nom_tournoi = nom_tournoi
-        self.lieu_tournoi = lieu_tournoi
-        self.remarque_tournoi = remarque_tournoi
-        self.debut_tournoi = debut_tournoi
-        self.fin_tournoi = fin_tournoi
-        self.nb_tours = nb_tours
-        self.liste_matchs = liste_matchs
-        self.liste_joueurs = liste_joueurs
-        self.gagnant = gagnant
-
-
 class JoueurJSON:
     def __init__(self, identifiant, nom, prenom, sexe, date_naissance,
                  liste_tournois, moyenne_points):
@@ -508,3 +493,76 @@ class JoueurJSON:
                 json.dump([self.dictionnaire()], f)
                 reponse = "Le joueur a bien été créé."
                 return reponse
+
+    @staticmethod
+    def mise_a_jour_tournoi(joueurs_tournoi):
+        # On vérifie qu'un JSON existe pour la gestion des joueurs
+        bdd_joueurs = "JSON/joueurs.json"
+        if os.path.exists(bdd_joueurs):
+            # On charge le fichier en mémoire
+            with open(bdd_joueurs, 'r') as f:
+                contenu = json.load(f)
+            # On transforme chaque joueur du JSON en objet
+            joueurs_JSON = []
+            for j in contenu:
+                joueur = JoueurJSON(
+                    j["Identifiant national"],
+                    j["Nom du joueur"],
+                    j["Prénom du joueur"],
+                    j["Sexe"],
+                    j["Date de naissance"],
+                    j["Liste des tournois"],
+                    j["Moyenne des points par tournoi"]
+                )
+                joueurs_JSON.append(joueur)
+            # On récupère les joueurs du tournoi faisant partie du club pour les mettre à jour.
+            joueurs_maj = []
+            for joueur_tournoi in joueurs_tournoi:
+                tournois = []
+                for joueur_club in joueurs_JSON:
+                    if joueur_tournoi.identifiant_national == joueur_club.identifiant_national:
+                        tournois.extend(joueur_club.liste_tournois)
+                        tournois.append(joueur_tournoi.liste_tournois)
+                        if len(tournois) > 0:
+                            score = 0
+                            for t in tournois:
+                                score += t[2]["score"]
+                            moyenne = score / len(tournois)
+                        else:
+                            moyenne = 0
+
+                        joueur_maj = {
+                            "Identifiant national": joueur_club.identifiant_national,
+                            "Nom du joueur": joueur_club.nom,
+                            "Prénom du joueur": joueur_club.prenom,
+                            "Sexe": joueur_club.sexe,
+                            "Date de naissance": joueur_club.date_naissance,
+                            "Liste des tournois": tournois,
+                            "Moyenne des points par tournoi": moyenne
+                        }
+                        joueurs_maj.append(joueur_maj)
+
+            # On vérifie s'il n'y a pas des joueurs qui n'ont pas joué
+            for joueur_JSON in joueurs_JSON:
+                joueur_trouve = False
+                for joueur_maj in joueurs_maj:
+                    if joueur_maj["Identifiant national"] == joueur_JSON.identifiant_national:
+                        joueur_trouve = True
+                if joueur_trouve == False:
+                    joueur_ajout = {
+                        "Identifiant national": joueur_JSON.identifiant_national,
+                        "Nom du joueur": joueur_JSON.nom,
+                        "Prénom du joueur": joueur_JSON.prenom,
+                        "Sexe": joueur_JSON.sexe,
+                        "Date de naissance": joueur_JSON.date_naissance,
+                        "Liste des tournois": joueur_JSON.liste_tournois,
+                        "Moyenne des points par tournoi": joueur_JSON.moyenne_points
+                    }
+                    joueurs_maj.append(joueur_ajout)
+            # On met à jour le JSON
+            with open(bdd_joueurs, "w") as f:
+                json.dump(joueurs_maj, f, indent=4)
+            reponse = "Les statistiques des joueurs du club ont bien été mises à jour."
+        else :
+            reponse = "Le fichier JSON des joueurs n'a pas été trouvé, rapprochez vous de votre administrateur !"
+        return reponse

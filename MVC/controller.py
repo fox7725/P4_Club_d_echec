@@ -2,7 +2,7 @@ import sys
 import json
 import os
 
-from MVC.models import Joueur, Tournoi, Tour, Match, TournoisJSON, JoueurJSON
+from MVC.models import Joueur, Tournoi, Tour, Match, JoueurJSON
 from MVC.view import MenuPrincipal, Erreurs, RapportsTournois, MenuGestionJoueur, ViewInformationsTournoi, ViewMatch
 from fonctions.fonctions import liste_joueur_JSON, rapports_tournois, suppression_encours, charger_tournoi_en_cours
 
@@ -50,11 +50,12 @@ class Archives:
         while code_menu_joueur == 0:
             code_menu_joueur = MenuGestionJoueur.menujoueur()
 
-            # On traite le choix de l'utilisateur
+            # 1. Consulter la liste des joueurs enregistrés
             if code_menu_joueur == 1:
                 liste_joueurs_abonnes = liste_joueur_JSON()
                 code_menu_joueur = MenuGestionJoueur.affichage_liste_abonnes(liste_joueurs_abonnes)
 
+            # 2. Consulter les informations d'un joueur
             elif code_menu_joueur == 2:
                 oui_non = "oui"
                 while oui_non == "oui":
@@ -75,6 +76,7 @@ class Archives:
                                     code_menu_joueur = 0
                                 break
 
+            # 3. Créer un nouveau joueur
             elif code_menu_joueur == 3:
                 oui_non = "oui"
                 while oui_non == "oui":
@@ -93,6 +95,7 @@ class Archives:
                         oui_non = "non"
                         code_menu_joueur = 0
 
+            # 4. Retour au menu principal
             elif code_menu_joueur == 4:
                 Reprise.reprise()
 
@@ -234,8 +237,22 @@ class Lancement:
             # On peut maintenant afficher les résultats et les archiver
             ViewInformationsTournoi.infos_fin_tournoi(tournoi)
             ViewInformationsTournoi.pret_pour_archivage()
+            # On fait la mise à jour des joueurs du club
+            joueurs_tournoi = []
+            for j in tournoi.liste_joueurs:
+                joueur_tournoi = JoueurJSON(
+                    j.identifiant_national,
+                    j.nom_joueur,
+                    j.prenom_joueur,
+                    j.sexe,
+                    j.date_naissance,
+                    [tournoi.nom_tournoi, tournoi.debut_tournoi, {"score": j.points}],
+                    j.points)
+                joueurs_tournoi.append(joueur_tournoi)
+            maj_joueurs = JoueurJSON.mise_a_jour_tournoi(joueurs_tournoi)
+            # On archive le tournoi
             archivage = tournoi.sauvegarde_fin_tournoi()
-            ViewInformationsTournoi.archivage_tournoi(archivage)
+            ViewInformationsTournoi.archivage_tournoi(archivage, maj_joueurs)
 
             # Fin du tournoi
             Reprise.reprise()

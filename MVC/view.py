@@ -286,10 +286,11 @@ class ViewInformationsTournoi:
         input("Pressez 'ENTER' pour continuer")
 
     @staticmethod
-    def archivage_tournoi(archivage):
+    def archivage_tournoi(archivage, maj_joueurs):
         print("=" * 29)
         print(" ")
         print(archivage)
+        print(maj_joueurs)
         print(" ")
         print("=" * 29)
         input("Pressez 'ENTER' pour continuer")
@@ -534,7 +535,12 @@ class MenuGestionJoueur:
     def affichage(resultat):
         print("Voici les informations demandées")
         for cle in resultat:
-            print(cle, ":", resultat[cle])
+            if cle == "Liste des tournois":
+                print(cle, ":")
+                for t in resultat[cle]:
+                    print("    -", t[0], "le", t[1], "score :", t[2]["score"])
+            else:
+                print(cle, ":", resultat[cle])
         oui_non = "peut-être"
         while oui_non != "oui" and oui_non != "non":
             oui_non = input("Voulez vous consulter un autre joueur ? (oui / non) ")
@@ -549,7 +555,12 @@ class MenuGestionJoueur:
         liste_abonnes_triee = sorted(liste_abonnes, key=lambda x: x['Nom du joueur'])
         for abonne in liste_abonnes_triee:
             for cle in abonne:
-                print(cle, ":", abonne[cle])
+                if cle == "Liste des tournois" :
+                    print(cle, ":")
+                    for t in abonne[cle] :
+                        print("    -", t[0], "le", t[1], "score :", t[2]["score"])
+                else :
+                    print(cle, ":", abonne[cle])
             print("-" * 29)
         input("Pour continuer pressez 'ENTER'")
         return 0
