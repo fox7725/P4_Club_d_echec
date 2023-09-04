@@ -211,7 +211,6 @@ class Lancement:
 
                 # On peut passer à la réception des scores: L'opérateur sélectionne le match dont il a le retour
                 while len(matchs_restant) > 0:
-                    #choix_match = None
                     if len(matchs_restant) == 1:
                         choix_match = matchs_restant[0]
                         matchs_restant.remove(choix_match)

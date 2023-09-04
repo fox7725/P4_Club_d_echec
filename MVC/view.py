@@ -39,7 +39,7 @@ class MenuPrincipal:
     @staticmethod
     def menu_principal(code_menu_principal):
         # On fait une boucle pour que le menu s'affiche tant que l'utilisateur ne donne pas une réponse autorisée
-        while (code_menu_principal != 1 and code_menu_principal != 2 and  code_menu_principal != 3 and
+        while (code_menu_principal != 1 and code_menu_principal != 2 and code_menu_principal != 3 and
                code_menu_principal != 4):
             print("*" * 66)
             print("-" * 66)
@@ -61,7 +61,7 @@ class MenuPrincipal:
                 print("Merci de choisir parmis les options 1, 2, 3 ou 4")
                 print(" ")
                 input("Pressez 'ENTER' pour continuer")
-            if (code_menu_principal != 0 and code_menu_principal != 1 and  code_menu_principal != 2 and
+            if (code_menu_principal != 0 and code_menu_principal != 1 and code_menu_principal != 2 and
                     code_menu_principal != 3 and code_menu_principal != 4):
                 print(" ")
                 print("Merci de choisir parmis les options 1, 2, 3  ou 4")
@@ -426,13 +426,17 @@ class RapportsTournois:
                     # Parcourir chaque match dans le tour
                     for match in tour.liste_matchs:
                         # on mémorise les données à afficher
-                        impr_joueur1 = ("        Blanc : " + match.joueur_blanc.identifiant_national + " - " +
-                                        match.joueur_blanc.nom_joueur + " " + match.joueur_blanc.prenom_joueur + " - "
-                                         + str(match.score_JB) + " point(s).")
+                        impr_joueur1 = (
+                                "        Blanc : " + match.joueur_blanc.identifiant_national + " - " +
+                                match.joueur_blanc.nom_joueur + " " + match.joueur_blanc.prenom_joueur + " - " +
+                                str(match.score_JB) + " point(s)."
+                        )
 
-                        impr_joueur2 = ("        Noir : " + match.joueur_noir.identifiant_national + " - " +
-                                        match.joueur_noir.nom_joueur + " " + match.joueur_noir.prenom_joueur + " - "
-                                         + str(match.score_JN) + " point(s).")
+                        impr_joueur2 = (
+                                "        Noir : " + match.joueur_noir.identifiant_national + " - " +
+                                match.joueur_noir.nom_joueur + " " + match.joueur_noir.prenom_joueur + " - " +
+                                str(match.score_JN) + " point(s)."
+                        )
 
                         # on détermine le joueur gagnant
                         if match.score_JB > match.score_JN:
@@ -555,11 +559,11 @@ class MenuGestionJoueur:
         liste_abonnes_triee = sorted(liste_abonnes, key=lambda x: x['Nom du joueur'])
         for abonne in liste_abonnes_triee:
             for cle in abonne:
-                if cle == "Liste des tournois" :
+                if cle == "Liste des tournois":
                     print(cle, ":")
-                    for t in abonne[cle] :
+                    for t in abonne[cle]:
                         print("    -", t[0], "le", t[1], "score :", t[2]["score"])
-                else :
+                else:
                     print(cle, ":", abonne[cle])
             print("-" * 29)
         input("Pour continuer pressez 'ENTER'")

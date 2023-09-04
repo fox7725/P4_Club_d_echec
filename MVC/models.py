@@ -7,7 +7,7 @@ from fonctions.fonctions import suppression_encours, maintenant
 
 class Joueur:
     def __init__(self, identifiant_national, nom_joueur, prenom_joueur, sexe,
-                 date_naissance, points= 0):
+                 date_naissance, points=0):
         self.identifiant_national = identifiant_national
         self.nom_joueur = nom_joueur
         self.prenom_joueur = prenom_joueur
@@ -23,7 +23,7 @@ class Joueur:
             j["prenom_joueur"],
             j["sexe"],
             j["date_naissance"],
-            points = 0
+            points=0
         )
 
 
@@ -40,15 +40,14 @@ class Tournoi:
         self.liste_tours = liste_tours
         self.gagnant = gagnant
 
-
     @classmethod
     def creation(cls, infos_tournoi, liste_joueurs):
-        nom_tournoi=infos_tournoi[0]
-        lieu_tournoi=infos_tournoi[1]
-        remarque_tournoi=infos_tournoi[2]
-        debut_tournoi=infos_tournoi[3]
-        fin_tournoi=infos_tournoi[4]
-        nb_tours=infos_tournoi[5]
+        nom_tournoi = infos_tournoi[0]
+        lieu_tournoi = infos_tournoi[1]
+        remarque_tournoi = infos_tournoi[2]
+        debut_tournoi = infos_tournoi[3]
+        fin_tournoi = infos_tournoi[4]
+        nb_tours = infos_tournoi[5]
 
         return cls(
             nom_tournoi,
@@ -61,7 +60,6 @@ class Tournoi:
             liste_joueurs=liste_joueurs,
             gagnant=[]
         )
-
 
     @classmethod
     def from_json(cls, tournoi_dict):
@@ -101,7 +99,7 @@ class Tournoi:
 
                 # Sélection du joueur blanc
                 for joueur in liste_joueurs:
-                    if joueur_blanc_infos != None:
+                    if joueur_blanc_infos is not None:
                         if joueur.identifiant_national == joueur_blanc_infos[0]:
                             joueur_blanc = joueur
                     else:
@@ -109,7 +107,7 @@ class Tournoi:
 
                 # Sélection du joueur noir
                 for joueur in liste_joueurs:
-                    if joueur_noir_infos != None:
+                    if joueur_noir_infos is not None:
                         if joueur.identifiant_national == joueur_noir_infos[0]:
                             joueur_noir = joueur
                     else:
@@ -122,7 +120,7 @@ class Tournoi:
             liste_tours.append(tour)
         # Liste des gagnants
         gagnants_infos = tournoi_dict["gagnant"]
-        if gagnants_infos != None:
+        if gagnants_infos is not None:
             gagnants = []
             for gagnant_infos in gagnants_infos:
                 for joueur in liste_joueurs:
@@ -160,12 +158,12 @@ class Tournoi:
             "nb_tours": self.nb_tours,
             "liste_joueurs": [
                 [
-                joueur.identifiant_national,
-                joueur.nom_joueur,
-                joueur.prenom_joueur,
-                joueur.sexe,
-                joueur.date_naissance,
-                joueur.points
+                    joueur.identifiant_national,
+                    joueur.nom_joueur,
+                    joueur.prenom_joueur,
+                    joueur.sexe,
+                    joueur.date_naissance,
+                    joueur.points
                 ]
                 for joueur in self.liste_joueurs
             ],
@@ -201,7 +199,7 @@ class Tournoi:
                                 match.score_JN
                             ]
                         ]
-                    for match in tour.liste_matchs
+                        for match in tour.liste_matchs
                     ],
                     tour.date_debut_tour,
                     tour.date_fin_tour
@@ -210,12 +208,12 @@ class Tournoi:
             ],
             "gagnant": [
                 [
-                joueur.identifiant_national,
-                joueur.nom_joueur,
-                joueur.prenom_joueur,
-                joueur.sexe,
-                joueur.date_naissance,
-                joueur.points
+                    joueur.identifiant_national,
+                    joueur.nom_joueur,
+                    joueur.prenom_joueur,
+                    joueur.sexe,
+                    joueur.date_naissance,
+                    joueur.points
                 ]
                 for joueur in self.gagnant
             ] if self.gagnant else None
@@ -307,16 +305,19 @@ class Tournoi:
         bdd_tournoi = "JSON/archives/tournois.json"
         if os.path.exists(bdd_tournoi):
             # On charge le fichier en mémoire
-            with open(bdd_tournoi, 'r') as f: contenu = json.load(f)
+            with open(bdd_tournoi, 'r') as f:
+                contenu = json.load(f)
             # On ajoute le tournoi qui vient de se terminer, pas besoin de faire un classement car le dernier
             # tournoi terminé sera le dernier ajouté
             contenu.append(tournoi_dict)
-            with open(bdd_tournoi, "w") as f: json.dump(contenu, f, indent=4)
+            with open(bdd_tournoi, "w") as f:
+                json.dump(contenu, f, indent=4)
         else:
             # Si l'archive n'existe pas encore, on la crée et on y ajoute le tournoi
             liste_tournoi_dict = []
             liste_tournoi_dict.append(tournoi_dict)
-            with open(bdd_tournoi, "w") as f: json.dump(liste_tournoi_dict, f, indent=4)
+            with open(bdd_tournoi, "w") as f:
+                json.dump(liste_tournoi_dict, f, indent=4)
 
         # On peut maintenant supprimer le dossier "en_cours" et les JSON temporaires qu'il contient :
         suppression_encours()
@@ -376,7 +377,7 @@ class Tour:
                 i = 1
                 duo = [liste_joueurs_tour[0], liste_joueurs_tour[i]]
                 if duo in paires_ayant_joue:
-                    while duo in paires_ayant_joue and  i < len(liste_joueurs_tour) - 1:
+                    while duo in paires_ayant_joue and i < len(liste_joueurs_tour) - 1:
                         i += 1
                         duo = [liste_joueurs_tour[0], liste_joueurs_tour[i]]
 
@@ -405,7 +406,7 @@ class Tour:
 
 
 class Match:
-    def __init__(self, nom_match, joueur_blanc = None, joueur_noir=None, score_JB=0,score_JN=0):
+    def __init__(self, nom_match, joueur_blanc=None, joueur_noir=None, score_JB=0, score_JN=0):
         self.nom_match = nom_match
         self.joueur_blanc = joueur_blanc
         self.joueur_noir = joueur_noir
@@ -417,8 +418,8 @@ class Match:
         nom_match = "M" + str(num_match)
         return cls(
             nom_match,
-            joueur_blanc = None,
-            joueur_noir = None,
+            joueur_blanc=None,
+            joueur_noir=None,
             score_JB=0,
             score_JN=0
         )
@@ -548,7 +549,7 @@ class JoueurJSON:
                 for joueur_maj in joueurs_maj:
                     if joueur_maj["Identifiant national"] == joueur_JSON.identifiant_national:
                         joueur_trouve = True
-                if joueur_trouve == False:
+                if joueur_trouve is False:
                     joueur_ajout = {
                         "Identifiant national": joueur_JSON.identifiant_national,
                         "Nom du joueur": joueur_JSON.nom,
@@ -563,6 +564,6 @@ class JoueurJSON:
             with open(bdd_joueurs, "w") as f:
                 json.dump(joueurs_maj, f, indent=4)
             reponse = "Les statistiques des joueurs du club ont bien été mises à jour."
-        else :
+        else:
             reponse = "Le fichier JSON des joueurs n'a pas été trouvé, rapprochez vous de votre administrateur !"
         return reponse
