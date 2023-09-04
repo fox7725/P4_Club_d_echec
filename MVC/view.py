@@ -135,12 +135,18 @@ class ViewInformationsTournoi:
     def demande_nv_joueurs():
         oui_non = "peut-être"
         while oui_non != "oui" and oui_non != "non":
-            oui_non = input("Le tournoi se joue-t-il à guichet fermé (seulement les membres du club + invités) ou est"
-                            " il ouvert à tous ? (oui / non)")
+            oui_non = input("Le tournoi se joue-t-il à guichet fermé (seulement les membres du club + invités) ? ("
+                            "oui / non)")
             if oui_non != "oui" and oui_non != "non":
                 print("merci de répondre par 'oui' ou par 'non'")
                 input("Tapez 'enter' pour recommencer")
-            else:
+            elif oui_non == "oui":
+                print("Nous chargeons les joueurs dans la base de données.")
+                input("Tapez 'enter' pour recommencer")
+                return oui_non
+            elif oui_non == "non":
+                print("Vous allez maintenant pouvoir saisir les joueurs présents.")
+                input("Tapez 'enter' pour recommencer")
                 return oui_non
 
     @staticmethod
