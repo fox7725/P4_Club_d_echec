@@ -23,7 +23,7 @@ Maintenant Il ne vous reste plus qu'à vous laisser guider à travers les menus
 
 ## Etape 3 : Vérification de la bonne mise aux normes PEP8
 pour vérifier que le code de ce logiciel respecte les normes **PEP8**, il 
-vous suffit de taper `flake8 --format=html --htmldir=flake-report main.py MVC fonctions`, pour plus de facilité nous l'avons déjà fait et vous 
+vous suffit de taper `flake8`, pour plus de facilité nous l'avons déjà fait et vous 
 pourrez trouver dans le dossier `flake-report` les fichiers HTML générés avec **Flake8**. Il vous suffit de lancer `index.html' pour consulter l'ensemble des normes non respectées.
 
 ## Etape 4 : Quitter l'environnement virtuel

@@ -26,7 +26,7 @@ def liste_joueur_JSON():
 def verification_date(date):
     format_date = "%d/%m/%Y"
     try:
-        validation_date = datetime.datetime.strptime(date, format_date)
+        datetime.datetime.strptime(date, format_date)
     except ValueError:
         return 0
     return 1
